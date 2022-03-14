@@ -28,7 +28,7 @@ Plug 'hrsh7th/nvim-cmp'
 Plug 'hrsh7th/cmp-vsnip'
 Plug 'hrsh7th/vim-vsnip'
 Plug 'lewis6991/gitsigns.nvim'
-
+Plug 'williamboman/nvim-lsp-installer'
 call plug#end()
 
 
@@ -242,9 +242,45 @@ for _, lsp in pairs(servers) do
     capabilities = capabilities,
     on_attach = on_attach,
   }
+
 end
+require('lspconfig').efm.setup {
+        capabilities = capabilities,
+        cmd = {"/home/me/.local/share/nvim/lsp_servers/efm/efm-langserver"},
+        on_attach = on_attach,
+        filetypes = {"python"},
+        init_options = {documentFormatting = true, hover = true, documentSymbol = true, codeAction = true, completion = true},
+        settings = {
+                rootMarkers = { ".git/" },
+                lintDebounce = 1000,
+                languages = {
+                        python = { 
+                                 {
+                                        formatCommand = "black --quiet -",
+                                    formatStdin = true,
+                                },
+
+                            {
+                                 formatCommand = "isort --stdout --profile black -",
+                                formatStdin = true
+     },
+     {
+        lintCommand = "poetry run pylint --output-format text --score no --msg-template {path}:{line}:{column}:{C}:{msg} ${INPUT}",
+        lintStdin = true,
+        lintFormats = {"%f:%l:%c:%t:%m"},
+        lintIgnoreExitCode = true,
+        lintOffsetColumns = 1
+             },
+                        }
+                
+                }
+        }
+}
 
 EOF
+
+" format on save
+autocmd BufWritePre *.py lua vim.lsp.buf.formatting_sync(nil, 1000)
 
 " comment.nvim
 lua require('Comment').setup()
