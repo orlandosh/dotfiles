@@ -1,6 +1,3 @@
-" spellcheck ================================================================
-"
-"
 call plug#begin()
 Plug 'terryma/vim-multiple-cursors'
 Plug 'sheerun/vim-polyglot'
