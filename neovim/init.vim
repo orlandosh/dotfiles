@@ -26,6 +26,7 @@ Plug 'lewis6991/gitsigns.nvim'
 Plug 'williamboman/nvim-lsp-installer'
 Plug 'folke/lsp-colors.nvim'
 Plug 'folke/trouble.nvim'
+Plug 'ray-x/lsp_signature.nvim'
 call plug#end()
 
 
@@ -138,6 +139,8 @@ local on_attach = function(client, bufnr)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>fo', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+
+  require "lsp_signature".on_attach()
 end
 
 
