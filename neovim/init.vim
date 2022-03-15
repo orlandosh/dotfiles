@@ -69,7 +69,7 @@ let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 1
 
 " format on save
-autocmd BufWritePre *.py lua vim.lsp.buf.formatting_sync(nil, 1000)
+" autocmd BufWritePre *.py lua vim.lsp.buf.formatting_sync(nil, 1000)
 
 " AUTO SAVE
 lua << EOF
@@ -233,13 +233,23 @@ end
   local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 -- Use a loop to conveniently call 'setup' on multiple servers and
 -- map buffer local keybindings when the language server attaches
-local servers = { 'pyright', 'vuels', 'jsonls' }
+local servers = { 'vuels', 'jsonls' }
 for _, lsp in pairs(servers) do
   require('lspconfig')[lsp].setup {
     capabilities = capabilities,
     on_attach = on_attach,
   }
 
+require('lspconfig').pyright.setup {
+        settings = {python = {analysis = {
+        autoSearchPaths = false,
+        useLibraryCodeForTypes = false,
+        diagnosticMode = 'openFilesOnly',
+        }}},
+      on_attach = on_attach,
+      capabilities = capabilities
+}
+-- require('lspconfig').pyright.setup{on_attach = on_attach, capabilities = capabilities}
 end
 require('lspconfig').efm.setup {
         capabilities = capabilities,
