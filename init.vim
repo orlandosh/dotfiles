@@ -255,22 +255,21 @@ require('lspconfig').efm.setup {
                 lintDebounce = 1000,
                 languages = {
                         python = { 
-                                 {
+                                {
                                         formatCommand = "black --quiet -",
-                                    formatStdin = true,
+                                        formatStdin = true,
                                 },
-
-                            {
-                                 formatCommand = "isort --stdout --profile black -",
-                                formatStdin = true
-     },
-     {
-        lintCommand = "poetry run pylint --output-format text --score no --msg-template {path}:{line}:{column}:{C}:{msg} ${INPUT}",
-        lintStdin = true,
-        lintFormats = {"%f:%l:%c:%t:%m"},
-        lintIgnoreExitCode = true,
-        lintOffsetColumns = 1
-             },
+                                {
+                                        formatCommand = "isort --stdout --profile black -",
+                                        formatStdin = true
+                                },
+                                {
+                                        lintCommand = "poetry run pylint --output-format text --score no --msg-template {path}:{line}:{column}:{C}:{msg} ${INPUT}",
+                                        lintStdin = true,
+                                        lintFormats = {"%f:%l:%c:%t:%m"},
+                                        lintIgnoreExitCode = true,
+                                        lintOffsetColumns = 1
+                                },
                         }
                 
                 }
