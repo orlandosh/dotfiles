@@ -40,8 +40,10 @@ let g:lightline = {
         \ },
         \ }
 
-"General settings
+" General settings
 colorscheme onedark
+" hi! Normal guibg=NONE
+" hi! NonText guibg=NONE
 syntax on
 setlocal spell spelllang=en_us
 set noshowmode
