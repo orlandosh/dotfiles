@@ -9,7 +9,6 @@ Plug 'voldikss/vim-floaterm'
 Plug 'Pocco81/AutoSave.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'neovim/nvim-lspconfig'
 Plug 'tpope/vim-fugitive'
 Plug 'joshdick/onedark.vim'
@@ -45,7 +44,9 @@ let g:lightline = {
 colorscheme onedark
 " hi! Normal guibg=NONE
 " hi! NonText guibg=NONE
+
 syntax on
+highlight Comment gui=italic
 setlocal spell spelllang=en_us
 set noshowmode
 set completeopt=menu,menuone,noselect
@@ -94,17 +95,6 @@ autosave.setup(
     }
 )
 EOF
-
-
-" Treesitter
-lua <<EOF
-require'nvim-treesitter.configs'.setup {
-  highlight = {
-    enable = true
-  },
-}
-EOF
-
 
 
 " nvim lspconfig
@@ -344,3 +334,7 @@ lua require('Comment').setup()
 
 " Gitsigns
 lua require('gitsigns').setup()
+
+
+" Telescope
+lua require('telescope').setup{defaults = { file_ignore_patterns = {"%.po"} }}
