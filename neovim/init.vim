@@ -26,6 +26,7 @@ Plug 'williamboman/nvim-lsp-installer'
 Plug 'folke/lsp-colors.nvim'
 Plug 'folke/trouble.nvim'
 Plug 'ray-x/lsp_signature.nvim'
+Plug 'mfussenegger/nvim-lint'
 call plug#end()
 
 
@@ -244,12 +245,13 @@ require('lspconfig').pyright.setup {
 }
 -- require('lspconfig').pyright.setup{on_attach = on_attach, capabilities = capabilities}
 end
+
 require('lspconfig').efm.setup {
         capabilities = capabilities,
         cmd = {"/home/me/.local/share/nvim/lsp_servers/efm/efm-langserver"},
         on_attach = on_attach,
         filetypes = {"python"},
-        init_options = {documentFormatting = true, hover = true, documentSymbol = true, codeAction = true, completion = true},
+        init_options = {documentFormatting = true},
         settings = {
                 rootMarkers = { ".git/" },
                 lintDebounce = 1000,
@@ -263,13 +265,6 @@ require('lspconfig').efm.setup {
                                         formatCommand = "isort --stdout --profile black -",
                                         formatStdin = true
                                 },
-                                {
-                                        lintCommand = "poetry run pylint --output-format text --score no --msg-template {path}:{line}:{column}:{C}:{msg} ${INPUT}",
-                                        lintStdin = true,
-                                        lintFormats = {"%f:%l:%c:%t:%m"},
-                                        lintIgnoreExitCode = true,
-                                        lintOffsetColumns = 1
-                                },
                         }
                 
                 }
@@ -277,6 +272,14 @@ require('lspconfig').efm.setup {
 }
 EOF
 
+                                " {
+                                "         lintCommand = "poetry run pylint --output-format text --score no --msg-template {path}:{line}:{column}:{C}:{msg} ${INPUT}",
+                                "         lintStdin = false,
+                                "         lintFormats = {"%f:%l:%c:%t:%m"},
+                                "         lintIgnoreExitCode = true,
+                                "         lintOffsetColumns = 1,
+                                "         lintDebounce = 5000
+                                " },
 lua <<EOF
 
 require("trouble").setup {
@@ -338,3 +341,17 @@ lua require('gitsigns').setup()
 
 " Telescope
 lua require('telescope').setup{defaults = { file_ignore_patterns = {"%.po"} }}
+
+
+" lint
+lua << EOF
+local pylint = require('lint.linters.pylint')
+pylint.cmd = "poetry"
+pylint.args = {
+        'run', 'pylint', unpack(pylint.args)
+}
+require('lint').linters_by_ft = {
+  python = {'pylint',}
+}
+EOF
+autocmd BufWritePost *.py lua require('lint').try_lint()
