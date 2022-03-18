@@ -1,4 +1,5 @@
 vim.cmd("source ~/.config/nvim/vim_init.vim")
+
 require("lsp_stuff")
 require("lint_stuff")
 require("trouble_stuff")
