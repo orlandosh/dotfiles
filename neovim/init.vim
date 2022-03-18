@@ -75,30 +75,6 @@ let NERDTreeDirArrows = 1
 " format on save
 " autocmd BufWritePre *.py lua vim.lsp.buf.formatting_sync(nil, 1000)
 autocmd BufWrite *.lua call LuaFormat()
-
-lua require('autosave')
-lua require('lsp')
-lua require('trouble')
-" comment.nvim
-lua require('Comment').setup()
-
-" Gitsigns
-lua require('gitsigns').setup()
-
-
-" Telescope
-lua require('telescope').setup{defaults = { file_ignore_patterns = {"%.po"} }}
-
-
-" lint
-lua << EOF
-local pylint = require('lint.linters.pylint')
-pylint.cmd = "poetry"
-pylint.args = {
-        'run', 'pylint', unpack(pylint.args)
-}
-require('lint').linters_by_ft = {
-  python = {'pylint',}
-}
-EOF
 autocmd BufWritePost *.py lua require('lint').try_lint()
+
+lua dofile('/home/me/.config/nvim/lua_stuff.lua')
