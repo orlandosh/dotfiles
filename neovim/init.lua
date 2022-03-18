@@ -1,0 +1,9 @@
+vim.cmd("source ~/.config/nvim/vim_init.vim")
+require("lsp_stuff")
+require("lint_stuff")
+require("trouble_stuff")
+require("autosave_stuff")
+
+require("Comment").setup()
+require("gitsigns").setup()
+require("telescope").setup({ defaults = { file_ignore_patterns = { "%.po" } } })
