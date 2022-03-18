@@ -47,6 +47,7 @@ let g:lightline = {
 
 " General settings
 colorscheme onedark
+let g:onedark_termcolors=16
 " hi! Normal guibg=NONE
 " hi! NonText guibg=NONE
 
