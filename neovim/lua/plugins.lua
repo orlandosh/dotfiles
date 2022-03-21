@@ -1,0 +1,33 @@
+return require('packer').startup(function(use)
+	use 'wbthomason/packer.nvim'
+
+	use 'terryma/vim-multiple-cursors'
+	use 'sheerun/vim-polyglot'
+	use 'jiangmiao/auto-pairs'
+	use 'unblevable/quick-scope'
+	use 'itchyny/lightline.vim'
+	use 'voldikss/vim-floaterm'
+	use 'tpope/vim-fugitive'
+	use 'joshdick/onedark.vim'
+
+	use 'neovim/nvim-lspconfig'
+	use 'hrsh7th/cmp-nvim-lsp'
+	use 'hrsh7th/cmp-buffer'
+	use 'hrsh7th/cmp-path'
+	use 'hrsh7th/cmp-cmdline'
+	use 'hrsh7th/nvim-cmp'
+	use 'hrsh7th/cmp-vsnip'
+	use 'hrsh7th/vim-vsnip'
+	use { 'ms-jpq/chadtree', branch = 'chad', run = 'python3 -m chadtree deps' } 
+
+	use 'Pocco81/AutoSave.nvim'
+	use 'nvim-lua/plenary.nvim'
+	use 'nvim-telescope/telescope.nvim'
+	use 'numToStr/Comment.nvim'
+	use 'lewis6991/gitsigns.nvim'
+	use 'williamboman/nvim-lsp-installer'
+	use 'folke/lsp-colors.nvim'
+	use 'folke/trouble.nvim'
+	use 'ray-x/lsp_signature.nvim'
+	use 'mfussenegger/nvim-lint'
+end)
