@@ -26,7 +26,7 @@ set termguicolors
 set modifiable
 
 " REMAPS
-nnoremap <leader>b <cmd>NERDTreeToggle<cr>
+nnoremap <leader>b <cmd>CHADopen<cr>
 nnoremap <leader>sv <cmd>source $MYVIMRC<cr>
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
@@ -40,7 +40,7 @@ let NERDTreeQuitOnOpen = 1
 let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 1
 
-let g:chadtree_settings = { "theme.icon_glyph_set": "ascii", "xdg": v:true }
+let g:chadtree_settings = { "theme.icon_glyph_set": "ascii", "keymap.open_sys": [], "keymap.primary": ["o", "<enter>"] }
 
 " format on save
 autocmd BufWritePre *.py '*.lua' lua vim.lsp.buf.formatting_sync(nil, 1000)
