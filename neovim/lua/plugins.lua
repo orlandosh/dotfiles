@@ -9,6 +9,8 @@ return require('packer').startup(function(use)
 	use 'voldikss/vim-floaterm'
 	use 'tpope/vim-fugitive'
 	use 'joshdick/onedark.vim'
+	use 'tpope/vim-surround'
+	use 'luochen1990/rainbow'
 
 	use 'neovim/nvim-lspconfig'
 	use 'hrsh7th/cmp-nvim-lsp'
