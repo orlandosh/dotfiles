@@ -31,7 +31,6 @@ local on_attach = function(client, bufnr)
 	vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts)
 	vim.api.nvim_buf_set_keymap(bufnr, "n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", opts)
 	vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>fo", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
-
 end
 
 local has_words_before = function()
@@ -127,68 +126,73 @@ local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protoco
 -- Use a loop to conveniently call 'setup' on multiple servers and
 -- map buffer local keybindings when the language server attaches
 
-	-- require("lspconfig").pyright.setup({
-	-- 	settings = { python = { analysis = {
-	-- 		diagnosticMode = "openFilesOnly",
-	-- 	} } },
-	-- 	on_attach = on_attach,
-	-- 	capabilities = capabilities,
-	-- })
+-- require("lspconfig").pyright.setup({
+-- 	settings = { python = { analysis = {
+-- 		diagnosticMode = "openFilesOnly",
+-- 	} } },
+-- 	on_attach = on_attach,
+-- 	capabilities = capabilities,
+-- })
 
 local lsp_installer = require("nvim-lsp-installer")
 lsp_installer.on_server_ready(function(server)
-	local opts = {on_attach = on_attach, capabilities = capabilities}
-	if server.name == 'pyright' then
+	local opts = { on_attach = on_attach, capabilities = capabilities }
+	if server.name == "pyright" then
 		opts.settings = { python = { analysis = {
-		diagnosticMode = "openFilesOnly",
-	} } }
+			diagnosticMode = "openFilesOnly",
+		} } }
 	end
-	if server.name == 'sumneko_lua' then
+	if server.name == "sumneko_lua" then
 		opts.settings = {
-		Lua = {
-			diagnostics = {
-				globals = { "vim" },
+			Lua = {
+				diagnostics = {
+					globals = { "vim" },
+				},
+				runtime = { version = "LuaJIT" },
 			},
-			runtime = { version = "LuaJIT" },
-		},
-	}
+		}
 	end
-	if server.name == 'efm' then
+	if server.name == "efm" then
 		return
 	end
 	server:setup(opts)
 end)
 
-	-- require('lspconfig').pyright.setup{on_attach = on_attach, capabilities = capabilities}
+-- require('lspconfig').pyright.setup{on_attach = on_attach, capabilities = capabilities}
 
-		settings = {
-			rootMarkers = { ".git/" },
-			lintDebounce = 1000,
-			languages = {
-				python = {
-					{
-						formatCommand = "isort --stdout --profile black -",
-						formatStdin = true,
-					}
-				}
+settings = {
+	rootMarkers = { ".git/" },
+	lintDebounce = 1000,
+	languages = {
+		python = {
+			{
+				formatCommand = "isort --stdout --profile black -",
+				formatStdin = true,
 			},
-		}
+		},
+	},
+}
 
-		bufdir = vim.api.nvim_buf_get_name(0)
-		p8ln = vim.env.MYVIMRC
-		p8ln = p8ln:gsub("%init.lua", "p8ln")
-		if string.find(bufdir, "apicbase") then
-		else
-			table.insert(settings.languages.python, {
-						formatCommand = "black --quiet -",
-						formatStdin = true,
-					})
-		end
+bufdir = vim.api.nvim_buf_get_name(0)
+p8ln = vim.env.MYVIMRC
+p8ln = p8ln:gsub("%init.lua", "p8ln")
+if string.find(bufdir, "apicbase") then
+else
+	table.insert(settings.languages.python, {
+		formatCommand = "black --quiet -",
+		formatStdin = true,
+	})
+end
 
-			settings.lintDebounce = 1000
+settings.lintDebounce = 1000
 
-		require("lspconfig").efm.setup{on_attach = on_attach, capabilities = capabilities,  cmd = { "/home/parallels/.local/share/nvim/lsp_servers/efm/efm-langserver"}, settings = settings, filetypes = {"python"}, init_options = {documentFormatting = true, diagnostics = true}}
+require("lspconfig").efm.setup({
+	on_attach = on_attach,
+	capabilities = capabilities,
+	cmd = { "/home/parallels/.local/share/nvim/lsp_servers/efm/efm-langserver" },
+	settings = settings,
+	filetypes = { "python" },
+	init_options = { documentFormatting = true, diagnostics = true },
+})
 
-
-		require("lsp_signature").setup()
-
+require("lsp_signature").setup()
