@@ -179,13 +179,13 @@ end)
 		p8ln = p8ln:gsub("%init.lua", "p8ln")
 		if string.find(bufdir, "apicbase") then
 		else
-			settings.lintDebounce = 5000
 			table.insert(settings.languages.python, {
 						formatCommand = "black --quiet -",
 						formatStdin = true,
 					})
 		end
-		local opts = {}
+
+			settings.lintDebounce = 1000
 
 		require("lspconfig").efm.setup{on_attach = on_attach, capabilities = capabilities,  cmd = { "/home/parallels/.local/share/nvim/lsp_servers/efm/efm-langserver"}, settings = settings, filetypes = {"python"}, init_options = {documentFormatting = true, diagnostics = true}}
 
