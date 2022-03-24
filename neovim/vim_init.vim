@@ -35,6 +35,8 @@ nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 nnoremap <leader>t <cmd>Telescope lsp_dynamic_workspace_symbols<cr>
 nnoremap <leader>tr <cmd>TroubleToggle<cr>
+nnoremap <SPACE> <Nop>
+let mapleader=" "
 
 " NERDTREE
 let NERDTreeQuitOnOpen = 1
