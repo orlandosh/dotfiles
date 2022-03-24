@@ -3,7 +3,6 @@ return require('packer').startup(function(use)
 
 	use 'terryma/vim-multiple-cursors'
 	use 'sheerun/vim-polyglot'
-	use 'jiangmiao/auto-pairs'
 	use 'unblevable/quick-scope'
 	use 'itchyny/lightline.vim'
 	use 'voldikss/vim-floaterm'
@@ -13,6 +12,7 @@ return require('packer').startup(function(use)
 	use 'luochen1990/rainbow'
 
 	use 'neovim/nvim-lspconfig'
+	use 'windwp/nvim-autopairs'
 	use 'hrsh7th/cmp-nvim-lsp'
 	use 'hrsh7th/cmp-buffer'
 	use 'hrsh7th/cmp-path'
@@ -33,3 +33,4 @@ return require('packer').startup(function(use)
 	use 'ray-x/lsp_signature.nvim'
 	use 'mfussenegger/nvim-lint'
 end)
+
