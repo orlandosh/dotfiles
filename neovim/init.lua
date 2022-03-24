@@ -9,5 +9,4 @@ require("autosave_stuff")
 require("Comment").setup()
 require("gitsigns").setup()
 require("telescope").setup({ defaults = { file_ignore_patterns = { "%.po" } } })
-require('nvim-autopairs').setup{}
-
+require("nvim-autopairs").setup({})
