@@ -32,7 +32,6 @@ local on_attach = function(client, bufnr)
 	vim.api.nvim_buf_set_keymap(bufnr, "n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", opts)
 	vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>fo", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
 
-	require("lsp_signature").on_attach()
 end
 
 local has_words_before = function()
@@ -189,3 +188,7 @@ end)
 		local opts = {}
 
 		require("lspconfig").efm.setup{on_attach = on_attach, capabilities = capabilities,  cmd = { "/home/parallels/.local/share/nvim/lsp_servers/efm/efm-langserver"}, settings = settings, filetypes = {"python"}, init_options = {documentFormatting = true, diagnostics = true}}
+
+
+		require("lsp_signature").setup()
+
