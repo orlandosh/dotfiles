@@ -44,7 +44,7 @@ let NERDTreeDirArrows = 1
 let g:chadtree_settings = { "theme.icon_glyph_set": "ascii", "keymap.open_sys": [], "keymap.primary": ["o", "<enter>"] }
 
 " format on save
-" autocmd BufWritePre *.py '*.lua' lua vim.lsp.buf.formatting_sync(nil, 1000)
+autocmd BufWritePre *.py,*.lua lua vim.lsp.buf.formatting_sync(nil, 1000)
 " lint on save
 autocmd BufWritePost *.py lua require('lint').try_lint()
 
