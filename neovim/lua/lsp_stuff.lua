@@ -138,10 +138,10 @@ local bufdir = vim.api.nvim_buf_get_name(0)
 
 local lsp_installer = require("nvim-lsp-installer")
 lsp_installer.on_server_ready(function(server)
-	opts = { on_attach = on_attach, capabilities = capabilities }
+	local lsp_opts = { on_attach = on_attach, capabilities = capabilities }
 	if server.name == "pyright" then
 		if string.find(bufdir, "apicbase") then
-			opts.settings = { python = { analysis = {
+			lsp_opts.settings = { python = { analysis = {
 				diagnosticMode = "openFilesOnly",
 			} } }
 		end
@@ -149,7 +149,7 @@ lsp_installer.on_server_ready(function(server)
 	if server.name == "efm" then
 		return
 	end
-	server:setup(opts)
+	server:setup(lsp_opts)
 end)
 
 -- require('lspconfig').pyright.setup{on_attach = on_attach, capabilities = capabilities}
