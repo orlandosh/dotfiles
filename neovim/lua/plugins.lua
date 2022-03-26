@@ -1,6 +1,8 @@
 return require("packer").startup(function(use)
+	-- packer
 	use("wbthomason/packer.nvim")
 
+	-- vim plugins
 	use("terryma/vim-multiple-cursors")
 	use("sheerun/vim-polyglot")
 	use("unblevable/quick-scope")
@@ -10,7 +12,9 @@ return require("packer").startup(function(use)
 	use("joshdick/onedark.vim")
 	use("tpope/vim-surround")
 	use("luochen1990/rainbow")
+	use({ "ms-jpq/chadtree", branch = "chad", run = "python3 -m chadtree deps" })
 
+	-- nvim autocomplete & snip related
 	use("neovim/nvim-lspconfig")
 	use("windwp/nvim-autopairs")
 	use("hrsh7th/cmp-nvim-lsp")
@@ -20,8 +24,9 @@ return require("packer").startup(function(use)
 	use("hrsh7th/nvim-cmp")
 	use("hrsh7th/cmp-vsnip")
 	use("hrsh7th/vim-vsnip")
-	use({ "ms-jpq/chadtree", branch = "chad", run = "python3 -m chadtree deps" })
+	use("ray-x/lsp_signature.nvim")
 
+	-- nvim-only plugins
 	use("Pocco81/AutoSave.nvim")
 	use("nvim-lua/plenary.nvim")
 	use("nvim-telescope/telescope.nvim")
@@ -30,6 +35,5 @@ return require("packer").startup(function(use)
 	use("williamboman/nvim-lsp-installer")
 	use("folke/lsp-colors.nvim")
 	use("folke/trouble.nvim")
-	use("ray-x/lsp_signature.nvim")
 	use("mfussenegger/nvim-lint")
 end)
