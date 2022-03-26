@@ -134,23 +134,17 @@ local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protoco
 -- 	capabilities = capabilities,
 -- })
 
+local bufdir = vim.api.nvim_buf_get_name(0)
+
 local lsp_installer = require("nvim-lsp-installer")
 lsp_installer.on_server_ready(function(server)
-	local opts = { on_attach = on_attach, capabilities = capabilities }
+	opts = { on_attach = on_attach, capabilities = capabilities }
 	if server.name == "pyright" then
-		opts.settings = { python = { analysis = {
-			diagnosticMode = "openFilesOnly",
-		} } }
-	end
-	if server.name == "sumneko_lua" then
-		opts.settings = {
-			Lua = {
-				diagnostics = {
-					globals = { "vim" },
-				},
-				runtime = { version = "LuaJIT" },
-			},
-		}
+		if string.find(bufdir, "apicbase") then
+			opts.settings = { python = { analysis = {
+				diagnosticMode = "openFilesOnly",
+			} } }
+		end
 	end
 	if server.name == "efm" then
 		return
@@ -160,7 +154,7 @@ end)
 
 -- require('lspconfig').pyright.setup{on_attach = on_attach, capabilities = capabilities}
 
-settings = {
+local settings = {
 	rootMarkers = { ".git/" },
 	lintDebounce = 1000,
 	languages = {
@@ -173,8 +167,7 @@ settings = {
 	},
 }
 
-bufdir = vim.api.nvim_buf_get_name(0)
-p8ln = vim.env.MYVIMRC
+local p8ln = vim.env.MYVIMRC
 p8ln = p8ln:gsub("%init.lua", "p8ln")
 if string.find(bufdir, "apicbase") then
 else
@@ -193,6 +186,20 @@ require("lspconfig").efm.setup({
 	settings = settings,
 	filetypes = { "python" },
 	init_options = { documentFormatting = true, diagnostics = true },
+})
+
+require("lspconfig").sumneko_lua.setup({
+	settings = {
+		Lua = {
+			diagnostics = {
+				globals = { "vim" },
+			},
+			runtime = { version = "LuaJIT" },
+			telemetry = {
+				enable = false,
+			},
+		},
+	},
 })
 
 require("lsp_signature").setup()
