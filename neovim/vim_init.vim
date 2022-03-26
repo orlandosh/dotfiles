@@ -44,7 +44,7 @@ let NERDTreeQuitOnOpen = 1
 let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 1
 
-let g:chadtree_settings = { "theme.icon_glyph_set": "ascii", "keymap.open_sys": [], "keymap.primary": ["o", "<enter>"] }
+let g:chadtree_settings = { "theme.icon_glyph_set": "ascii", "keymap.open_sys": [], "keymap.primary": ["o", "<enter>"], "keymap.tertiary": ["O", "<m-enter>", "middlemouse"] }
 
 " format on save
 autocmd BufWritePre *.py,*.lua lua vim.lsp.buf.formatting_sync(nil, 1000)
