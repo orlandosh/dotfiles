@@ -1,20 +1,7 @@
-let g:lightline = {
-        \ 'active': {
-        \ 'left': [ ['mode', 'paste'],
-        \           ['readonly', 'filename', 'modified', 'fugitive'] ]
-        \ },
-        \ 'colorscheme': 'onedark',
-        \ 'component_function': {
-        \     'fugitive': 'fugitive#head'
-        \ },
-        \ }
-
 " General settings
 colorscheme onedark
 let g:onedark_termcolors=16
 let g:rainbow_active = 1
-" hi! Normal guibg=NONE
-" hi! NonText guibg=NONE
 
 syntax on
 highlight Comment gui=italic
@@ -25,6 +12,9 @@ set number
 set relativenumber
 set termguicolors
 set modifiable
+
+" for when the time comes
+" set laststatus=3
 
 " REMAPS
 nnoremap <SPACE> <Nop>
@@ -38,11 +28,6 @@ nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 nnoremap <leader>t <cmd>Telescope lsp_dynamic_workspace_symbols<cr>
 nnoremap <leader>tr <cmd>TroubleToggle<cr>
-
-" NERDTREE
-let NERDTreeQuitOnOpen = 1
-let NERDTreeMinimalUI = 1
-let NERDTreeDirArrows = 1
 
 let g:chadtree_settings = { "theme.icon_glyph_set": "ascii", "keymap.open_sys": [], "keymap.primary": ["o", "<enter>"], "keymap.tertiary": ["O", "<m-enter>", "middlemouse"] }
 
