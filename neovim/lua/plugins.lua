@@ -12,6 +12,7 @@ return require("packer").startup(function(use)
 	use("luochen1990/rainbow")
 	use({ "ms-jpq/chadtree", branch = "chad", run = "python3 -m chadtree deps" })
 
+	-- TODO: reorganize
 	-- nvim lsp, autocomplete, lint & snip related
 	use("neovim/nvim-lspconfig")
 	use("windwp/nvim-autopairs")
@@ -26,8 +27,10 @@ return require("packer").startup(function(use)
 	use("ray-x/lsp_signature.nvim")
 	use("folke/lsp-colors.nvim")
 	use("williamboman/nvim-lsp-installer")
+	use({ "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" })
 
 	-- nvim-only plugins
+	-- TODO: add plugin to index TODOs
 	use("Pocco81/AutoSave.nvim")
 	use("nvim-lua/plenary.nvim")
 	use("nvim-telescope/telescope.nvim")
@@ -35,4 +38,5 @@ return require("packer").startup(function(use)
 	use("lewis6991/gitsigns.nvim")
 	use("folke/trouble.nvim")
 	use("feline-nvim/feline.nvim")
+	use("lukas-reineke/indent-blankline.nvim")
 end)
