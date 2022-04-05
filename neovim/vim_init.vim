@@ -31,7 +31,7 @@ nnoremap <leader>t <cmd>Telescope lsp_dynamic_workspace_symbols<cr>
 nnoremap <leader>tr <cmd>TroubleToggle<cr>
 
 " Clear highlighting on escape in normal mode
-nnoremap <esc> :noh<return><esc>
+nnoremap <esc> <cmd>noh<cr><esc>
 nnoremap <esc>^[ <esc>^[
 
 " TODO: show chadtree on the right
