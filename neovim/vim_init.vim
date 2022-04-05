@@ -30,6 +30,10 @@ nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 nnoremap <leader>t <cmd>Telescope lsp_dynamic_workspace_symbols<cr>
 nnoremap <leader>tr <cmd>TroubleToggle<cr>
 
+" Clear highlighting on escape in normal mode
+nnoremap <esc> :noh<return><esc>
+nnoremap <esc>^[ <esc>^[
+
 " TODO: show chadtree on the right
 " TODO: ignore spellcheck on file extensions
 let g:chadtree_settings = { "theme.icon_glyph_set": "ascii", "keymap.open_sys": [], "keymap.primary": ["o", "<enter>"], "keymap.tertiary": ["O", "<m-enter>", "middlemouse"] }
