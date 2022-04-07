@@ -8,7 +8,7 @@ require("autosave_stuff")
 
 require("Comment").setup()
 require("gitsigns").setup()
-require("telescope").setup({ defaults = { file_ignore_patterns = { "%.po" } } })
+require("telescope").setup({ defaults = { file_ignore_patterns = { "%.po", "assets" } } })
 require("nvim-autopairs").setup({})
 require("feline").setup({
 	preset = "noicon",
