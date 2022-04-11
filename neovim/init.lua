@@ -1,6 +1,7 @@
+require("plugins")
+
 vim.cmd("source ~/.config/nvim/vim_init.vim")
 
-require("plugins")
 require("lsp_stuff")
 require("lint_stuff")
 require("trouble_stuff")
@@ -13,8 +14,5 @@ require("nvim-autopairs").setup({})
 require("feline").setup({
 	preset = "noicon",
 })
-vim.opt.list = true
-require("indent_blankline").setup({
-	show_current_context = true,
-	show_current_context_start = true,
-})
+require("indent_blankline_cfg")
+require("colorizer").setup()

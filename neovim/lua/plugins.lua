@@ -39,4 +39,14 @@ return require("packer").startup(function(use)
 	use("folke/trouble.nvim")
 	use("feline-nvim/feline.nvim")
 	use("lukas-reineke/indent-blankline.nvim")
+	use("norcalli/nvim-colorizer.lua")
+	use("stevearc/dressing.nvim")
+	-- use({
+	-- 	"goolord/alpha-nvim",
+	-- 	config = function()
+	-- 		require("alpha").setup(require("alpha.themes.dashboard").config)
+	-- 	end,
+	-- })
+	use("Shatur/neovim-session-manager")
+	use("kdheepak/lazygit.nvim")
 end)

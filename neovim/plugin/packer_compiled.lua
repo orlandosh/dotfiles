@@ -115,6 +115,11 @@ local no_errors, error_msg = pcall(function()
 			path = "/home/parallels/.local/share/nvim/site/pack/packer/start/cmp-vsnip",
 			url = "https://github.com/hrsh7th/cmp-vsnip",
 		},
+		["dressing.nvim"] = {
+			loaded = true,
+			path = "/home/parallels/.local/share/nvim/site/pack/packer/start/dressing.nvim",
+			url = "https://github.com/stevearc/dressing.nvim",
+		},
 		["feline.nvim"] = {
 			loaded = true,
 			path = "/home/parallels/.local/share/nvim/site/pack/packer/start/feline.nvim",
@@ -130,6 +135,11 @@ local no_errors, error_msg = pcall(function()
 			path = "/home/parallels/.local/share/nvim/site/pack/packer/start/indent-blankline.nvim",
 			url = "https://github.com/lukas-reineke/indent-blankline.nvim",
 		},
+		["lazygit.nvim"] = {
+			loaded = true,
+			path = "/home/parallels/.local/share/nvim/site/pack/packer/start/lazygit.nvim",
+			url = "https://github.com/kdheepak/lazygit.nvim",
+		},
 		["lsp-colors.nvim"] = {
 			loaded = true,
 			path = "/home/parallels/.local/share/nvim/site/pack/packer/start/lsp-colors.nvim",
@@ -140,6 +150,11 @@ local no_errors, error_msg = pcall(function()
 			path = "/home/parallels/.local/share/nvim/site/pack/packer/start/lsp_signature.nvim",
 			url = "https://github.com/ray-x/lsp_signature.nvim",
 		},
+		["neovim-session-manager"] = {
+			loaded = true,
+			path = "/home/parallels/.local/share/nvim/site/pack/packer/start/neovim-session-manager",
+			url = "https://github.com/Shatur/neovim-session-manager",
+		},
 		["nvim-autopairs"] = {
 			loaded = true,
 			path = "/home/parallels/.local/share/nvim/site/pack/packer/start/nvim-autopairs",
@@ -149,6 +164,11 @@ local no_errors, error_msg = pcall(function()
 			loaded = true,
 			path = "/home/parallels/.local/share/nvim/site/pack/packer/start/nvim-cmp",
 			url = "https://github.com/hrsh7th/nvim-cmp",
+		},
+		["nvim-colorizer.lua"] = {
+			loaded = true,
+			path = "/home/parallels/.local/share/nvim/site/pack/packer/start/nvim-colorizer.lua",
+			url = "https://github.com/norcalli/nvim-colorizer.lua",
 		},
 		["nvim-lint"] = {
 			loaded = true,
