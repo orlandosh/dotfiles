@@ -9,10 +9,15 @@ require("autosave_stuff")
 
 require("Comment").setup()
 require("gitsigns").setup()
-local actions = require 'telescope.actions';
-require("telescope").setup({ defaults = { file_ignore_patterns = { "%.po", "assets" }, mappings = {
-        n = { ["dd"] = actions.delete_buffer },
-      }, } })
+local actions = require("telescope.actions")
+require("telescope").setup({
+	defaults = {
+		file_ignore_patterns = { "%.po", "assets" },
+		mappings = {
+			n = { ["dd"] = actions.delete_buffer },
+		},
+	},
+})
 require("nvim-autopairs").setup({})
 require("feline").setup({
 	preset = "noicon",
