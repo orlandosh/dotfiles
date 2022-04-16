@@ -151,6 +151,19 @@ lsp_installer.on_server_ready(function(server)
 	if server.name == "efm" then
 		return
 	end
+	if server.name == "sumneko_lua" then
+		lsp_opts.settings = {
+			Lua = {
+				diagnostics = {
+					globals = { "vim" },
+				},
+				runtime = { version = "LuaJIT" },
+				telemetry = {
+					enable = false,
+				},
+			},
+		}
+	end
 	server:setup(lsp_opts)
 end)
 
@@ -166,6 +179,12 @@ local settings = {
 				formatStdin = true,
 			},
 		},
+		lua = {
+			{
+				formatCommand = "stylua -",
+				formatStdin = true
+			},
+		}
 	},
 }
 
@@ -191,17 +210,6 @@ require("lspconfig").efm.setup({
 })
 
 require("lspconfig").sumneko_lua.setup({
-	settings = {
-		Lua = {
-			diagnostics = {
-				globals = { "vim" },
-			},
-			runtime = { version = "LuaJIT" },
-			telemetry = {
-				enable = false,
-			},
-		},
-	},
 })
 
 require("lsp_signature").setup()
