@@ -182,9 +182,9 @@ local settings = {
 		lua = {
 			{
 				formatCommand = "stylua -",
-				formatStdin = true
+				formatStdin = true,
 			},
-		}
+		},
 	},
 }
 
@@ -207,9 +207,6 @@ require("lspconfig").efm.setup({
 	settings = settings,
 	filetypes = { "python" },
 	init_options = { documentFormatting = true, diagnostics = true },
-})
-
-require("lspconfig").sumneko_lua.setup({
 })
 
 require("lsp_signature").setup()
