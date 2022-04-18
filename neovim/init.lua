@@ -24,3 +24,4 @@ require("feline").setup({
 })
 require("indent_blankline_cfg")
 require("colorizer").setup()
+require("sessions")
