@@ -148,6 +148,9 @@ lsp_installer.on_server_ready(function(server)
 			} } }
 		end
 	end
+	if server.name == "jedi_language_server" then
+		lsp_opts.init_options = {workspace = {symbols = {maxSymbols = -1}}}
+	end
 	if server.name == "efm" then
 		return
 	end
