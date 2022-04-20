@@ -10,7 +10,7 @@ return require("packer").startup(function(use)
 	use("joshdick/onedark.vim")
 	use("tpope/vim-surround")
 	use("luochen1990/rainbow")
-	use({ "ms-jpq/chadtree", branch = "chad", run = "python3 -m chadtree deps" })
+	-- replaced by neotree use({ "ms-jpq/chadtree", branch = "chad", run = "python3 -m chadtree deps" })
 
 	-- TODO: reorganize
 	-- nvim lsp, autocomplete, lint & snip related
@@ -50,4 +50,16 @@ return require("packer").startup(function(use)
 	use("Shatur/neovim-session-manager")
 	use("kdheepak/lazygit.nvim")
 	use("mfussenegger/nvim-dap")
+
+	-- neotree
+	vim.cmd([[ let g:neo_tree_remove_legacy_commands = 1 ]])
+	use({
+		"nvim-neo-tree/neo-tree.nvim",
+		branch = "v2.x",
+		requires = {
+			"nvim-lua/plenary.nvim",
+			"kyazdani42/nvim-web-devicons", -- not strictly required, but recommended
+			"MunifTanjim/nui.nvim",
+		},
+	})
 end)

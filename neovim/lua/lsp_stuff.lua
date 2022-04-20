@@ -121,18 +121,7 @@ cmp.setup.cmdline(":", {
 	}),
 })
 
--- Setup lspconfig.
 local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities())
--- Use a loop to conveniently call 'setup' on multiple servers and
--- map buffer local keybindings when the language server attaches
-
--- require("lspconfig").pyright.setup({
--- 	settings = { python = { analysis = {
--- 		diagnosticMode = "openFilesOnly",
--- 	} } },
--- 	on_attach = on_attach,
--- 	capabilities = capabilities,
--- })
 
 local handle = io.popen("echo $PWD")
 local bufdir = handle:read("*a")
@@ -141,6 +130,7 @@ handle:close()
 local lsp_installer = require("nvim-lsp-installer")
 lsp_installer.on_server_ready(function(server)
 	local lsp_opts = { on_attach = on_attach, capabilities = capabilities }
+
 	if server.name == "pyright" then
 		if string.find(bufdir, "apicbase") then
 			lsp_opts.settings = { python = { analysis = {
@@ -148,12 +138,15 @@ lsp_installer.on_server_ready(function(server)
 			} } }
 		end
 	end
+
 	if server.name == "jedi_language_server" then
-		lsp_opts.init_options = {workspace = {symbols = {maxSymbols = -1}}}
+		lsp_opts.init_options = { workspace = { symbols = { maxSymbols = -1 } } }
 	end
+
 	if server.name == "efm" then
 		return
 	end
+
 	if server.name == "sumneko_lua" then
 		lsp_opts.settings = {
 			Lua = {
@@ -166,11 +159,17 @@ lsp_installer.on_server_ready(function(server)
 				},
 			},
 		}
+		lsp_opts.capabilities = { document_formatting = false, document_range_formatting = false }
+		lsp_opts.on_attach = function(client, bufnr)
+			on_attach(client, bufnr)
+
+			client.resolved_capabilities.document_formatting = false
+			client.resolved_capabilities.document_range_formatting = false
+		end
 	end
+
 	server:setup(lsp_opts)
 end)
-
--- require('lspconfig').pyright.setup{on_attach = on_attach, capabilities = capabilities}
 
 local settings = {
 	rootMarkers = { ".git/" },
@@ -208,7 +207,7 @@ require("lspconfig").efm.setup({
 	capabilities = capabilities,
 	cmd = { "/home/parallels/.local/share/nvim/lsp_servers/efm/efm-langserver" },
 	settings = settings,
-	filetypes = { "python" },
+	filetypes = { "python", "lua" },
 	init_options = { documentFormatting = true, diagnostics = true },
 })
 
