@@ -1,6 +1,7 @@
 require("plugins")
 
 vim.cmd("source ~/.config/nvim/vim_init.vim")
+vim.opt.ignorecase = true
 
 require("lsp_stuff")
 require("lint_stuff")
