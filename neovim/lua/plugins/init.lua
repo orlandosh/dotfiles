@@ -1,24 +1,13 @@
-require("plugins._packer")
-require("Comment").setup()
-require("gitsigns").setup()
+-- Notes:
+-- As per documentation, neotree configs are inside packer.lua
 
-local actions = require("telescope.actions")
-require("telescope").setup({
-	defaults = {
-		file_ignore_patterns = { "%.po", "assets" },
-		mappings = {
-			n = { ["dd"] = actions.delete_buffer },
-		},
-	},
-})
+require("plugins.packer")
+require("plugins.plain_setups")
 
-require("plugins")
-require("lsp_stuff")
-require("lint_stuff")
-require("trouble_stuff")
-require("autosave_stuff")
-require("nvim-autopairs").setup({})
-require("feline").setup({})
-require("indent_blankline_cfg")
-require("colorizer").setup()
-require("sessions")
+require("plugins.autopairs")
+require("plugins.autosave")
+require("plugins.indent_blankline")
+require("plugins._lint") -- we need to rename lint to _lint cause its also used in autocmd.lua
+require("plugins.sessions")
+require("plugins.telescope")
+require("plugins.trouble")

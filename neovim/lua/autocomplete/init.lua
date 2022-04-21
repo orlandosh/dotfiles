@@ -1,9 +1,9 @@
 local opts = { noremap = true, silent = true }
-require("lsp.keymaps")(opts)
-local on_attach = require("lsp.on_attach")(opts)
+require("autocomplete.keymaps")(opts)
+local on_attach = require("autocomplete.on_attach")(opts)
 
 local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities())
-require("lsp.cmp")
+require("autocomplete.cmp")
 
 local handle = io.popen("echo $PWD")
 local bufdir = handle:read("*a")

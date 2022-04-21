@@ -60,6 +60,6 @@ return require("packer").startup(function(use)
 			"kyazdani42/nvim-web-devicons", -- not strictly required, but recommended
 			"MunifTanjim/nui.nvim",
 		},
-		config = require("neotree_cfg"),
+		config = require("plugins.neotree"),
 	})
 end)
