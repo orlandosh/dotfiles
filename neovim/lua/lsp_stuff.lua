@@ -205,7 +205,7 @@ settings.lintDebounce = 1000
 require("lspconfig").efm.setup({
 	on_attach = on_attach,
 	capabilities = capabilities,
-	cmd = { "/home/parallels/.local/share/nvim/lsp_servers/efm/efm-langserver" },
+	cmd = { "/home/me/.local/share/nvim/lsp_servers/efm/efm-langserver" },
 	settings = settings,
 	filetypes = { "python", "lua" },
 	init_options = { documentFormatting = true, diagnostics = true },

@@ -1,6 +1,5 @@
 require("plugins")
-
-vim.cmd("source ~/.config/nvim/vim_init.vim")
+require("settings")
 vim.opt.ignorecase = true
 
 require("lsp_stuff")
@@ -20,9 +19,7 @@ require("telescope").setup({
 	},
 })
 require("nvim-autopairs").setup({})
-require("feline").setup({
-	preset = "noicon",
-})
+require("feline").setup({})
 require("indent_blankline_cfg")
 require("colorizer").setup()
 require("sessions")
