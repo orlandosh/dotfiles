@@ -1,3 +1,5 @@
+local lint = { lint = require("lint") }
+
 local pylint = require("lint.linters.pylint")
 
 pylint.cmd = "poetry"
@@ -14,6 +16,8 @@ if string.find(bufdir, "apicbase") then
 	table.insert(linters, "flake8")
 end
 
-require("lint").linters_by_ft = {
+lint.lint.linters_by_ft = {
 	python = linters,
 }
+
+return lint

@@ -10,6 +10,6 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 vim.api.nvim_create_autocmd({ "BufWritePost" }, {
 	pattern = { "*.py" },
 	callback = function()
-		require("lint").try_lint()
+		require("plugins.lint").lint.try_lint()
 	end,
 })
