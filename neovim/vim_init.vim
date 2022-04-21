@@ -21,13 +21,14 @@ set modifiable
 nnoremap <SPACE> <Nop>
 let mapleader=" "
 
-nnoremap <leader>b <cmd>CHADopen<cr>
+nnoremap <leader>b <cmd>Neotree<cr>
 nnoremap <leader>sv <cmd>source $MYVIMRC<cr>
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
-nnoremap <leader>t <cmd>Telescope lsp_dynamic_workspace_symbols<cr>
+nnoremap <leader>tw <cmd>Telescope lsp_dynamic_workspace_symbols<cr>
+nnoremap <leader>ts <cmd>Telescope treesitter<cr>
 nnoremap <leader>tr <cmd>TroubleToggle<cr>
 
 " Clear highlighting on escape in normal mode
