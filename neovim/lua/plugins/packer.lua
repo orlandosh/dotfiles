@@ -1,4 +1,6 @@
 return require("packer").startup(function(use)
+	-- TODO: properly sort plugins and deps
+
 	-- packer
 	use("wbthomason/packer.nvim")
 
@@ -33,7 +35,7 @@ return require("packer").startup(function(use)
 	-- TODO: add plugin to index TODOs
 	use("Pocco81/AutoSave.nvim")
 	use("nvim-lua/plenary.nvim")
-	use("nvim-telescope/telescope.nvim")
+	use({ "nvim-telescope/telescope.nvim", requires = { { "nvim-lua/plenary.nvim" } } })
 	use("numToStr/Comment.nvim")
 	use("lewis6991/gitsigns.nvim")
 	use("folke/trouble.nvim")
@@ -62,4 +64,6 @@ return require("packer").startup(function(use)
 		},
 		config = require("plugins.neotree"),
 	})
+
+	use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" })
 end)
