@@ -18,3 +18,4 @@ set.termguicolors = true
 set.modifiable = true
 set.laststatus = 3
 set.ignorecase = true
+set.spell = true
