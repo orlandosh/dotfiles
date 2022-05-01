@@ -58,7 +58,7 @@ local file_line = {
 }
 
 -- TODO: highlight feature, hotfix, etc
-local git_branch = { provider = { name = "git_branch" }, right_sep = " ", hl = function() end }
+local git_branch = { provider = { name = "git_branch" }, right_sep = " ", left_sep = "  ", hl = function() end }
 local git_diff = {}
 
 git_diff.add = {
@@ -109,10 +109,10 @@ git_diff.del = {
 	right_sep = " ",
 }
 
-local diagnostic_errors = { provider = "diagnostic_errors", hl = { fg = "magenta" }, right_sep = " " }
-local diagnostic_warnings = { provider = "diagnostic_warnings", hl = { fg = "yellow" }, right_sep = " " }
-local diagnostic_hints = { provider = "diagnostic_hints", hl = { fg = "cyan" }, right_sep = " " }
-local diagnostic_info = { provider = "diagnostic_info", hl = { fg = "white" }, right_sep = " " }
+local diagnostic_errors = { provider = "diagnostic_errors", hl = { fg = "magenta" }, right_sep = "" }
+local diagnostic_warnings = { provider = "diagnostic_warnings", hl = { fg = "yellow" }, right_sep = "" }
+local diagnostic_hints = { provider = "diagnostic_hints", hl = { fg = "cyan" }, right_sep = "" }
+local diagnostic_info = { provider = "diagnostic_info", hl = { fg = "white" }, right_sep = "" }
 
 local left = {
 	file_name,
