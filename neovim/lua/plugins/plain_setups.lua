@@ -1,5 +1,5 @@
 require("Comment").setup()
 require("gitsigns").setup()
 require("nvim-autopairs").setup()
-require("feline").setup()
 require("colorizer").setup()
+require("neoscroll").setup()
