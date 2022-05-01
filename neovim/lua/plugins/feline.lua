@@ -141,5 +141,5 @@ local components = {
 require("feline").setup({
 	components = components,
 	theme = require("plugins.feline.theme").my_theme,
-	disable = { buftypes = { "terminal" }, filetypes = { "neo-tree" } },
+	disable = { buftypes = { "terminal" }, filetypes = { "neo--tree" } },
 })
