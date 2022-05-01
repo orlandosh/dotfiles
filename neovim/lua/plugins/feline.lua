@@ -1,3 +1,5 @@
+-- change vi mode colors
+
 local fe_vi_mode = require("feline.providers.vi_mode")
 local fe_file = require("feline.providers.file")
 local fe_git = require("feline.providers.git")
