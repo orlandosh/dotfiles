@@ -4,9 +4,9 @@ local fe_git = require("feline.providers.git")
 local fe_cursor = require("feline.providers.cursor")
 
 local file_name = {
-	provider = function()
-		local file_name, icon = fe_file.file_info({}, { unique = true })
-		local pos = fe_cursor.position({}, {}):gsub("%s+", "")
+	provider = function(component)
+		local file_name, _ = fe_file.file_info(component, { type = "unique" })
+		local pos = fe_cursor.position(component, {}):gsub("%s+", "")
 		local percent = fe_cursor.line_percentage():lower():gsub("%s+", "")
 
 		if percent:find("bot") then
@@ -17,6 +17,14 @@ local file_name = {
 
 		percent = percent:format("%-4s", percent) .. "%%"
 		local pos_percent = string.format("%-16s", pos .. ":" .. percent)
+
+		local icon_str, icon_color = require("nvim-web-devicons").get_icon_colors_by_filetype(
+			vim.bo.filetype,
+			{ default = true }
+		)
+
+		local icon = { str = icon_str }
+		icon.hl = { fg = icon_color }
 
 		return file_name .. ":" .. pos_percent, icon
 	end,
