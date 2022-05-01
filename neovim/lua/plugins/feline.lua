@@ -138,4 +138,8 @@ local components = {
 	inactive = { left, mid, right },
 }
 
-require("feline").setup({ components = components, theme = require("plugins.feline.theme").my_theme })
+require("feline").setup({
+	components = components,
+	theme = require("plugins.feline.theme").my_theme,
+	disable = { buftypes = { "terminal" }, filetypes = { "neo-tree" } },
+})
