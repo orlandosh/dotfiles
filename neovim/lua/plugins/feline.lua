@@ -104,7 +104,7 @@ git_diff.del = {
 local diagnostic_errors = { provider = "diagnostic_errors", hl = { fg = "magenta" }, right_sep = " " }
 local diagnostic_warnings = { provider = "diagnostic_warnings", hl = { fg = "yellow" }, right_sep = " " }
 local diagnostic_hints = { provider = "diagnostic_hints", hl = { fg = "cyan" }, right_sep = " " }
-local diagnostic_info = { provider = "diagnostic_info", hl = { fg = "white" }, right_sep = "  " } ------------------------
+local diagnostic_info = { provider = "diagnostic_info", hl = { fg = "white" }, right_sep = " " }
 
 local left = {
 	file_name,
