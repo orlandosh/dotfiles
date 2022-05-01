@@ -4,7 +4,9 @@ vim.keymap.set("n", "<SPACE>", "<Nop>")
 vim.g.mapleader = " "
 
 vim.keymap.set("n", "<leader>b", "<cmd>Neotree toggle<cr>")
+
 vim.keymap.set("n", "<leader>sv", "<cmd>source $MYVIMRC<cr>")
+
 vim.keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>")
 vim.keymap.set("n", "<leader>fg", "<cmd>Telescope live_grep<cr>")
 vim.keymap.set("n", "<leader>fb", "<cmd>Telescope buffers<cr>")

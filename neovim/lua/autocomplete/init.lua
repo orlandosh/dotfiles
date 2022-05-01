@@ -1,13 +1,12 @@
 local opts = { noremap = true, silent = true }
 require("autocomplete.keymaps")(opts)
 local on_attach = require("autocomplete.on_attach")(opts)
+local utils = require("utils")
 
 local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities())
 require("autocomplete.cmp")
 
-local handle = io.popen("echo $PWD")
-local bufdir = handle:read("*a")
-handle:close()
+local bufdir = utils.get_dir()
 
 local lsp_installer = require("nvim-lsp-installer")
 lsp_installer.on_server_ready(function(server)
