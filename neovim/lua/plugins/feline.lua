@@ -6,7 +6,19 @@ local fe_cursor = require("feline.providers.cursor")
 local file_name = {
 	provider = function()
 		local file_name, icon = fe_file.file_info({}, { unique = true })
-		return file_name .. ":" .. fe_cursor.position({}, {}), icon
+		local pos = fe_cursor.position({}, {}):gsub("%s+", "")
+		local percent = fe_cursor.line_percentage():lower():gsub("%s+", "")
+
+		if percent:find("bot") then
+			percent = "100%%"
+		elseif percent:find("top") then
+			percent = "0%%"
+		end
+
+		percent = percent:format("%-4s", percent) .. "%%"
+		local pos_percent = string.format("%-16s", pos .. ":" .. percent)
+
+		return file_name .. ":" .. pos_percent, icon
 	end,
 	left_sep = " ",
 }
@@ -39,7 +51,6 @@ local file_line = {
 
 -- TODO: highlight feature, hotfix, etc
 local git_branch = { provider = { name = "git_branch" }, right_sep = " ", hl = function() end }
-
 local git_diff = {}
 
 git_diff.add = {
@@ -64,7 +75,7 @@ git_diff.modify = {
 	end,
 
 	hl = function()
-		return { fg = "yellow" }
+		return { fg = "orange" }
 	end,
 
 	enabled = function()
@@ -90,6 +101,11 @@ git_diff.del = {
 	right_sep = " ",
 }
 
+local diagnostic_errors = { provider = "diagnostic_errors", hl = { fg = "magenta" }, right_sep = " " }
+local diagnostic_warnings = { provider = "diagnostic_warnings", hl = { fg = "yellow" }, right_sep = " " }
+local diagnostic_hints = { provider = "diagnostic_hints", hl = { fg = "cyan" }, right_sep = " " }
+local diagnostic_info = { provider = "diagnostic_info", hl = { fg = "white" }, right_sep = "  " } ------------------------
+
 local left = {
 	file_name,
 	file_line,
@@ -99,6 +115,10 @@ local left = {
 local mid = {}
 
 local right = {
+	diagnostic_errors,
+	diagnostic_warnings,
+	diagnostic_hints,
+	diagnostic_info,
 	git_branch,
 	git_diff.add,
 	git_diff.modify,
