@@ -67,4 +67,5 @@ return require("packer").startup(function(use)
 
 	use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" })
 	use("karb94/neoscroll.nvim")
+	use("hkupty/iron.nvim")
 end)
