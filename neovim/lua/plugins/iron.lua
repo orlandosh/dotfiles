@@ -12,7 +12,7 @@ iron.setup({
 			sh = {
 				command = { "zsh" },
 			},
-			python = { command = { "python" } },
+			python = { command = { "ipython" } },
 		},
 	},
 	repl_open_cmd = require("iron.view").curry.right(20),
