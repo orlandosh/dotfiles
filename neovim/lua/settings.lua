@@ -3,9 +3,12 @@ local set = vim.opt
 vim.g.onedark_termcolors = 16
 vim.g.rainbow_active = 1
 
+-- gruvbox
+set.background = "dark"
+
 vim.cmd([[
 	syntax on
-	colorscheme onedark
+	colorscheme gruvbox
 	highlight Comment gui=italic
 	setlocal spell spelllang=en_ca
 ]])

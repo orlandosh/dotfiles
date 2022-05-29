@@ -4,14 +4,17 @@ return require("packer").startup(function(use)
 	-- packer
 	use("wbthomason/packer.nvim")
 
+	-- themes
+	use("ellisonleao/gruvbox.nvim")
+	-- use("joshdick/onedark.vim")
+
 	-- vim plugins
 	use("terryma/vim-multiple-cursors")
-	use("sheerun/vim-polyglot")
+	-- use("sheerun/vim-polyglot")
 	use("unblevable/quick-scope")
 	use("tpope/vim-fugitive")
-	use("joshdick/onedark.vim")
 	use("tpope/vim-surround")
-	use("luochen1990/rainbow")
+	-- use("luochen1990/rainbow")
 	-- replaced by neotree use({ "ms-jpq/chadtree", branch = "chad", run = "python3 -m chadtree deps" })
 
 	-- TODO: reorganize
