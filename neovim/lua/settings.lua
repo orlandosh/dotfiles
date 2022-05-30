@@ -8,7 +8,7 @@ set.background = "dark"
 
 vim.cmd([[
 	syntax on
-	colorscheme gruvbox
+	colorscheme gruvbox-material
 	highlight Comment gui=italic
 	setlocal spell spelllang=en_ca
 ]])

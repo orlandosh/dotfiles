@@ -6,11 +6,12 @@ return require("packer").startup(function(use)
 
 	-- themes
 	use("ellisonleao/gruvbox.nvim")
+	use("sainnhe/gruvbox-material")
 	-- use("joshdick/onedark.vim")
 
 	-- vim plugins
 	use("terryma/vim-multiple-cursors")
-	-- use("sheerun/vim-polyglot")
+	use("sheerun/vim-polyglot")
 	use("unblevable/quick-scope")
 	use("tpope/vim-fugitive")
 	use("tpope/vim-surround")
