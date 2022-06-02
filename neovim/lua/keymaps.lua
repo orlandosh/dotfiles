@@ -13,7 +13,10 @@ vim.keymap.set("n", "<leader>fb", "<cmd>Telescope buffers<cr>")
 vim.keymap.set("n", "<leader>fh", "<cmd>Telescope help_tags<cr>")
 vim.keymap.set("n", "<leader>tw", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>")
 vim.keymap.set("n", "<leader>ts", "<cmd>Telescope treesitter<cr>")
+
 vim.keymap.set("n", "<leader>tr", "<cmd>TroubleToggle<cr>")
+
+vim.keymap.set("n", "<leader>lg", "<cmd>LazyGit<cr>")
 
 -- Clear highlighting on escape in normal mode
 vim.keymap.set("n", "<esc>", "<cmd>noh<cr><esc>")
