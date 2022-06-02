@@ -22,7 +22,6 @@ iron.setup({
 		send_motion = "<leader>sc",
 		visual_send = "<leader>sc",
 		send_line = "<leader>sl",
-		repeat_cmd = "<leader>s.",
 		exit = "<leader>sq",
 		clear = "<leader>cl",
 	},
