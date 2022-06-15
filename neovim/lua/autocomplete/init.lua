@@ -68,6 +68,12 @@ local settings = {
 				formatStdin = true,
 			},
 		},
+		vue = {
+			{
+				formatCommand = "prettier ${INPUT}",
+				formatStdin = true,
+			},
+		},
 	},
 }
 
@@ -88,7 +94,7 @@ require("lspconfig").efm.setup({
 	capabilities = capabilities,
 	cmd = { "/home/me/.local/share/nvim/lsp_servers/efm/efm-langserver" },
 	settings = settings,
-	filetypes = { "python", "lua" },
+	filetypes = { "python", "lua", "vue" },
 	init_options = { documentFormatting = true, diagnostics = true },
 })
 
