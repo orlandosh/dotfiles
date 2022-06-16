@@ -6,6 +6,7 @@ require("plugins.plain_setups")
 
 require("plugins.autopairs")
 require("plugins.autosave")
+require("plugins.autotag")
 require("plugins.indent_blankline")
 require("plugins.iron")
 require("plugins.lint")
