@@ -17,3 +17,5 @@ vim.api.nvim_create_autocmd({ "BufWritePost" }, {
 		require("plugins.lint").lint.try_lint()
 	end,
 })
+
+-- TODO: remove trailing whitespace

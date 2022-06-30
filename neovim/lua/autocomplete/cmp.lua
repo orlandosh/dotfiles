@@ -9,6 +9,7 @@ end
 -- Setup nvim-cmp.
 local cmp = require("cmp")
 
+-- TODO: sort autocomplete values first for scss and css
 cmp.setup({
 	snippet = {
 		-- REQUIRED - you must specify a snippet engine
