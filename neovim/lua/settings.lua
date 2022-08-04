@@ -5,11 +5,12 @@ vim.g.rainbow_active = 1
 
 -- gruvbox
 set.background = "dark"
+vim.g.gruvbox_material_enable_italic = 1
+vim.g.gruvbox_material_diagnostic_virtual_text = "colored"
 
 vim.cmd([[
 	syntax on
 	colorscheme gruvbox-material
-	highlight Comment gui=italic
 	setlocal spell spelllang=en_ca
 ]])
 
