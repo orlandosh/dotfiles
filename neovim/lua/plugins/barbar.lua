@@ -1,1 +1,1 @@
-require("bufferline").setup({ closable = false })
+require("bufferline").setup({ closable = false, clickable = false })
