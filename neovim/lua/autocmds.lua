@@ -5,7 +5,9 @@ if not dir:find("apicbase") then
 	vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 		pattern = { "*.py", "*.lua" },
 		callback = function()
+			local v = vim.fn.winsaveview()
 			vim.lsp.buf.formatting_sync(nil, 1000)
+			vim.fn.winrestview(v)
 		end,
 	})
 end
