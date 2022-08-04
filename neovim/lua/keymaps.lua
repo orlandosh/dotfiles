@@ -22,3 +22,30 @@ vim.keymap.set("n", "<leader>lg", "<cmd>LazyGit<cr>")
 -- Clear highlighting on escape in normal mode
 vim.keymap.set("n", "<esc>", "<cmd>noh<cr><esc>")
 vim.keymap.set("n", "<esc>^[", "<esc>^[")
+
+-- barbar
+vim.keymap.set("n", "<A-,>", "<cmd>BufferPrevious<cr>")
+vim.keymap.set("n", "<A-.>", "<cmd>BufferNext<cr>")
+
+vim.keymap.set("n", "<A-<>", "<cmd>BufferMovePrevious<cr>")
+vim.keymap.set("n", "<A->>", "<cmd>BufferMoveNext<cr>")
+
+vim.keymap.set("n", "<A-1>", "<cmd>BufferGoto 1<cr>")
+vim.keymap.set("n", "<A-2>", "<cmd>BufferGoto 2<cr>")
+vim.keymap.set("n", "<A-3>", "<cmd>BufferGoto 3<cr>")
+vim.keymap.set("n", "<A-4>", "<cmd>BufferGoto 4<cr>")
+vim.keymap.set("n", "<A-5>", "<cmd>BufferGoto 5<cr>")
+vim.keymap.set("n", "<A-6>", "<cmd>BufferGoto 6<cr>")
+vim.keymap.set("n", "<A-7>", "<cmd>BufferGoto 7<cr>")
+vim.keymap.set("n", "<A-8>", "<cmd>BufferGoto 8<cr>")
+vim.keymap.set("n", "<A-9>", "<cmd>BufferGoto 9<cr>")
+vim.keymap.set("n", "<A-0>", "<cmd>BufferLast<cr>")
+
+vim.keymap.set("n", "<A-p>", "<cmd>BufferPin<cr>")
+vim.keymap.set("n", "<A-c>", "<cmd>BufferClose<cr>")
+vim.keymap.set("n", "<A-o>", "<cmd>BufferPick<cr>")
+
+vim.keymap.set("n", "<leader>bb", "<cmd>BufferOrderByBufferNumber<cr>")
+vim.keymap.set("n", "<leader>bd", "<cmd>BufferOrderByDirectory<cr>")
+vim.keymap.set("n", "<leader>bl", "<cmd>BufferOrderByLanguage<cr>")
+vim.keymap.set("n", "<leader>bw", "<cmd>BufferOrderByWindowNumber<cr>")

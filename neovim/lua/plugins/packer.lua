@@ -44,6 +44,10 @@ return require("packer").startup(function(use)
 	use("lewis6991/gitsigns.nvim")
 	use("folke/trouble.nvim")
 	use("feline-nvim/feline.nvim")
+	use({
+		"romgrk/barbar.nvim",
+		requires = { "kyazdani42/nvim-web-devicons" },
+	})
 	use("lukas-reineke/indent-blankline.nvim")
 	use("norcalli/nvim-colorizer.lua")
 	use("stevearc/dressing.nvim")
