@@ -14,7 +14,6 @@ return require("packer").startup(function(use)
 	use("sheerun/vim-polyglot")
 	use("unblevable/quick-scope")
 	use("tpope/vim-fugitive")
-	use("tpope/vim-surround")
 	-- use("luochen1990/rainbow")
 	-- replaced by neotree use({ "ms-jpq/chadtree", branch = "chad", run = "python3 -m chadtree deps" })
 
@@ -79,4 +78,13 @@ return require("packer").startup(function(use)
 
 	-- autotag
 	use("windwp/nvim-ts-autotag")
+
+	use({
+		"kylechui/nvim-surround",
+		config = function()
+			require("nvim-surround").setup({
+				-- Configuration here, or leave empty to use defaults
+			})
+		end,
+	})
 end)
