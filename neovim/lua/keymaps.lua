@@ -3,7 +3,7 @@
 vim.keymap.set("n", "<SPACE>", "<Nop>")
 vim.g.mapleader = " "
 
-vim.keymap.set("n", "<leader>b", "<cmd>Neotree toggle<cr>")
+vim.keymap.set("n", "<leader>b", "<cmd>Neotree toggle position=right<cr>")
 
 vim.keymap.set("n", "<leader>sv", "<cmd>source $MYVIMRC<cr>")
 
