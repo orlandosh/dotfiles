@@ -36,7 +36,7 @@ return require("packer").startup(function(use)
 
 	-- nvim-only plugins
 	-- TODO: add plugin to index TODOs
-	use("Pocco81/AutoSave.nvim")
+	use("Pocco81/auto-save.nvim")
 	use("nvim-lua/plenary.nvim")
 	use({ "nvim-telescope/telescope.nvim", requires = { { "nvim-lua/plenary.nvim" } } })
 	use("numToStr/Comment.nvim")

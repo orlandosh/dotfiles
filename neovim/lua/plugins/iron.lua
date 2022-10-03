@@ -15,7 +15,7 @@ iron.setup({
 			-- python = { command = { "ipython" } },
 		},
 	},
-	repl_open_cmd = require("iron.view").curry.right(20),
+	repl_open_cmd = require("iron.view").right(20),
 	-- Iron doesn't set keymaps by default anymore. Set them here
 	-- or use `should_map_plug = true` and map from you vim files
 	keymaps = {
