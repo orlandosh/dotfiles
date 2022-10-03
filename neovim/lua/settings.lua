@@ -7,6 +7,7 @@ vim.g.rainbow_active = 1
 set.background = "dark"
 vim.g.gruvbox_material_enable_italic = 1
 vim.g.gruvbox_material_diagnostic_virtual_text = "colored"
+vim.g.gruvbox_material_background = "soft"
 
 vim.cmd([[
 	syntax on
