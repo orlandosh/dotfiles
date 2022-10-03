@@ -20,14 +20,13 @@ local file_name = {
 		percent = percent:format("%-4s", percent) .. "%%"
 		local pos_percent = string.format("%-16s", pos .. ":" .. percent)
 
-		local icon_str, icon_color = require("nvim-web-devicons").get_icon_colors_by_filetype(
-			vim.bo.filetype,
-			{ default = true }
-		)
+		local icon_str, icon_color =
+			require("nvim-web-devicons").get_icon_colors_by_filetype(vim.bo.filetype, { default = true })
 
 		local icon = { str = icon_str }
 		icon.hl = { fg = icon_color }
 
+		pos_percent = pos_percent:gsub("%%", "") -- as feline currently does not accept strings ending with %%
 		return file_name .. ":" .. pos_percent, icon
 	end,
 	left_sep = " ",
