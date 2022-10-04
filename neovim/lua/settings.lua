@@ -24,3 +24,4 @@ set.modifiable = true
 set.laststatus = 3
 set.smartcase = true
 set.spell = true
+set.cmdheight = 0
