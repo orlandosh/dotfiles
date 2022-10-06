@@ -1,5 +1,3 @@
--- change vi mode colors
-
 local fe_vi_mode = require("feline.providers.vi_mode")
 local fe_file = require("feline.providers.file")
 local fe_git = require("feline.providers.git")
@@ -17,7 +15,7 @@ local file_name = {
 			percent = "0%%"
 		end
 
-		percent = percent:format("%-4s", percent) .. "%%"
+		percent = percent:format("%-4s", percent) .. "%"
 		local pos_percent = string.format("%-16s", pos .. ":" .. percent)
 
 		local icon_str, icon_color =
@@ -26,7 +24,6 @@ local file_name = {
 		local icon = { str = icon_str }
 		icon.hl = { fg = icon_color }
 
-		pos_percent = pos_percent:gsub("%%", "") -- as feline currently does not accept strings ending with %%
 		return file_name .. ":" .. pos_percent, icon
 	end,
 	left_sep = " ",
