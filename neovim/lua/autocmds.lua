@@ -10,7 +10,7 @@ if not dir:find("apicbase") then
 		pattern = { "*.py", "*.lua" },
 		callback = function()
 			local v = vim.fn.winsaveview()
-			vim.lsp.buf.formatting_sync(nil, 1000)
+			vim.lsp.buf.format({ timeout_ms = 1000 })
 			vim.fn.winrestview(v)
 		end,
 	})

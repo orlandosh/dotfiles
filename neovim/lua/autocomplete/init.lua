@@ -3,54 +3,39 @@ require("autocomplete.keymaps")(opts)
 local on_attach = require("autocomplete.on_attach")(opts)
 local utils = require("utils")
 
-local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities())
+local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
 require("autocomplete.cmp")
 
 local bufdir = utils.get_dir()
 
-local lsp_installer = require("nvim-lsp-installer")
-lsp_installer.on_server_ready(function(server)
+local lspconfig = require("lspconfig")
+local installed_servers = require("mason-lspconfig").get_installed_servers()
+
+for _, server in pairs(installed_servers) do
 	local lsp_opts = { on_attach = on_attach, capabilities = capabilities }
 
-	if server.name == "pyright" then
+	if server == "pyright" then
 		if string.find(bufdir, "apicbase") then
-			lsp_opts.settings = { python = { analysis = {
-				diagnosticMode = "openFilesOnly",
-			} } }
+			lsp_opts.settings = {
+				python = {
+					analysis = {
+						diagnosticMode = "openFilesOnly",
+					}
+				}
+			}
 		end
 	end
 
-	if server.name == "jedi_language_server" then
+	if server == "jedi_language_server" then
 		lsp_opts.init_options = { workspace = { symbols = { maxSymbols = -1 } } }
 	end
 
-	if server.name == "efm" then
+	if server == "efm" then
 		return
 	end
 
-	if server.name == "sumneko_lua" then
-		lsp_opts.settings = {
-			Lua = {
-				diagnostics = {
-					globals = { "vim" },
-				},
-				runtime = { version = "LuaJIT" },
-				telemetry = {
-					enable = false,
-				},
-			},
-		}
-		lsp_opts.capabilities = { document_formatting = false, document_range_formatting = false }
-		lsp_opts.on_attach = function(client, bufnr)
-			on_attach(client, bufnr)
-
-			client.server_capabilities.documentFormattingProvider = false
-			client.server_capabilities.documentRangeFormattingProvider = false
-		end
-	end
-
-	server:setup(lsp_opts)
-end)
+	lspconfig[server].setup(lsp_opts)
+end
 
 local settings = {
 	rootMarkers = { ".git/" },

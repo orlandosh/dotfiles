@@ -1,4 +1,3 @@
-require("Comment").setup()
 require("gitsigns").setup()
 require("nvim-autopairs").setup()
 require("colorizer").setup()

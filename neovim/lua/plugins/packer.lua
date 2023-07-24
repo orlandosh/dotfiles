@@ -31,7 +31,19 @@ return require("packer").startup(function(use)
 	use("mfussenegger/nvim-lint")
 	use("ray-x/lsp_signature.nvim")
 	use("folke/lsp-colors.nvim")
-	use("williamboman/nvim-lsp-installer")
+	use({
+		"williamboman/mason.nvim",
+		run = ":MasonUpdate", -- :MasonUpdate updates registry contents
+		config = function()
+			require("mason").setup()
+		end,
+	})
+	use({
+		"williamboman/mason-lspconfig.nvim",
+		config = function()
+			require("mason-lspconfig").setup()
+		end,
+	})
 	use({ "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" })
 
 	-- nvim-only plugins
@@ -39,7 +51,12 @@ return require("packer").startup(function(use)
 	use("Pocco81/auto-save.nvim")
 	use("nvim-lua/plenary.nvim")
 	use({ "nvim-telescope/telescope.nvim", requires = { { "nvim-lua/plenary.nvim" } } })
-	use("numToStr/Comment.nvim")
+	use({
+		"numToStr/Comment.nvim",
+		config = function()
+			require("Comment").setup()
+		end,
+	})
 	use("lewis6991/gitsigns.nvim")
 	use("folke/trouble.nvim")
 	use("feline-nvim/feline.nvim")
@@ -85,6 +102,16 @@ return require("packer").startup(function(use)
 			require("nvim-surround").setup({
 				-- Configuration here, or leave empty to use defaults
 			})
+		end,
+	})
+
+	-- copilot
+	use({
+		"zbirenbaum/copilot.lua",
+		cmd = "Copilot",
+		event = "InsertEnter",
+		config = function()
+			require("copilot").setup({})
 		end,
 	})
 end)
