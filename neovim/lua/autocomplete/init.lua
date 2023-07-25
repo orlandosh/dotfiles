@@ -20,8 +20,8 @@ for _, server in pairs(installed_servers) do
 				python = {
 					analysis = {
 						diagnosticMode = "openFilesOnly",
-					}
-				}
+					},
+				},
 			}
 		end
 	end
@@ -30,8 +30,13 @@ for _, server in pairs(installed_servers) do
 		lsp_opts.init_options = { workspace = { symbols = { maxSymbols = -1 } } }
 	end
 
-	if server == "efm" then
-		return
+	if server == "omnisharp" then
+		lsp_opts.cmd = {
+			"/home/me/.local/share/nvim/mason/bin/omnisharp",
+			"--languageserver",
+			"--hostPID",
+			tostring(vim.fn.getpid()),
+		}
 	end
 
 	lspconfig[server].setup(lsp_opts)
@@ -59,6 +64,12 @@ local settings = {
 				formatStdin = true,
 			},
 		},
+		cs = {
+			{
+				formatCommand = "dotnet-csharpier --write-stdout -",
+				formatStdin = true,
+			},
+		},
 	},
 }
 
@@ -79,7 +90,7 @@ require("lspconfig").efm.setup({
 	capabilities = capabilities,
 	cmd = { "/home/me/.local/share/nvim/lsp_servers/efm/efm-langserver" },
 	settings = settings,
-	filetypes = { "python", "lua", "vue" },
+	filetypes = { "python", "lua", "vue", "cs" },
 	init_options = { documentFormatting = true, diagnostics = true },
 })
 

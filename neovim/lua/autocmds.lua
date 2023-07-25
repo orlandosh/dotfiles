@@ -7,7 +7,7 @@ end
 
 if not dir:find("apicbase") then
 	vim.api.nvim_create_autocmd({ "BufWritePre" }, {
-		pattern = { "*.py", "*.lua" },
+		pattern = { "*.py", "*.lua", "*.cs", "*.json" },
 		callback = function()
 			local v = vim.fn.winsaveview()
 			vim.lsp.buf.format({ timeout_ms = 1000 })
