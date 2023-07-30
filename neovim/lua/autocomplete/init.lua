@@ -70,6 +70,12 @@ local settings = {
 				formatStdin = true,
 			},
 		},
+		rs = {
+			{
+				formatCommand = "rustfmt --emit=stdout",
+				formatStdin = true,
+			},
+		},
 	},
 }
 
