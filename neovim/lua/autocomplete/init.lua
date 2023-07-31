@@ -39,6 +39,16 @@ for _, server in pairs(installed_servers) do
 		}
 	end
 
+	if server == "sqlls" then
+		lsp_opts.cmd = {
+			"sql-language-server",
+			"up",
+			"--method",
+			"stdio",
+		}
+		lsp_opts.root_dir = lspconfig.util.root_pattern(".git", ".sqllsrc")
+	end
+
 	lspconfig[server].setup(lsp_opts)
 end
 
@@ -73,6 +83,12 @@ local settings = {
 		rs = {
 			{
 				formatCommand = "rustfmt --emit=stdout",
+				formatStdin = true,
+			},
+		},
+		sql = {
+			{
+				formatCommand = "sqlfluff fix --dialect postgres -",
 				formatStdin = true,
 			},
 		},

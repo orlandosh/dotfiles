@@ -13,13 +13,16 @@ if bufdir:find("apicbase") or bufdir:find("dango") then
 	}
 end
 
-local linters = { "pylint" }
+local python_linters = { "pylint" }
 if string.find(bufdir, "apicbase") then
-	table.insert(linters, "flake8")
+	table.insert(python_linters, "flake8")
 end
 
+local sql_linters = { "sqlfluff" }
+
 lint.lint.linters_by_ft = {
-	python = linters,
+	python = python_linters,
+	sql = sql_linters,
 }
 
 return lint
