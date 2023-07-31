@@ -1,10 +1,10 @@
-local set = vim.opt
+Set = vim.opt
 
 vim.g.onedark_termcolors = 16
 vim.g.rainbow_active = 1
 
 -- gruvbox
-set.background = "dark"
+Set.background = "dark"
 vim.g.gruvbox_material_enable_italic = 1
 vim.g.gruvbox_material_diagnostic_virtual_text = "colored"
 vim.g.gruvbox_material_background = "soft"
@@ -15,12 +15,17 @@ vim.cmd([[
 	setlocal spell spelllang=en_ca
 ]])
 
-set.showmode = false
-set.completeopt = { "menu", "menuone", "noselect" }
-set.number = true
-set.relativenumber = true
-set.termguicolors = true
-set.modifiable = true
-set.smartcase = true
-set.spell = true
-set.cmdheight = 0
+Set.showmode = false
+Set.completeopt = { "menu", "menuone", "noselect" }
+Set.number = true
+Set.relativenumber = true
+Set.termguicolors = true
+Set.modifiable = true
+Set.ignorecase = true
+Set.smartcase = true
+Set.spell = true
+Set.cmdheight = 0
+
+Set.foldmethod = "expr"
+Set.foldexpr = "nvim_treesitter#foldexpr()"
+Set.foldenable = false

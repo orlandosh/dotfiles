@@ -70,7 +70,7 @@ local settings = {
 		},
 		vue = {
 			{
-				formatCommand = "prettier ${INPUT}",
+				formatCommand = "prettier --parser vue",
 				formatStdin = true,
 			},
 		},
@@ -89,6 +89,42 @@ local settings = {
 		sql = {
 			{
 				formatCommand = "sqlfluff fix --dialect postgres -",
+				formatStdin = true,
+			},
+		},
+		json = {
+			{
+				formatCommand = "prettier --parser json",
+				formatStdin = true,
+			},
+		},
+		html = {
+			{
+				formatCommand = "prettier --parser html",
+				formatStdin = true,
+			},
+		},
+		js = {
+			{
+				formatCommand = "prettier --parser babel",
+				formatStdin = true,
+			},
+		},
+		jsx = {
+			{
+				formatCommand = "prettier --parser babel",
+				formatStdin = true,
+			},
+		},
+		css = {
+			{
+				formatCommand = "prettier --parser css",
+				formatStdin = true,
+			},
+		},
+		scss = {
+			{
+				formatCommand = "prettier --parser scss",
 				formatStdin = true,
 			},
 		},

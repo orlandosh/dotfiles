@@ -49,3 +49,7 @@ vim.keymap.set("n", "<leader>sb", "<cmd>BufferOrderByBufferNumber<cr>")
 vim.keymap.set("n", "<leader>sd", "<cmd>BufferOrderByDirectory<cr>")
 vim.keymap.set("n", "<leader>sl", "<cmd>BufferOrderByLanguage<cr>")
 vim.keymap.set("n", "<leader>sw", "<cmd>BufferOrderByWindowNumber<cr>")
+vim.keymap.set("n", "<leader>qq", "<cmd>BufferCloseAllButCurrentOrPinned<cr>")
+
+-- paste yanked text to insert mode
+vim.keymap.set("i", "<A-v>", '<C-r>=substitute(getreg(), "\\n$", "", "")<CR>')

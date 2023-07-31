@@ -25,3 +25,17 @@ vim.api.nvim_create_autocmd({ "BufWritePost" }, {
 })
 
 -- TODO: remove trailing whitespace
+
+vim.api.nvim_create_autocmd({ "CmdLineEnter" }, {
+	pattern = { ":" },
+	callback = function()
+		Set.smartcase = false
+	end,
+})
+
+vim.api.nvim_create_autocmd({ "CmdLineLeave" }, {
+	pattern = { ":" },
+	callback = function()
+		Set.smartcase = true
+	end,
+})
