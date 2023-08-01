@@ -66,3 +66,6 @@ vim.keymap.set({ "n", "v" }, "<leader>vc", function()
 		yank_file:close()
 	end
 end)
+
+-- toggle gitblame
+vim.keymap.set("n", "<leader>gb", "<cmd>GitBlameToggle<cr>")

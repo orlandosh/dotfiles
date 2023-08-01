@@ -1,13 +1,16 @@
-Set = vim.opt
+local dir = require("utils").get_dir()
 
-vim.g.onedark_termcolors = 16
-vim.g.rainbow_active = 1
+Set = vim.opt
+G = vim.g
+
+G.onedark_termcolors = 16
+G.rainbow_active = 1
 
 -- gruvbox
 Set.background = "dark"
-vim.g.gruvbox_material_enable_italic = 1
-vim.g.gruvbox_material_diagnostic_virtual_text = "colored"
-vim.g.gruvbox_material_background = "soft"
+G.gruvbox_material_enable_italic = 1
+G.gruvbox_material_diagnostic_virtual_text = "colored"
+G.gruvbox_material_background = "soft"
 
 vim.cmd([[
 	syntax on
@@ -29,3 +32,11 @@ Set.cmdheight = 0
 Set.foldmethod = "expr"
 Set.foldexpr = "nvim_treesitter#foldexpr()"
 Set.foldenable = false
+
+-- gitblame
+G.gitblame_message_template = "<author> • <date> #<sha>"
+G.gitblame_date_format = "%r"
+G.gitblame_display_virtual_text = 0
+if not dir:find("apicbase") then
+	G.gitblame_enabled = 0
+end
