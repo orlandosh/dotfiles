@@ -52,6 +52,10 @@ return require("packer").startup(function(use)
 			require("lsp-inlayhints").setup()
 		end,
 	})
+	-- add lspkind
+	use({
+		"onsails/lspkind-nvim",
+	})
 
 	-- nvim-only plugins
 	-- TODO: add plugin to index TODOs
@@ -166,9 +170,22 @@ return require("packer").startup(function(use)
 					svn = false,
 					cvs = false,
 					["."] = false,
+					sh = function()
+						if string.match(vim.fs.basename(vim.api.nvim_buf_get_name(0)), "^%.env.*") then
+							-- disable for .env files
+							return false
+						end
+						return true
+					end,
 				},
 				copilot_node_command = "node", -- Node.js version must be > 16.x
-				server_opts_overrides = {},
+				server_opts_overrides = {
+					trace = "verbose",
+					advanced = {
+						listCount = 10,
+						inlineSuggestionCount = 10,
+					},
+				},
 			})
 		end,
 	})
