@@ -33,7 +33,17 @@ cmp.setup({
 			i = cmp.mapping.abort(),
 			c = cmp.mapping.close(),
 		}),
-		["<CR>"] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+		["<CR>"] = cmp.mapping({
+			i = function(fallback)
+				if cmp.visible() and cmp.get_active_entry() then
+					cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
+				else
+					fallback()
+				end
+			end,
+			s = cmp.mapping.confirm({ select = true }),
+			c = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
+		}), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
 
 		["<Tab>"] = cmp.mapping(function(fallback)
 			if cmp.visible() then
@@ -66,9 +76,15 @@ cmp.setup({
 	formatting = {
 		format = lspkind.cmp_format({
 			mode = "symbol_text", -- show only symbol annotations
-			maxwidth = 30, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+			maxwidth = 20, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
 			ellipsis_char = "...", -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
 			preset = "codicons",
+			before = function(entry, vim_item)
+				if vim_item.menu ~= nil and vim_item.menu ~= "" then
+					vim_item.menu = string.sub(vim_item.menu, 1, 10) .. "..."
+				end
+				return vim_item
+			end,
 		}),
 	},
 })
