@@ -46,6 +46,13 @@ return require("packer").startup(function(use)
 	})
 	use({ "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" })
 
+	use({
+		"lvimuser/lsp-inlayhints.nvim",
+		config = function()
+			require("lsp-inlayhints").setup()
+		end,
+	})
+
 	-- nvim-only plugins
 	-- TODO: add plugin to index TODOs
 	use("Pocco81/auto-save.nvim")
@@ -75,7 +82,16 @@ return require("packer").startup(function(use)
 	-- })
 	use("Shatur/neovim-session-manager")
 	use("kdheepak/lazygit.nvim")
-	use("mfussenegger/nvim-dap")
+	-- use("mfussenegger/nvim-dap")
+	-- use("rcarriga/nvim-dap-ui")
+	use({
+		"folke/neodev.nvim",
+		config = function()
+			require("neodev").setup()
+		end,
+	})
+
+	use("f-person/git-blame.nvim")
 
 	-- neotree
 	use({
