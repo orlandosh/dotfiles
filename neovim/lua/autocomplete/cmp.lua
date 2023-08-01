@@ -24,10 +24,20 @@ cmp.setup({
 			-- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
 		end,
 	},
+	window = {
+		completion = {
+			border = "single",
+			scrollbar = "║",
+		},
+		documentation = {
+			border = "single",
+			scrollbar = "║",
+		},
+	},
 	mapping = {
-		["<C-b>"] = cmp.mapping(cmp.mapping.scroll_docs(-4), { "i", "c" }),
-		["<C-f>"] = cmp.mapping(cmp.mapping.scroll_docs(4), { "i", "c" }),
-		["<C-Space>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),
+		["<C-b>"] = cmp.mapping(cmp.mapping.scroll_docs(-4)),
+		["<C-f>"] = cmp.mapping(cmp.mapping.scroll_docs(4)),
+		["<C-Space>"] = cmp.mapping(cmp.mapping.complete()),
 		["<C-y>"] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
 		["<C-e>"] = cmp.mapping({
 			i = cmp.mapping.abort(),
@@ -42,7 +52,6 @@ cmp.setup({
 				end
 			end,
 			s = cmp.mapping.confirm({ select = true }),
-			c = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
 		}), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
 
 		["<Tab>"] = cmp.mapping(function(fallback)
@@ -81,7 +90,9 @@ cmp.setup({
 			preset = "codicons",
 			before = function(entry, vim_item)
 				if vim_item.menu ~= nil and vim_item.menu ~= "" then
-					vim_item.menu = string.sub(vim_item.menu, 1, 10) .. "..."
+					if vim_item.menu:len() > 10 then
+						vim_item.menu = string.sub(vim_item.menu, 1, 10) .. "..."
+					end
 				end
 				return vim_item
 			end,
