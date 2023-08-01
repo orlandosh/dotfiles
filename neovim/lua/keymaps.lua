@@ -53,3 +53,16 @@ vim.keymap.set("n", "<leader>qq", "<cmd>BufferCloseAllButCurrentOrPinned<cr>")
 
 -- paste yanked text to insert mode
 vim.keymap.set("i", "<A-v>", '<C-r>=substitute(getreg(), "\\n$", "", "")<CR>')
+
+-- write last yanked content to ~/.nvim_yank
+vim.keymap.set({ "n", "v" }, "<leader>vc", function()
+	local yank = vim.fn.getreg('"0')
+	if yank == nil or not yank or yank == "" then
+		return
+	end
+	local yank_file = io.open(os.getenv("HOME") .. "/.nvim_yank", "w")
+	if yank_file then
+		yank_file:write(yank .. "\n")
+		yank_file:close()
+	end
+end)
