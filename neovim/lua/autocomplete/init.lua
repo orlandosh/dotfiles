@@ -49,6 +49,25 @@ for _, server in pairs(installed_servers) do
 		lsp_opts.root_dir = lspconfig.util.root_pattern(".git", ".sqllsrc")
 	end
 
+	if server == "rust_analyzer" then
+		lsp_opts.settings = {
+			["rust-analyzer"] = {
+				checkOnSave = {
+					enable = true,
+				},
+				procMacro = {
+					enable = true,
+				},
+				cargo = {
+					features = { "all" },
+					buildScripts = {
+						enable = true,
+					},
+				},
+			},
+		}
+	end
+
 	lspconfig[server].setup(lsp_opts)
 end
 
