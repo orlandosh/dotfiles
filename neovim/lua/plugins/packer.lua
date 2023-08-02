@@ -213,7 +213,7 @@ return require("packer").startup(function(use)
 						jump_next = "]]",
 						accept = "<CR>",
 						refresh = "gr",
-						open = "<A-a>",
+						open = "<A-m>",
 					},
 					layout = {
 						position = "bottom", -- | top | left | right
