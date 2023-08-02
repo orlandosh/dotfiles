@@ -1,5 +1,5 @@
 local opts = { noremap = true, silent = true }
-require("autocomplete.keymaps")(opts)
+require("keymaps").cmp_keymaps(opts)
 local on_attach = require("autocomplete.on_attach")(opts)
 local utils = require("utils")
 
@@ -167,7 +167,7 @@ require("lspconfig").efm.setup({
 	capabilities = capabilities,
 	cmd = { "/home/me/.local/share/nvim/lsp_servers/efm/efm-langserver" },
 	settings = settings,
-	filetypes = { "python", "lua", "vue", "cs" },
+	filetypes = { "python", "lua", "vue", "cs", "rs", "sql", "json", "html", "js", "jsx", "css", "scss" },
 	init_options = { documentFormatting = true, diagnostics = true },
 })
 
