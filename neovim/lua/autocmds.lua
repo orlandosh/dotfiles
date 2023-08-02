@@ -1,11 +1,7 @@
 -- format on save
 local dir = require("utils").get_dir()
 
-if dir == nil then
-	return
-end
-
-if not dir:find("apicbase") then
+if dir ~= nil and not dir:find("apicbase") then
 	vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 		pattern = { "*.py", "*.lua", "*.cs", "*.json", "*.rs", "*.toml", "*.sql" },
 		callback = function()
