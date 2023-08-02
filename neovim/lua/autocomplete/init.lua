@@ -77,7 +77,7 @@ local settings = {
 	languages = {
 		python = {
 			{
-				formatCommand = "isort --stdout --profile black -",
+				formatCommand = "black --quiet - | isort --stdout --profile black - | black --quiet -",
 				formatStdin = true,
 			},
 		},
@@ -149,16 +149,6 @@ local settings = {
 		},
 	},
 }
-
-local p8ln = vim.env.MYVIMRC
-p8ln = p8ln:gsub("%init.lua", "p8ln")
-if string.find(bufdir, "apicbase") then
-else
-	table.insert(settings.languages.python, {
-		formatCommand = "black --quiet -",
-		formatStdin = true,
-	})
-end
 
 settings.lintDebounce = 1000
 
