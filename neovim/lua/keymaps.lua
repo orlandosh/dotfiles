@@ -4,7 +4,7 @@ vim.g.mapleader = " "
 -- open neotree
 vim.keymap.set("n", "<leader>b", "<cmd>Neotree toggle position=right<cr>")
 
-vim.keymap.set("n", "<leader>sv", "<cmd>source $MYVIMRC<cr>")
+-- vim.keymap.set("n", "<leader>||||sv", "<cmd>source $MYVIMRC<cr>") -- unused because it doesn't work
 
 vim.keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>")
 vim.keymap.set("n", "<leader>fg", "<cmd>Telescope live_grep<cr>")
@@ -92,6 +92,11 @@ vim.keymap.set("n", "<A-l>", "<cmd>wincmd l<cr>")
 -- split vertically and horizontally
 vim.keymap.set("n", "<leader>sv", "<cmd>split<cr>")
 vim.keymap.set("n", "<leader>sh", "<cmd>vsplit<cr>")
+-- close split
+vim.keymap.set("n", "<leader>sc", "<cmd>close<cr>")
+
+-- quit vim
+vim.keymap.set("n", "<leader>Q", "<cmd>wqa<cr>")
 
 -- toggle cmdheight
 vim.keymap.set("n", "<leader>ch", function()
