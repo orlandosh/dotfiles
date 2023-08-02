@@ -1,8 +1,7 @@
--- For LSP keymaps, go to lsp/keymaps.lua
-
 vim.keymap.set("n", "<SPACE>", "<Nop>")
 vim.g.mapleader = " "
 
+-- open neotree
 vim.keymap.set("n", "<leader>b", "<cmd>Neotree toggle position=right<cr>")
 
 vim.keymap.set("n", "<leader>sv", "<cmd>source $MYVIMRC<cr>")
@@ -49,7 +48,7 @@ vim.keymap.set("n", "<leader>sb", "<cmd>BufferOrderByBufferNumber<cr>")
 vim.keymap.set("n", "<leader>sd", "<cmd>BufferOrderByDirectory<cr>")
 vim.keymap.set("n", "<leader>sl", "<cmd>BufferOrderByLanguage<cr>")
 vim.keymap.set("n", "<leader>sw", "<cmd>BufferOrderByWindowNumber<cr>")
-vim.keymap.set("n", "<leader>qq", "<cmd>BufferCloseAllButCurrentOrPinned<cr>")
+vim.keymap.set("n", "<leader>sq", "<cmd>BufferCloseAllButCurrentOrPinned<cr>")
 
 -- paste yanked text to insert mode
 vim.keymap.set("i", "<A-v>", '<C-r>=substitute(getreg(), "\\n$", "", "")<CR>')
@@ -69,3 +68,66 @@ end)
 
 -- toggle gitblame
 vim.keymap.set("n", "<leader>gb", "<cmd>GitBlameToggle<cr>")
+
+-- split movements
+vim.keymap.set("n", "<A-h>", "<cmd>wincmd h<cr>")
+vim.keymap.set("n", "<A-j>", "<cmd>wincmd j<cr>")
+vim.keymap.set("n", "<A-k>", "<cmd>wincmd k<cr>")
+vim.keymap.set("n", "<A-l>", "<cmd>wincmd l<cr>")
+
+-- split vertically and horizontally
+vim.keymap.set("n", "<leader>sv", "<cmd>split<cr>")
+vim.keymap.set("n", "<leader>sh", "<cmd>vsplit<cr>")
+
+-- toggle cmdheight
+vim.keymap.set("n", "<leader>ch", function()
+	if Set.cmdheight._value == 0 then
+		Set.cmdheight = 1
+	else
+		Set.cmdheight = 0
+	end
+end)
+
+local M = {}
+function M.lsp_keymaps(opts)
+	return function(bufnr)
+		-- Mappings.
+		-- See `:help vim.lsp.*` for documentation on any of the below functions
+		vim.api.nvim_buf_set_keymap(bufnr, "n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts)
+		vim.api.nvim_buf_set_keymap(bufnr, "n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", opts)
+		vim.api.nvim_buf_set_keymap(bufnr, "n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", opts)
+		vim.api.nvim_buf_set_keymap(bufnr, "n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
+		vim.api.nvim_buf_set_keymap(bufnr, "n", "<C-k>", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
+		vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>wa", "<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>", opts)
+
+		vim.api.nvim_buf_set_keymap(
+			bufnr,
+			"n",
+			"<leader>wr",
+			"<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>",
+			opts
+		)
+		vim.api.nvim_buf_set_keymap(
+			bufnr,
+			"n",
+			"<leader>wl",
+			"<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>",
+			opts
+		)
+
+		vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>D", "<cmd>lua vim.lsp.buf.type_definition()<CR>", opts)
+		vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
+		vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts)
+		vim.api.nvim_buf_set_keymap(bufnr, "n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", opts)
+		vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>fo", "<cmd>lua vim.lsp.buf.format()<CR>", opts)
+	end
+end
+
+function M.cmp_keymaps(opts)
+	vim.api.nvim_set_keymap("n", "<leader>e", "<cmd>lua vim.diagnostic.open_float()<CR>", opts)
+	vim.api.nvim_set_keymap("n", "[d", "<cmd>lua vim.diagnostic.goto_prev()<CR>", opts)
+	vim.api.nvim_set_keymap("n", "]d", "<cmd>lua vim.diagnostic.goto_next()<CR>", opts)
+	vim.api.nvim_set_keymap("n", "<leader>q", "<cmd>lua vim.diagnostic.setloclist()<CR>", opts)
+end
+
+return M

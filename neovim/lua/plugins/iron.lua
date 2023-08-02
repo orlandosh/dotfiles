@@ -19,10 +19,10 @@ iron.setup({
 	-- Iron doesn't set keymaps by default anymore. Set them here
 	-- or use `should_map_plug = true` and map from you vim files
 	keymaps = {
-		send_motion = "<leader>sc",
-		visual_send = "<leader>sc",
-		send_line = "<leader>sl",
-		exit = "<leader>sq",
-		clear = "<leader>cl",
+		send_motion = "<leader>ic",
+		visual_send = "<leader>ic",
+		send_line = "<leader>il",
+		exit = "<leader>iq",
+		clear = "<leader>il",
 	},
 })
