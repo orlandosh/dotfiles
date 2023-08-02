@@ -73,11 +73,16 @@ return require("packer").startup(function(use)
 	use("feline-nvim/feline.nvim")
 	use({
 		"romgrk/barbar.nvim",
-		requires = { "kyazdani42/nvim-web-devicons" },
 	})
 	use("lukas-reineke/indent-blankline.nvim")
 	use("norcalli/nvim-colorizer.lua")
 	use("stevearc/dressing.nvim")
+	use({
+		"rcarriga/nvim-notify",
+		config = function()
+			vim.notify = require("notify")
+		end,
+	})
 	-- use({
 	-- 	"goolord/alpha-nvim",
 	-- 	config = function()
@@ -100,14 +105,15 @@ return require("packer").startup(function(use)
 	-- neotree
 	use({
 		"nvim-neo-tree/neo-tree.nvim",
-		branch = "v2.x",
+		branch = "v3.x",
 		requires = {
 			"nvim-lua/plenary.nvim",
-			"kyazdani42/nvim-web-devicons", -- not strictly required, but recommended
+			"nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
 			"MunifTanjim/nui.nvim",
 		},
 		config = require("plugins.neotree"),
 	})
+	use({ "nvim-tree/nvim-web-devicons" })
 
 	use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" })
 	use("karb94/neoscroll.nvim")
@@ -140,7 +146,7 @@ return require("packer").startup(function(use)
 						jump_next = "]]",
 						accept = "<CR>",
 						refresh = "gr",
-						open = "<M-a>",
+						open = "<A-a>",
 					},
 					layout = {
 						position = "bottom", -- | top | left | right
@@ -152,11 +158,11 @@ return require("packer").startup(function(use)
 					auto_trigger = true,
 					debounce = 75,
 					keymap = {
-						accept = "<M-CR>",
+						accept = "<A-CR>",
 						accept_word = false,
 						accept_line = false,
-						next = "<M-]>",
-						prev = "<M-[>",
+						next = "<A-]>",
+						prev = "<A-[>",
 						dismiss = "<C-]>",
 					},
 				},
