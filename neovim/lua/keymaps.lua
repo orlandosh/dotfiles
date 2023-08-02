@@ -51,7 +51,7 @@ vim.keymap.set("n", "<leader>sw", "<cmd>BufferOrderByWindowNumber<cr>")
 vim.keymap.set("n", "<leader>sq", "<cmd>BufferCloseAllButCurrentOrPinned<cr>")
 
 -- spectre
-vim.keymap.set("n", "<leader>S", '<cmd>lua require("spectre").toggle()<CR>', {
+vim.keymap.set("n", "<leader>so", '<cmd>lua require("spectre").toggle()<CR>', {
 	desc = "Toggle Spectre",
 })
 vim.keymap.set("n", "<leader>se", '<cmd>lua require("spectre").open_visual({select_word=true})<CR>', {
@@ -88,12 +88,22 @@ vim.keymap.set("n", "<A-h>", "<cmd>wincmd h<cr>")
 vim.keymap.set("n", "<A-j>", "<cmd>wincmd j<cr>")
 vim.keymap.set("n", "<A-k>", "<cmd>wincmd k<cr>")
 vim.keymap.set("n", "<A-l>", "<cmd>wincmd l<cr>")
+-- alternative wasd movements
+vim.keymap.set("n", "<A-a>", "<cmd>wincmd h<cr>")
+vim.keymap.set("n", "<A-s>", "<cmd>wincmd j<cr>")
+vim.keymap.set("n", "<A-w>", "<cmd>wincmd k<cr>")
+vim.keymap.set("n", "<A-d>", "<cmd>wincmd l<cr>")
 
 -- split vertically and horizontally
 vim.keymap.set("n", "<leader>sv", "<cmd>split<cr>")
 vim.keymap.set("n", "<leader>sh", "<cmd>vsplit<cr>")
--- close split
+-- alternative A and S
+vim.keymap.set("n", "<leader>A", "<cmd>split<cr>")
+vim.keymap.set("n", "<leader>S", "<cmd>vsplit<cr>")
+
+-- close split and alternative
 vim.keymap.set("n", "<leader>sc", "<cmd>close<cr>")
+vim.keymap.set("n", "<leader>xc", "<cmd>close<cr>")
 
 -- quit vim
 vim.keymap.set("n", "<leader>Q", "<cmd>wqa<cr>")
