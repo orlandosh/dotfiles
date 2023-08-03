@@ -1,3 +1,5 @@
+-- TODO: obviously refactor when i have time
+
 local has_words_before = function()
 	if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then
 		return false
@@ -12,9 +14,17 @@ end
 -- Setup nvim-cmp.
 local cmp = require("cmp")
 local lspkind = require("lspkind")
-
--- TODO: sort autocomplete values first for scss and css
-cmp.setup({
+local cmp_common_config = {
+	enabled = function()
+		-- disable completion in comments
+		local context = require("cmp.config.context")
+		-- keep command mode completion enabled when cursor is in a comment
+		if vim.api.nvim_get_mode().mode == "c" then
+			return true
+		else
+			return not context.in_treesitter_capture("comment") and not context.in_syntax_group("Comment")
+		end
+	end,
 	snippet = {
 		-- REQUIRED - you must specify a snippet engine
 		expand = function(args)
@@ -46,14 +56,13 @@ cmp.setup({
 		["<CR>"] = cmp.mapping({
 			i = function(fallback)
 				if cmp.visible() and cmp.get_active_entry() then
-					cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
+					cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true })
 				else
 					fallback()
 				end
 			end,
 			s = cmp.mapping.confirm({ select = true }),
 		}), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-
 		["<Tab>"] = cmp.mapping(function(fallback)
 			if cmp.visible() then
 				cmp.select_next_item()
@@ -85,7 +94,7 @@ cmp.setup({
 	formatting = {
 		format = lspkind.cmp_format({
 			mode = "symbol_text", -- show only symbol annotations
-			maxwidth = 20, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+			maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
 			ellipsis_char = "...", -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
 			preset = "codicons",
 			before = function(entry, vim_item)
@@ -98,7 +107,36 @@ cmp.setup({
 			end,
 		}),
 	},
-})
+}
+-- TODO: sort autocomplete values first for scss and css
+cmp.setup(cmp_common_config)
+
+local copy_table = require("utils").copy_table
+local rust_config = copy_table(cmp_common_config)
+local compare = require("cmp.config.compare")
+rust_config["sorting"] = {
+	priority_weight = 2,
+	comparators = {
+		-- deprioritize `.box`, `.mut`, etc.
+		require("autocomplete.rust_sorting").deprioritize_postfix,
+		-- deprioritize `Borrow::borrow` and `BorrowMut::borrow_mut`
+		require("autocomplete.rust_sorting").deprioritize_borrow,
+		-- deprioritize `Deref::deref` and `DerefMut::deref_mut`
+		require("autocomplete.rust_sorting").deprioritize_deref,
+		-- deprioritize `Into::into`, `Clone::clone`, etc.
+		require("autocomplete.rust_sorting").deprioritize_common_traits,
+		compare.offset,
+		compare.exact,
+		compare.score,
+		compare.recently_used,
+		compare.locality,
+		compare.sort_text,
+		compare.length,
+		compare.order,
+	},
+}
+
+cmp.setup.filetype("rust", rust_config)
 
 -- Set configuration for specific filetype.
 cmp.setup.filetype("gitcommit", {
@@ -125,3 +163,7 @@ cmp.setup.cmdline(":", {
 		{ name = "path" },
 	}, { { name = "cmdline" } }),
 })
+
+local cmp_autopairs = require("nvim-autopairs.completion.cmp")
+local cmp = require("cmp")
+cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
