@@ -55,13 +55,13 @@ for _, server in pairs(installed_servers) do
 				checkOnSave = {
 					enable = true,
 				},
-				procMacro = {
-					enable = true,
-				},
-				cargo = {
-					features = { "all" },
-					buildScripts = {
-						enable = true,
+				workspace = {
+					symbol = {
+						search = {
+							scope = "WorkspaceAndDependencies",
+							limit = 1000,
+							kind = "all_symbols",
+						},
 					},
 				},
 			},
