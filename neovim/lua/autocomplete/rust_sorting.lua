@@ -46,6 +46,7 @@ local function deprioritize_common_traits(entry1, entry2)
 			"TryFrom",
 			"TryInto",
 			"Default",
+			"IntoSql",
 		}
 
 		for i, v in ipairs(traits) do
