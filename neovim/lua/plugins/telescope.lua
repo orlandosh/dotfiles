@@ -6,6 +6,9 @@ require("telescope").setup({
 		mappings = {
 			n = { ["dd"] = actions.delete_buffer },
 		},
+		cache_picker = {
+			num_pickers = 100,
+		},
 	},
 	extensions = {
 		fzf = {
@@ -18,4 +21,5 @@ require("telescope").setup({
 	},
 })
 
+-- TODO: customize appearance
 require("telescope").load_extension("fzf")

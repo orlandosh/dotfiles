@@ -6,15 +6,20 @@ vim.keymap.set("n", "<leader>b", "<cmd>Neotree toggle position=right<cr>")
 
 -- vim.keymap.set("n", "<leader>||||sv", "<cmd>source $MYVIMRC<cr>") -- unused because it doesn't work
 
+vim.keymap.set("n", "<leader>T", "<cmd>Telescope planets<cr>")
+vim.keymap.set("n", "<leader>tb", "<cmd>Telescope builtin<cr>")
+vim.keymap.set("n", "<leader>tl", "<cmd>Telescope reloader<cr>")
+vim.keymap.set("n", "<leader>tk", "<cmd>Telescope keymaps<cr>")
 vim.keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>")
 vim.keymap.set("n", "<leader>fg", "<cmd>Telescope live_grep<cr>")
 vim.keymap.set("n", "<leader>fb", "<cmd>Telescope buffers<cr>")
 vim.keymap.set("n", "<leader>fh", "<cmd>Telescope help_tags<cr>")
-vim.keymap.set("n", "<leader>tw", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>")
+vim.keymap.set("n", "<leader>fw", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>")
+vim.keymap.set("n", "<leader>fd", "<cmd>Telescope lsp_document_symbols<cr>")
+vim.keymap.set("n", "<leader>tr", "<cmd>Telescope diagnostics<cr>") -- from trouble
 vim.keymap.set("n", "<leader>ts", "<cmd>Telescope treesitter<cr>")
 vim.keymap.set("n", "<leader>fr", "<cmd>Telescope resume<cr>")
-
-vim.keymap.set("n", "<leader>tr", "<cmd>TroubleToggle<cr>")
+vim.keymap.set("n", "<leader>fc", "<cmd>Telescope pickers<cr>")
 
 vim.keymap.set("n", "<leader>lg", "<cmd>LazyGit<cr>")
 
@@ -123,9 +128,9 @@ function M.lsp_keymaps(opts)
 		-- Mappings.
 		-- See `:help vim.lsp.*` for documentation on any of the below functions
 		vim.api.nvim_buf_set_keymap(bufnr, "n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts)
-		vim.api.nvim_buf_set_keymap(bufnr, "n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", opts)
+		vim.api.nvim_buf_set_keymap(bufnr, "n", "gd", "<cmd>Telescope lsp_definitions<CR>", opts)
 		vim.api.nvim_buf_set_keymap(bufnr, "n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", opts)
-		vim.api.nvim_buf_set_keymap(bufnr, "n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
+		vim.api.nvim_buf_set_keymap(bufnr, "n", "gi", "<cmd>Telescope lsp_implementations<CR>", opts)
 		vim.api.nvim_buf_set_keymap(bufnr, "n", "<C-k>", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
 		vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>wa", "<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>", opts)
 
@@ -144,10 +149,10 @@ function M.lsp_keymaps(opts)
 			opts
 		)
 
-		vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>D", "<cmd>lua vim.lsp.buf.type_definition()<CR>", opts)
+		vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>D", "<cmd>Telescope type_definitions<CR>", opts)
 		vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
 		vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts)
-		vim.api.nvim_buf_set_keymap(bufnr, "n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", opts)
+		vim.api.nvim_buf_set_keymap(bufnr, "n", "gr", "<cmd>Telescope lsp_references<CR>", opts)
 		vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>fo", "<cmd>lua vim.lsp.buf.format()<CR>", opts)
 	end
 end
