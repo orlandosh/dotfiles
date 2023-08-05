@@ -58,13 +58,13 @@ for _, server in pairs(installed_servers) do
 				checkOnSave = true,
 				check = {
 					command = "clippy",
+					extraArgs = { "--", "-A", "clippy::module_inception" },
 				},
 				workspace = {
 					symbol = {
 						search = {
 							scope = "WorkspaceAndDependencies",
 							limit = 1000,
-							kind = "all_symbols",
 						},
 					},
 				},
