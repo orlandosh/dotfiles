@@ -1,9 +1,11 @@
+-- TODO: move this entire module out of here
 local opts = { noremap = true, silent = true }
 require("keymaps").cmp_keymaps(opts)
 local on_attach = require("autocomplete.on_attach")(opts)
 local utils = require("utils")
 
 local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
+
 require("autocomplete.cmp")
 
 local bufdir = utils.get_dir()
@@ -50,10 +52,12 @@ for _, server in pairs(installed_servers) do
 	end
 
 	if server == "rust_analyzer" then
+		lsp_opts = { on_attach = on_attach }
 		lsp_opts.settings = {
 			["rust-analyzer"] = {
-				checkOnSave = {
-					enable = true,
+				checkOnSave = true,
+				check = {
+					command = "clippy",
 				},
 				workspace = {
 					symbol = {
@@ -96,12 +100,6 @@ local settings = {
 		cs = {
 			{
 				formatCommand = "dotnet-csharpier --write-stdout -",
-				formatStdin = true,
-			},
-		},
-		rs = {
-			{
-				formatCommand = "rustfmt --emit=stdout",
 				formatStdin = true,
 			},
 		},
