@@ -1,4 +1,6 @@
 -- TODO: obviously refactor when i have time
+-- TODO: split what's about the cmp and what's from the lsps
+--
 
 local has_words_before = function()
 	if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then
@@ -55,7 +57,7 @@ local cmp_common_config = {
 		}),
 		["<CR>"] = cmp.mapping({
 			i = function(fallback)
-				if cmp.visible() and cmp.get_active_entry() then
+				if cmp.visible() and cmp.get_selected_entry() then
 					cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true })
 				else
 					fallback()
