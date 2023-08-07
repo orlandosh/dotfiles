@@ -1,5 +1,6 @@
 vim.keymap.set("n", "<SPACE>", "<Nop>")
 vim.g.mapleader = " "
+vim.keymap.set("n", "<leader>re", "<C-l>")
 
 -- open neotree
 vim.keymap.set("n", "<leader>b", "<cmd>Neotree toggle position=right<cr>")
@@ -90,15 +91,10 @@ end)
 vim.keymap.set("n", "<leader>gb", "<cmd>GitBlameToggle<cr>")
 
 -- split movements
-vim.keymap.set("n", "<A-h>", "<cmd>wincmd h<cr>")
-vim.keymap.set("n", "<A-j>", "<cmd>wincmd j<cr>")
-vim.keymap.set("n", "<A-k>", "<cmd>wincmd k<cr>")
-vim.keymap.set("n", "<A-l>", "<cmd>wincmd l<cr>")
--- alternative wasd movements
-vim.keymap.set("n", "<A-a>", "<cmd>wincmd h<cr>")
-vim.keymap.set("n", "<A-s>", "<cmd>wincmd j<cr>")
-vim.keymap.set("n", "<A-w>", "<cmd>wincmd k<cr>")
-vim.keymap.set("n", "<A-d>", "<cmd>wincmd l<cr>")
+vim.keymap.set("n", "<C-h>", "<cmd>wincmd h<cr>")
+vim.keymap.set("n", "<C-j>", "<cmd>wincmd j<cr>")
+vim.keymap.set("n", "<C-k>", "<cmd>wincmd k<cr>")
+vim.keymap.set("n", "<C-l>", "<cmd>wincmd l<cr>")
 
 -- split vertically and horizontally
 vim.keymap.set("n", "<leader>sv", "<cmd>split<cr>")
@@ -132,7 +128,7 @@ function M.lsp_keymaps(opts)
 		vim.api.nvim_buf_set_keymap(bufnr, "n", "gd", "<cmd>Telescope lsp_definitions<CR>", opts)
 		vim.api.nvim_buf_set_keymap(bufnr, "n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", opts)
 		vim.api.nvim_buf_set_keymap(bufnr, "n", "gi", "<cmd>Telescope lsp_implementations<CR>", opts)
-		vim.api.nvim_buf_set_keymap(bufnr, "n", "<C-k>", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
+		vim.api.nvim_buf_set_keymap(bufnr, "n", "<A-k>", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
 		vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>wa", "<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>", opts)
 
 		vim.api.nvim_buf_set_keymap(
