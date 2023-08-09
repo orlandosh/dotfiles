@@ -1,5 +1,7 @@
 return require("packer").startup(function(use)
 	-- TODO: properly sort plugins and deps
+	-- TODO: add sidebar-nvim
+	-- TODO: setup debuggers
 
 	-- packer
 	use("wbthomason/packer.nvim")
@@ -68,7 +70,6 @@ return require("packer").startup(function(use)
 	})
 
 	-- nvim-only plugins
-	-- TODO: add plugin to index TODOs
 	use("Pocco81/auto-save.nvim")
 	use("nvim-lua/plenary.nvim")
 	use({ "nvim-telescope/telescope.nvim", requires = { { "nvim-lua/plenary.nvim" } } })
@@ -193,6 +194,20 @@ return require("packer").startup(function(use)
 		config = function()
 			require("nvim-surround").setup({
 				-- Configuration here, or leave empty to use defaults
+			})
+		end,
+	})
+
+	use({
+		"folke/todo-comments.nvim",
+		requires = "nvim-lua/plenary.nvim",
+		config = function()
+			require("todo-comments").setup({
+				highlight = {
+					before = "",
+					keyword = "bg",
+					after = "",
+				},
 			})
 		end,
 	})

@@ -22,6 +22,7 @@ vim.keymap.set("n", "<leader>tr", "<cmd>Telescope diagnostics<cr>") -- from trou
 vim.keymap.set("n", "<leader>ts", "<cmd>Telescope treesitter<cr>")
 vim.keymap.set("n", "<leader>fr", "<cmd>Telescope resume<cr>")
 vim.keymap.set("n", "<leader>fc", "<cmd>Telescope pickers<cr>")
+vim.keymap.set("n", "<leader>ft", "<cmd>TodoTelescope<cr>")
 
 vim.keymap.set("n", "<leader>lg", "<cmd>LazyGit<cr>")
 
