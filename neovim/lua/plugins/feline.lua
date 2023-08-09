@@ -57,8 +57,24 @@ local file_line = {
 	left_sep = " ",
 }
 
--- TODO: highlight feature, hotfix, etc
-local git_branch = { provider = { name = "git_branch" }, right_sep = " ", left_sep = "  ", hl = function() end }
+local git_branch = {
+	provider = { name = "git_branch" },
+	right_sep = " ",
+	left_sep = "  ",
+	hl = function()
+		-- if branch contains feature, highlight green
+		-- if branch contains hotfix, highlight red
+		-- if branch contains bugfix, highlight yellow
+
+		if fe_git.git_branch():find("feature") then
+			return { fg = "green" }
+		elseif fe_git.git_branch():find("hotfix") then
+			return { fg = "red" }
+		elseif fe_git.git_branch():find("bugfix") then
+			return { fg = "yellow" }
+		end
+	end,
+}
 local git_diff = {}
 
 git_diff.add = {
