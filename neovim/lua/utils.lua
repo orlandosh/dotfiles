@@ -5,7 +5,7 @@ utils.get_dir = function()
 	local dir = handle:read("*a")
 	handle:close()
 
-	return dir
+	return dir:gsub("\n", "") .. "/"
 end
 
 utils.copy_table = function(original)
@@ -30,4 +30,17 @@ utils.copy_table = function(original)
 
 	return _copy(original)
 end
+
+utils.get_json = function(path)
+	local file = io.open(path, "r")
+
+	if not file then
+		return {}
+	end
+
+	local content = file:read("*a")
+	file:close()
+	return vim.json.decode(content) or {}
+end
+
 return utils

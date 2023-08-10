@@ -52,7 +52,11 @@ for _, server in pairs(installed_servers) do
 	end
 
 	if server == "rust_analyzer" then
-		lsp_opts = { on_attach = on_attach }
+		-- default settings
+		lsp_opts.cmd = {
+			"/home/me/.local/bin/rust-analyzer",
+		}
+
 		lsp_opts.settings = {
 			["rust-analyzer"] = {
 				checkOnSave = true,
@@ -64,12 +68,33 @@ for _, server in pairs(installed_servers) do
 					symbol = {
 						search = {
 							scope = "WorkspaceAndDependencies",
-							limit = 1000,
+							limit = 1000000,
 						},
 					},
 				},
 			},
 		}
+
+		-- custom settings
+		local current_dir = require("utils").get_dir()
+		local settings_json = require("utils").get_json(current_dir .. "rust_analyzer_neovim.json")
+
+		-- to merge custom settings, do it recursively
+		local function merge(t1, t2)
+			for k, v in pairs(t2) do
+				if type(v) == "table" then
+					if type(t1[k] or false) == "table" then
+						merge(t1[k] or {}, t2[k] or {})
+					else
+						t1[k] = v
+					end
+				else
+					t1[k] = v
+				end
+			end
+		end
+
+		merge(lsp_opts.settings["rust-analyzer"], settings_json)
 	end
 
 	lspconfig[server].setup(lsp_opts)
