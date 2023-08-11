@@ -53,10 +53,6 @@ for _, server in pairs(installed_servers) do
 
 	if server == "rust_analyzer" then
 		-- default settings
-		lsp_opts.cmd = {
-			"/home/me/.local/bin/rust-analyzer",
-		}
-
 		lsp_opts.settings = {
 			["rust-analyzer"] = {
 				checkOnSave = true,

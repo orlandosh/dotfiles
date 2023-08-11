@@ -20,7 +20,7 @@ vim.keymap.set("n", "<leader>fs", "<cmd>Telescope lsp_workspace_symbols<cr>")
 vim.keymap.set(
 	"n",
 	"<leader>fd",
-	"<cmd>Telescope lsp_document_symbols symbols=struct,function,class,module,object,method,enum<cr>"
+	"<cmd>Telescope lsp_document_symbols symbols=struct,function,class,module,object,method,enum,constant<cr>"
 )
 vim.keymap.set("n", "<leader>fD", "<cmd>Telescope lsp_document_symbols<cr>")
 vim.keymap.set("n", "<leader>tr", "<cmd>Telescope diagnostics<cr>") -- from trouble
