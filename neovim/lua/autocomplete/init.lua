@@ -124,12 +124,6 @@ local settings = {
 				formatStdin = true,
 			},
 		},
-		sql = {
-			{
-				formatCommand = "sqlfluff fix --dialect postgres -",
-				formatStdin = true,
-			},
-		},
 		json = {
 			{
 				formatCommand = "prettier --parser json",

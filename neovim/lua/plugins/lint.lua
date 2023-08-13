@@ -18,11 +18,4 @@ if string.find(bufdir, "apicbase") then
 	table.insert(python_linters, "flake8")
 end
 
-local sql_linters = { "sqlfluff" }
-
-lint.lint.linters_by_ft = {
-	python = python_linters,
-	sql = sql_linters,
-}
-
 return lint
