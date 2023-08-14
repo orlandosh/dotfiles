@@ -281,4 +281,118 @@ return require("packer").startup(function(use)
 			})
 		end,
 	})
+
+	use({
+		"SmiteshP/nvim-navbuddy",
+		requires = {
+			"neovim/nvim-lspconfig",
+			"SmiteshP/nvim-navic",
+			"MunifTanjim/nui.nvim",
+			"numToStr/Comment.nvim", -- Optional
+			"nvim-telescope/telescope.nvim", -- Optional
+		},
+		config = function()
+			require("nvim-navic").setup({
+				icons = {
+					File = " ",
+					Module = " ",
+					Namespace = " ",
+					Package = " ",
+					Class = " ",
+					Method = " ",
+					Property = " ",
+					Field = " ",
+					Constructor = " ",
+					Enum = " ",
+					Interface = " ",
+					Function = " ",
+					Variable = " ",
+					Constant = " ",
+					String = " ",
+					Number = " ",
+					Boolean = " ",
+					Array = " ",
+					Object = " ",
+					Key = " ",
+					Null = " ",
+					EnumMember = " ",
+					Struct = " ",
+					Event = " ",
+					Operator = " ",
+					TypeParameter = " ",
+				},
+				highlight = true,
+			})
+
+			require("nvim-navbuddy").setup({
+				icons = {
+					File = " ",
+					Module = " ",
+					Namespace = " ",
+					Package = " ",
+					Class = " ",
+					Method = " ",
+					Property = " ",
+					Field = " ",
+					Constructor = " ",
+					Enum = " ",
+					Interface = " ",
+					Function = " ",
+					Variable = " ",
+					Constant = " ",
+					String = " ",
+					Number = " ",
+					Boolean = " ",
+					Array = " ",
+					Object = " ",
+					Key = " ",
+					Null = " ",
+					EnumMember = " ",
+					Struct = " ",
+					Event = " ",
+					Operator = " ",
+					TypeParameter = " ",
+				},
+			})
+		end,
+	})
+
+	use({
+		"simrat39/symbols-outline.nvim",
+		config = function()
+			require("symbols-outline").setup({
+				-- use vscode icons
+				symbols = {
+					File = { icon = " ", hl = "@text.uri" },
+					Module = { icon = " ", hl = "@namespace" },
+					Namespace = { icon = " ", hl = "@namespace" },
+					Package = { icon = " ", hl = "@namespace" },
+					Class = { icon = " ", hl = "@type" },
+					Method = { icon = " ", hl = "@method" },
+					Property = { icon = " ", hl = "@method" },
+					Field = { icon = " ", hl = "@field" },
+					Constructor = { icon = " ", hl = "@constructor" },
+					Enum = { icon = " ", hl = "@type" },
+					Interface = { icon = " ", hl = "@type" },
+					Function = { icon = " ", hl = "@function" },
+					Variable = { icon = " ", hl = "@constant" },
+					Constant = { icon = " ", hl = "@constant" },
+					String = { icon = " ", hl = "@string" },
+					Number = { icon = " ", hl = "@number" },
+					Boolean = { icon = " ", hl = "@boolean" },
+					Array = { icon = " ", hl = "@constant" },
+					Object = { icon = " ", hl = "@type" },
+					Key = { icon = " ", hl = "@type" },
+					Null = { icon = " ", hl = "@type" },
+					EnumMember = { icon = " ", hl = "@field" },
+					Struct = { icon = " ", hl = "@type" },
+					Event = { icon = " ", hl = "@type" },
+					Operator = { icon = " ", hl = "@operator" },
+					TypeParameter = { icon = " ", hl = "@parameter" },
+					Component = { icon = " ", hl = "@function" },
+					Fragment = { icon = " ", hl = "@constant" },
+				},
+			})
+		end,
+	})
 end)

@@ -129,6 +129,7 @@ local diagnostic_errors = { provider = "diagnostic_errors", hl = { fg = "magenta
 local diagnostic_warnings = { provider = "diagnostic_warnings", hl = { fg = "yellow" }, right_sep = "" }
 local diagnostic_hints = { provider = "diagnostic_hints", hl = { fg = "cyan" }, right_sep = "" }
 local diagnostic_info = { provider = "diagnostic_info", hl = { fg = "white" }, right_sep = "" }
+local search_count = { provider = "search_count", right_sep = " " }
 
 local function abbreviate_name(blame_text)
 	local name = blame_text:match("(.*) •")
@@ -167,15 +168,64 @@ local git_blame = {
 	right_sep = " ",
 }
 
+vim.api.nvim_set_hl(0, "NavicText", {
+	default = false,
+	bg = "#45403d",
+	fg = "#ddc7a1",
+})
+
+-- add proper colors
+vim.api.nvim_set_hl(0, "NavicSeparator", { default = false, bg = "#45403d", fg = "#ddc7a1" })
+vim.api.nvim_set_hl(0, "NavicIconsFile", { default = false, bg = "#45403d" })
+vim.api.nvim_set_hl(0, "NavicIconsModule", { default = false, bg = "#45403d" })
+vim.api.nvim_set_hl(0, "NavicIconsNamespace", { default = false, bg = "#45403d" })
+vim.api.nvim_set_hl(0, "NavicIconsPackage", { default = false, bg = "#45403d" })
+vim.api.nvim_set_hl(0, "NavicIconsClass", { default = false, bg = "#45403d" })
+vim.api.nvim_set_hl(0, "NavicIconsMethod", { default = false, bg = "#45403d" })
+vim.api.nvim_set_hl(0, "NavicIconsProperty", { default = false, bg = "#45403d" })
+vim.api.nvim_set_hl(0, "NavicIconsField", { default = false, bg = "#45403d" })
+vim.api.nvim_set_hl(0, "NavicIconsConstructor", { default = false, bg = "#45403d" })
+vim.api.nvim_set_hl(0, "NavicIconsEnum", { default = false, bg = "#45403d" })
+vim.api.nvim_set_hl(0, "NavicIconsInterface", { default = false, bg = "#45403d" })
+vim.api.nvim_set_hl(0, "NavicIconsFunction", { default = false, bg = "#45403d" })
+vim.api.nvim_set_hl(0, "NavicIconsVariable", { default = false, bg = "#45403d" })
+vim.api.nvim_set_hl(0, "NavicIconsConstant", { default = false, bg = "#45403d" })
+vim.api.nvim_set_hl(0, "NavicIconsString", { default = false, bg = "#45403d" })
+vim.api.nvim_set_hl(0, "NavicIconsNumber", { default = false, bg = "#45403d" })
+vim.api.nvim_set_hl(0, "NavicIconsBoolean", { default = false, bg = "#45403d" })
+vim.api.nvim_set_hl(0, "NavicIconsArray", { default = false, bg = "#45403d" })
+vim.api.nvim_set_hl(0, "NavicIconsObject", { default = false, bg = "#45403d" })
+vim.api.nvim_set_hl(0, "NavicIconsKey", { default = false, bg = "#45403d" })
+vim.api.nvim_set_hl(0, "NavicIconsNull", { default = false, bg = "#45403d" })
+vim.api.nvim_set_hl(0, "NavicIconsEnumMember", { default = false, bg = "#45403d" })
+vim.api.nvim_set_hl(0, "NavicIconsStruct", { default = false, bg = "#45403d" })
+vim.api.nvim_set_hl(0, "NavicIconsEvent", { default = false, bg = "#45403d" })
+vim.api.nvim_set_hl(0, "NavicIconsOperator", { default = false, bg = "#45403d" })
+vim.api.nvim_set_hl(0, "NavicIconsTypeParameter", { default = false, bg = "#45403d" })
+
+local navic = require("nvim-navic")
+local navic_component = {
+	provider = function()
+		return navic.get_location()
+	end,
+	enabled = function()
+		return navic.is_available()
+	end,
+	right_sep = " ",
+	left_sep = " ",
+	hl = { bg = "bg" },
+}
+
 local left = {
 	file_name,
 	file_line,
 	vi_mode,
 }
 
-local mid = {}
+local mid = { navic_component }
 
 local right = {
+	search_count,
 	diagnostic_errors,
 	diagnostic_warnings,
 	diagnostic_hints,
@@ -195,5 +245,5 @@ local components = {
 require("feline").setup({
 	components = components,
 	theme = require("plugins.feline.theme").my_theme,
-	disable = { buftypes = { "terminal" }, filetypes = { "neo--tree" } },
+	disable = { buftypes = { "terminal" }, filetypes = { "neo--tree", "^Outline$" } },
 })

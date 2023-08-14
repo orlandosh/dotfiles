@@ -63,8 +63,12 @@ vim.keymap.set("n", "<leader>sl", "<cmd>BufferOrderByLanguage<cr>")
 vim.keymap.set("n", "<leader>sw", "<cmd>BufferOrderByWindowNumber<cr>")
 vim.keymap.set("n", "<leader>sq", "<cmd>BufferCloseAllButCurrentOrPinned<cr>")
 
+-- navbuddy & outline
+vim.keymap.set("n", "<leader>no", "<cmd>Navbuddy<cr>")
+vim.keymap.set("n", "<leader>so", "<cmd>SymbolsOutline<cr>")
+
 -- spectre
-vim.keymap.set("n", "<leader>so", '<cmd>lua require("spectre").toggle()<CR>', {
+vim.keymap.set("n", "<leader>st", '<cmd>lua require("spectre").toggle()<CR>', {
 	desc = "Toggle Spectre",
 })
 vim.keymap.set("n", "<leader>se", '<cmd>lua require("spectre").open_visual({select_word=true})<CR>', {
@@ -152,7 +156,7 @@ function M.lsp_keymaps(opts)
 			opts
 		)
 
-		vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>D", "<cmd>Telescope type_definitions<CR>", opts)
+		vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>D", "<cmd>Telescope lsp_type_definitions<CR>", opts)
 		vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
 		vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts)
 		vim.api.nvim_buf_set_keymap(bufnr, "n", "gr", "<cmd>Telescope lsp_references<CR>", opts)
