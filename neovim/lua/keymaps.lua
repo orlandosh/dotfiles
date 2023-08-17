@@ -1,6 +1,7 @@
 vim.keymap.set("n", "<SPACE>", "<Nop>")
 vim.g.mapleader = " "
 vim.keymap.set("n", "<leader>re", "<C-l>")
+vim.keymap.set("n", "<leader>W", "<cmd>wa<cr>")
 
 -- open neotree
 vim.keymap.set("n", "<leader>b", "<cmd>Neotree toggle position=right<cr>")
