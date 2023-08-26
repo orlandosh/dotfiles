@@ -28,7 +28,6 @@ Set.ignorecase = true
 Set.smartcase = true
 Set.spell = true
 Set.cmdheight = 0
-Set.lazyredraw = true
 
 Set.foldmethod = "expr"
 Set.foldexpr = "nvim_treesitter#foldexpr()"
@@ -41,3 +40,4 @@ G.gitblame_display_virtual_text = 0
 if not dir:find("apicbase") then
 	G.gitblame_enabled = 0
 end
+
