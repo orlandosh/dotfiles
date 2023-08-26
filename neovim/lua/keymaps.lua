@@ -130,6 +130,15 @@ vim.keymap.set("n", "<leader>ch", function()
 	end
 end)
 
+-- toggle relative lines to reduce latency
+vim.keymap.set("n", "<leader>rl", function()
+	if Set.relativenumber._value == true then
+		Set.relativenumber = false
+	else
+		Set.relativenumber = true
+	end
+end)
+
 local M = {}
 function M.lsp_keymaps(opts)
 	return function(bufnr)

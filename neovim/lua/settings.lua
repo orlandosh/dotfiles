@@ -21,13 +21,14 @@ vim.cmd([[
 Set.showmode = false
 Set.completeopt = { "menu", "menuone", "noselect" }
 Set.number = true
-Set.relativenumber = true
+Set.relativenumber = false
 Set.termguicolors = true
 Set.modifiable = true
 Set.ignorecase = true
 Set.smartcase = true
 Set.spell = true
 Set.cmdheight = 0
+Set.lazyredraw = true
 
 Set.foldmethod = "expr"
 Set.foldexpr = "nvim_treesitter#foldexpr()"
