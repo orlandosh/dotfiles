@@ -32,6 +32,29 @@ for _, server in pairs(installed_servers) do
 		lsp_opts.init_options = { workspace = { symbols = { maxSymbols = -1 } } }
 	end
 
+	if server == "pylsp" then
+		lsp_opts.settings = {
+			pylsp = {
+				plugins = {
+					jedi_completion = {
+						fuzzy = true,
+						eager = true,
+						include_class_objects = true,
+						include_function_objects = true,
+						resolve_at_most = 500,
+					},
+					rope_autoimport = {
+						enabled = true,
+					},
+					rope_completion = {
+						enabled = true,
+						eager = true,
+					},
+				},
+			},
+		}
+	end
+
 	if server == "omnisharp" then
 		lsp_opts.cmd = {
 			"/home/me/.local/share/nvim/mason/bin/omnisharp",
