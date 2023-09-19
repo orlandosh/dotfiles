@@ -227,7 +227,7 @@ return require("packer").startup(function(use)
 						jump_next = "]]",
 						accept = "<CR>",
 						refresh = "gr",
-						open = "<A-m>",
+						open = "<M-m>",
 					},
 					layout = {
 						position = "bottom", -- | top | left | right
@@ -239,11 +239,11 @@ return require("packer").startup(function(use)
 					auto_trigger = true,
 					debounce = 75,
 					keymap = {
-						accept = "<A-CR>",
+						accept = "<M-CR>",
 						accept_word = false,
 						accept_line = false,
-						next = "<A-]>",
-						prev = "<A-[>",
+						next = "<M-]>",
+						prev = "<M-[>",
 						dismiss = "<C-]>",
 					},
 				},
@@ -393,6 +393,21 @@ return require("packer").startup(function(use)
 					Fragment = { icon = " ", hl = "@constant" },
 				},
 			})
+		end,
+	})
+	use({
+		"akinsho/toggleterm.nvim",
+		tag = "*",
+		config = function()
+			require("toggleterm").setup()
+		end,
+	})
+	use({ "tpope/vim-dadbod" })
+	use({
+		"kristijanhusak/vim-dadbod-ui",
+		requires = { "tpope/vim-dadbod", "kristijanhusak/vim-dadbod-completion", ft = { "sql", "plsql", "clickhouse" } },
+		config = function()
+			vim.g.db_ui_use_nerd_fonts = 1
 		end,
 	})
 end)
