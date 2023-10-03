@@ -3,6 +3,7 @@ local opts = { noremap = true, silent = true }
 require("keymaps").cmp_keymaps(opts)
 local on_attach = require("autocomplete.on_attach")(opts)
 local utils = require("utils")
+local util = require("lspconfig/util")
 
 local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
@@ -116,11 +117,42 @@ for _, server in pairs(installed_servers) do
 		merge(lsp_opts.settings["rust-analyzer"], settings_json)
 	end
 
-	lspconfig[server].setup(lsp_opts)
+	if server == "tsserver" then
+		lsp_opts.settings = {
+			typescript = {
+				inlayHints = {
+					includeInlayParameterNameHints = "all",
+					includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+					includeInlayFunctionParameterTypeHints = true,
+					includeInlayVariableTypeHints = true,
+					includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+					includeInlayPropertyDeclarationTypeHints = true,
+					includeInlayFunctionLikeReturnTypeHints = true,
+					includeInlayEnumMemberValueHints = true,
+				},
+			},
+			javascript = {
+				inlayHints = {
+					includeInlayParameterNameHints = "all",
+					includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+					includeInlayFunctionParameterTypeHints = true,
+					includeInlayVariableTypeHints = true,
+					includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+					includeInlayPropertyDeclarationTypeHints = true,
+					includeInlayFunctionLikeReturnTypeHints = true,
+					includeInlayEnumMemberValueHints = true,
+				},
+			},
+		}
+	end
+
+	if server ~= "efm" then
+		lspconfig[server].setup(lsp_opts)
+	end
 end
 
 local settings = {
-	rootMarkers = { ".git/" },
+	rootMarkers = { "node_modules/", ".git/" },
 	lintDebounce = 1000,
 	languages = {
 		python = {
@@ -137,7 +169,7 @@ local settings = {
 		},
 		vue = {
 			{
-				formatCommand = "prettier --parser vue",
+				formatCommand = "bunx prettier --parser vue",
 				formatStdin = true,
 			},
 		},
@@ -149,37 +181,43 @@ local settings = {
 		},
 		json = {
 			{
-				formatCommand = "prettier --parser json",
+				formatCommand = "bunx prettier --parser json",
 				formatStdin = true,
 			},
 		},
 		html = {
 			{
-				formatCommand = "prettier --parser html",
+				formatCommand = "bunx prettier --parser html",
 				formatStdin = true,
 			},
 		},
-		js = {
+		javascript = {
 			{
-				formatCommand = "prettier --parser babel",
+				formatCommand = "bunx prettier --parser babel",
 				formatStdin = true,
 			},
 		},
-		jsx = {
+		typescript = {
 			{
-				formatCommand = "prettier --parser babel",
+				formatCommand = "bunx prettier --parser typescript",
+				formatStdin = true,
+			},
+		},
+		svelte = {
+			{
+				formatCommand = "bunx prettier --parser svelte",
 				formatStdin = true,
 			},
 		},
 		css = {
 			{
-				formatCommand = "prettier --parser css",
+				formatCommand = "bunx prettier --parser css",
 				formatStdin = true,
 			},
 		},
 		scss = {
 			{
-				formatCommand = "prettier --parser scss",
+				formatCommand = "bunx prettier --parser scss",
 				formatStdin = true,
 			},
 		},
@@ -193,8 +231,24 @@ require("lspconfig").efm.setup({
 	capabilities = capabilities,
 	cmd = { "/home/me/.local/share/nvim/lsp_servers/efm/efm-langserver" },
 	settings = settings,
-	filetypes = { "python", "lua", "vue", "cs", "rs", "sql", "json", "html", "js", "jsx", "css", "scss" },
+	filetypes = {
+		"python",
+		"lua",
+		"vue",
+		"cs",
+		"sql",
+		"json",
+		"html",
+		"css",
+		"scss",
+		"javascript",
+		"typescript",
+		"svelte",
+	},
 	init_options = { documentFormatting = true, diagnostics = true },
+	root_dir = function(fname)
+		return util.root_pattern("node_modules")(fname) or util.root_pattern(".git")(fname) or vim.fn.getcwd()
+	end,
 })
 
 require("lsp_signature").setup()

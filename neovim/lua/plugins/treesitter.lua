@@ -9,7 +9,7 @@ require("nvim-treesitter.configs").setup({
 		enable = true,
 		disable = function(lang, _)
 			-- disable if lang not in {"json", "sql"}
-			return not ({ json = true, sql = true })[lang]
+			return not ({ json = true, sql = true, svelte = true })[lang]
 		end,
 		-- Setting this to true will run `:h syntax` and tree-sitter at the same time.
 		-- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).

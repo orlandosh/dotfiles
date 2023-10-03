@@ -28,6 +28,10 @@ Set.ignorecase = true
 Set.smartcase = true
 Set.spell = true
 Set.cmdheight = 0
+Set.shiftwidth = 4
+Set.smarttab = true
+Set.tabstop = 4
+Set.softtabstop = 0
 
 Set.foldmethod = "expr"
 Set.foldexpr = "nvim_treesitter#foldexpr()"
@@ -41,7 +45,7 @@ if not dir:find("apicbase") then
 	G.gitblame_enabled = 0
 end
 
-Set.guifont = "MonoLisa Neovide:h15:b"
+Set.guifont = "MonoLisa Neovide,Symbols Nerd Font Mono:h15:b:#h-none"
 G.neovide_input_macos_alt_is_meta = true
 if vim.g.neovide then
 	vim.keymap.set("n", "<D-s>", ":w<CR>") -- Save
