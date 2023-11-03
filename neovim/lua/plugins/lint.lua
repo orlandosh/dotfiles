@@ -3,8 +3,9 @@ local lint = { lint = require("lint") }
 local pylint = require("lint.linters.pylint")
 
 local bufdir = require("utils").get_dir()
+local work_keyword = require("utils").work_keyword
 
-if bufdir:find("apicbase") or bufdir:find("dango") then
+if bufdir:find(work_keyword) or bufdir:find("dango") then
 	pylint.cmd = "poetry"
 	pylint.args = {
 		"run",
@@ -14,7 +15,7 @@ if bufdir:find("apicbase") or bufdir:find("dango") then
 end
 
 local python_linters = { "pylint" }
-if string.find(bufdir, "apicbase") then
+if string.find(bufdir, work_keyword) then
 	table.insert(python_linters, "flake8")
 end
 

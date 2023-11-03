@@ -43,4 +43,6 @@ utils.get_json = function(path)
 	return vim.json.decode(content) or {}
 end
 
+utils.work_keyword = "work"
+
 return utils

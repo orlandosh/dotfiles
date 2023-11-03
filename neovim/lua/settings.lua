@@ -1,4 +1,5 @@
 local dir = require("utils").get_dir()
+local work_keyword = require("utils").work_keyword
 
 Set = vim.opt
 G = vim.g
@@ -41,7 +42,7 @@ Set.foldenable = false
 G.gitblame_message_template = "<author> • <date> #<sha>"
 G.gitblame_date_format = "%r"
 G.gitblame_display_virtual_text = 0
-if not dir:find("apicbase") then
+if not dir:find(work_keyword) then
 	G.gitblame_enabled = 0
 end
 
@@ -57,6 +58,7 @@ if vim.g.neovide then
 end
 
 G.neovide_cursor_vfx_mode = "railgun"
+G.neovide_refresh_rate = 60
 
 -- Allow clipboard copy paste in neovim
 vim.api.nvim_set_keymap("", "<D-v>", "+p<CR>", { noremap = true, silent = true })

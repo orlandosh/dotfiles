@@ -10,6 +10,7 @@ local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protoc
 require("autocomplete.cmp")
 
 local bufdir = utils.get_dir()
+local work_keyword = require("utils").work_keyword
 
 local lspconfig = require("lspconfig")
 local installed_servers = require("mason-lspconfig").get_installed_servers()
@@ -18,7 +19,7 @@ for _, server in pairs(installed_servers) do
 	local lsp_opts = { on_attach = on_attach, capabilities = capabilities }
 
 	if server == "pyright" then
-		if string.find(bufdir, "apicbase") then
+		if string.find(bufdir, work_keyword) then
 			lsp_opts.settings = {
 				python = {
 					analysis = {
@@ -152,7 +153,6 @@ for _, server in pairs(installed_servers) do
 end
 
 local settings = {
-	rootMarkers = { "node_modules/", ".git/" },
 	lintDebounce = 1000,
 	languages = {
 		python = {
@@ -247,7 +247,9 @@ require("lspconfig").efm.setup({
 	},
 	init_options = { documentFormatting = true, diagnostics = true },
 	root_dir = function(fname)
-		return util.root_pattern("node_modules")(fname) or util.root_pattern(".git")(fname) or vim.fn.getcwd()
+		return not bufdir:find(work_keyword) and util.root_pattern("node_modules")(fname)
+			or not bufdir:find(work_keyword) and util.root_pattern(".git")(fname)
+			or vim.fn.getcwd()
 	end,
 })
 

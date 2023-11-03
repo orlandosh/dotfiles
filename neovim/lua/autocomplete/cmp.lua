@@ -58,7 +58,7 @@ local cmp_common_config = {
 		["<CR>"] = cmp.mapping({
 			i = function(fallback)
 				if cmp.visible() and cmp.get_selected_entry() then
-					cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true })
+					cmp.confirm({ select = true })
 				else
 					fallback()
 				end
