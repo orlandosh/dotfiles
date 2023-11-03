@@ -155,14 +155,14 @@ end
 
 local git_blame = {
 	provider = function()
-		if (G.gitblame_enabled ~= nil and G.gitblame_enabled == 0) or not git_blame_pl.is_blame_text_available() then
+		if (G.gitblame_enabled ~= nil and not G.gitblame_enabled) or not git_blame_pl.is_blame_text_available() then
 			return ""
 		end
 		return abbreviate_name(git_blame_pl.get_current_blame_text()):lower()
 	end,
 
 	enabled = function()
-		return G.gitblame_enabled ~= nil and G.gitblame_enabled > 0
+		return G.gitblame_enabled ~= nil and G.gitblame_enabled
 	end,
 
 	right_sep = " ",
