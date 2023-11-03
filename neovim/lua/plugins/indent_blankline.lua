@@ -7,16 +7,4 @@
 -- vim.cmd([[highlight IndentBlanklineIndent5 guifg=#61AFEF gui=nocombine]])
 --
 
-vim.opt.list = true
-
-require("ibl").setup({
-	-- show_current_context = true,
-	-- show_current_context_start = true,
-	-- char_highlight_list = {
-	-- 	"IndentBlanklineIndent1",
-	-- 	"IndentBlanklineIndent2",
-	-- 	"IndentBlanklineIndent3",
-	-- 	"IndentBlanklineIndent4",
-	-- 	"IndentBlanklineIndent5",
-	-- },
-})
+require("ibl").setup({})
