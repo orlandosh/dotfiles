@@ -85,7 +85,14 @@ return require("packer").startup(function(use)
 		"romgrk/barbar.nvim",
 	})
 	use("lukas-reineke/indent-blankline.nvim")
-	use("norcalli/nvim-colorizer.lua")
+	use({
+		"norcalli/nvim-colorizer.lua",
+		config = function()
+			require("colorizer").setup({
+				css = { css = true },
+			})
+		end,
+	})
 	use("stevearc/dressing.nvim")
 	use({
 		"rcarriga/nvim-notify",
@@ -183,7 +190,6 @@ return require("packer").startup(function(use)
 	use({ "nvim-tree/nvim-web-devicons" })
 
 	use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" })
-	use("karb94/neoscroll.nvim")
 	use("hkupty/iron.nvim")
 
 	-- autotag
@@ -408,6 +414,27 @@ return require("packer").startup(function(use)
 		requires = { "tpope/vim-dadbod", "kristijanhusak/vim-dadbod-completion", ft = { "sql", "plsql", "clickhouse" } },
 		config = function()
 			vim.g.db_ui_use_nerd_fonts = 1
+		end,
+	})
+	use({
+		"backdround/improved-search.nvim",
+		config = function()
+			local search = require("improved-search")
+			-- Search next / previous.
+			vim.keymap.set({ "n", "x", "o" }, "n", search.stable_next)
+			vim.keymap.set({ "n", "x", "o" }, "N", search.stable_previous)
+
+			-- Search current word without moving.
+			vim.keymap.set("n", "!", search.current_word)
+
+			-- Search selected text in visual mode
+			vim.keymap.set("x", "!", search.in_place) -- search selection without moving
+			vim.keymap.set("x", "*", search.forward) -- search selection forward
+			vim.keymap.set("x", "#", search.backward) -- search selection backward
+
+			-- Search by motion in place
+			vim.keymap.set("n", "|", search.in_place)
+			-- You can also use search.forward / search.backward for motion selection.
 		end,
 	})
 end)
