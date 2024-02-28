@@ -229,7 +229,6 @@ settings.lintDebounce = 1000
 require("lspconfig").efm.setup({
 	on_attach = on_attach,
 	capabilities = capabilities,
-	cmd = { "/home/me/.local/share/nvim/lsp_servers/efm/efm-langserver" },
 	settings = settings,
 	filetypes = {
 		"python",
