@@ -1,10 +1,9 @@
 -- Notes:
 -- As per documentation, neotree configs are inside packer.lua
 
-require("plugins.packer")
+require("plugins.lazy")
 require("plugins.plain_setups")
 
-require("plugins.autopairs")
 require("plugins.autosave")
 require("plugins.autotag")
 require("plugins.barbar")

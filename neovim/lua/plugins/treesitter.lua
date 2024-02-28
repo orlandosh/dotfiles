@@ -2,7 +2,6 @@ require("nvim-treesitter.configs").setup({
 	ensure_installed = { "python", "vue", "javascript", "rust", "lua", "sql", "html" },
 	sync_install = false,
 	indent = { enable = true },
-	autopairs = { enable = true },
 	auto_install = true,
 
 	highlight = {

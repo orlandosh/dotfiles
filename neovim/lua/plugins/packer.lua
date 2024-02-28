@@ -23,7 +23,6 @@ return require("packer").startup(function(use)
 	-- TODO: reorganize
 	-- nvim lsp, autocomplete, lint & snip related
 	use("neovim/nvim-lspconfig")
-	use("windwp/nvim-autopairs")
 	use("hrsh7th/cmp-nvim-lsp")
 	use("hrsh7th/cmp-buffer")
 	use("hrsh7th/cmp-path")
@@ -198,9 +197,7 @@ return require("packer").startup(function(use)
 	use({
 		"kylechui/nvim-surround",
 		config = function()
-			require("nvim-surround").setup({
-				-- Configuration here, or leave empty to use defaults
-			})
+			require("nvim-surround").setup()
 		end,
 	})
 
