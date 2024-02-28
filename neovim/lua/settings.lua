@@ -15,7 +15,6 @@ G.gruvbox_material_background = "soft"
 
 vim.cmd([[
 	syntax on
-	colorscheme gruvbox-material
 	setlocal spell spelllang=en_ca
 ]])
 
