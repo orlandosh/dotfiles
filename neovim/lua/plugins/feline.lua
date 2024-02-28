@@ -132,6 +132,10 @@ local diagnostic_info = { provider = "diagnostic_info", hl = { fg = "white" }, r
 local search_count = { provider = "search_count", right_sep = " " }
 
 local function abbreviate_name(blame_text)
+	if blame_text == nil then
+		return ""
+	end
+
 	local name = blame_text:match("(.*) •")
 	local date = blame_text:match("• (.*) #")
 	local sha = blame_text:match("#(.*)")
