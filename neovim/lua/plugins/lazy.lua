@@ -125,7 +125,14 @@ local plugins = {
 				-- filetype_overrides: filetype specific overrides.
 				-- The keys are strings to represent the filetype while the values are tables that
 				-- supports the same keys passed to .configure except for filetypes_denylist and filetypes_allowlist
-				filetype_overrides = {},
+				filetype_overrides = {
+					python = {
+						providers = {
+							"lsp",
+							"regex",
+						},
+					},
+				},
 				-- filetypes_denylist: filetypes to not illuminate, this overrides filetypes_allowlist
 				filetypes_denylist = {
 					"dirvish",
@@ -450,62 +457,65 @@ local plugins = {
 		end,
 	},
 
-	{
-		"CopilotC-Nvim/CopilotChat.nvim",
-		branch = "canary",
-		dependencies = {
-			"zbirenbaum/copilot.lua", -- or github/copilot.vim
-			{ "nvim-telescope/telescope.nvim" }, -- Use telescope for help actions
-			{ "nvim-lua/plenary.nvim" }, -- for curl, log wrapper
-		},
-		opts = {
-			debug = true, -- Enable or disable debug mode, the log file will be in ~/.local/state/nvim/CopilotChat.nvim.log
-		},
-		config = function(_, opts)
-			local chat = require("CopilotChat")
-			local select = require("CopilotChat.select")
+	-- {
+	-- 	"CopilotC-Nvim/CopilotChat.nvim",
+	-- 	branch = "canary",
+	-- 	dependencies = {
+	-- 		"zbirenbaum/copilot.lua", -- or github/copilot.vim
+	-- 		{ "nvim-telescope/telescope.nvim" }, -- Use telescope for help actions
+	-- 		{ "nvim-lua/plenary.nvim" }, -- for curl, log wrapper
+	-- 	},
+	-- 	opts = {
+	-- 		debug = true, -- Enable or disable debug mode, the log file will be in ~/.local/state/nvim/CopilotChat.nvim.log
+	-- 	},
+	-- 	config = function(_, opts)
+	-- 		local chat = require("CopilotChat")
+	-- 		local select = require("CopilotChat.select")
+	--
+	-- 		chat.setup(opts)
+	--
+	-- 		-- Restore CopilotChatVisual
+	-- 		vim.api.nvim_create_user_command("CopilotChatVisual", function(args)
+	-- 			chat.ask(args.args, { selection = select.visual })
+	-- 		end, { nargs = "*", range = true })
+	--
+	-- 		-- Restore CopilotChatInPlace (sort of)
+	-- 		vim.api.nvim_create_user_command("CopilotChatInPlace", function(args)
+	-- 			chat.ask(args.args, { selection = select.visual, window = { layout = "float" } })
+	-- 		end, { nargs = "*", range = true })
+	--
+	-- 		-- Restore CopilotChatBuffer
+	-- 		vim.api.nvim_create_user_command("CopilotChatBuffer", function(args)
+	-- 			chat.ask(args.args, { selection = select.buffer })
+	-- 		end, { nargs = "*", range = true })
+	-- 	end,
+	-- 	event = "VeryLazy",
+	-- 	keys = {
+	-- 		{ "<leader>ccb", "<cmd>CopilotChatBuffer ", desc = "CopilotChat - Chat with current buffer" },
+	-- 		{ "<leader>cce", "<cmd>CopilotChatExplain<cr>", desc = "CopilotChat - Explain code" },
+	-- 		{ "<leader>cct", "<cmd>CopilotChatTests<cr>", desc = "CopilotChat - Generate tests" },
+	-- 		{
+	-- 			"<leader>ccv",
+	-- 			":CopilotChatVisual ",
+	-- 			mode = "x",
+	-- 			desc = "CopilotChat - Open in vertical split",
+	-- 		},
+	-- 		{
+	-- 			"<leader>ccx",
+	-- 			":CopilotChatInPlace<cr>",
+	-- 			mode = "x",
+	-- 			desc = "CopilotChat - Run in-place code",
+	-- 		},
+	-- 		{
+	-- 			"<leader>ccf",
+	-- 			"<cmd>CopilotChatFixDiagnostic<cr>", -- Get a fix for the diagnostic message under the cursor.
+	-- 			desc = "CopilotChat - Fix diagnostic",
+	-- 		},
+	-- 	},
+	-- },
 
-			chat.setup(opts)
 
-			-- Restore CopilotChatVisual
-			vim.api.nvim_create_user_command("CopilotChatVisual", function(args)
-				chat.ask(args.args, { selection = select.visual })
-			end, { nargs = "*", range = true })
-
-			-- Restore CopilotChatInPlace (sort of)
-			vim.api.nvim_create_user_command("CopilotChatInPlace", function(args)
-				chat.ask(args.args, { selection = select.visual, window = { layout = "float" } })
-			end, { nargs = "*", range = true })
-
-			-- Restore CopilotChatBuffer
-			vim.api.nvim_create_user_command("CopilotChatBuffer", function(args)
-				chat.ask(args.args, { selection = select.buffer })
-			end, { nargs = "*", range = true })
-		end,
-		event = "VeryLazy",
-		keys = {
-			{ "<leader>ccb", "<cmd>CopilotChatBuffer ", desc = "CopilotChat - Chat with current buffer" },
-			{ "<leader>cce", "<cmd>CopilotChatExplain<cr>", desc = "CopilotChat - Explain code" },
-			{ "<leader>cct", "<cmd>CopilotChatTests<cr>", desc = "CopilotChat - Generate tests" },
-			{
-				"<leader>ccv",
-				":CopilotChatVisual ",
-				mode = "x",
-				desc = "CopilotChat - Open in vertical split",
-			},
-			{
-				"<leader>ccx",
-				":CopilotChatInPlace<cr>",
-				mode = "x",
-				desc = "CopilotChat - Run in-place code",
-			},
-			{
-				"<leader>ccf",
-				"<cmd>CopilotChatFixDiagnostic<cr>", -- Get a fix for the diagnostic message under the cursor.
-				desc = "CopilotChat - Fix diagnostic",
-			},
-		},
-	},
+	"smithbm2316/centerpad.nvim",
 }
 
 require("lazy").setup(plugins, {
