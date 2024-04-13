@@ -1,5 +1,5 @@
 require("settings")
-require("keymaps")
 require("autocmds")
 require("plugins.init")
 require("autocomplete.init")
+require("keymaps")
