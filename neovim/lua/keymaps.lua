@@ -11,6 +11,11 @@ vim.keymap.set("n", "<leader>b", "<cmd>Neotree toggle position=right<cr>")
 vim.keymap.set("n", "<leader>T", "<cmd>Telescope planets<cr>")
 vim.keymap.set("n", "<leader>tb", "<cmd>Telescope builtin<cr>")
 vim.keymap.set("n", "<leader>tl", "<cmd>Telescope reloader<cr>")
+vim.keymap.set(
+	"n",
+	"<leader>tc",
+	'<cmd>Telescope colorscheme enable_preview=true<cr>'
+)
 vim.keymap.set("n", "<leader>tk", "<cmd>Telescope keymaps<cr>")
 vim.keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>")
 vim.keymap.set("n", "<leader>fg", function()
@@ -22,10 +27,10 @@ vim.keymap.set("n", "<leader>fw", "<cmd>Telescope lsp_dynamic_workspace_symbols<
 vim.keymap.set("n", "<leader>fs", "<cmd>Telescope lsp_workspace_symbols<cr>")
 vim.keymap.set(
 	"n",
-	"<leader>fd",
+	"<leader>fD",
 	"<cmd>Telescope lsp_document_symbols symbols=struct,function,class,module,object,method,enum,constant<cr>"
 )
-vim.keymap.set("n", "<leader>fD", "<cmd>Telescope lsp_document_symbols<cr>")
+vim.keymap.set("n", "<leader>fd", "<cmd>Telescope lsp_document_symbols<cr>")
 vim.keymap.set("n", "<leader>tr", "<cmd>Telescope diagnostics<cr>") -- from trouble
 vim.keymap.set("n", "<leader>ts", "<cmd>Telescope treesitter<cr>")
 vim.keymap.set("n", "<leader>fr", "<cmd>Telescope resume<cr>")
