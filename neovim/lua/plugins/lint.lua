@@ -3,7 +3,7 @@ local lint = { lint = require("lint") }
 local pylint = require("lint.linters.pylint")
 
 local bufdir = require("utils").get_dir()
-local work_keyword = require("utils").work_keyword
+local work_keyword = require("utils").WORK_KEYWORD
 
 if bufdir:find(work_keyword) or bufdir:find("dango") then
 	pylint.cmd = "poetry"
