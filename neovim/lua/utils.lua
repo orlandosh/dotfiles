@@ -2,30 +2,34 @@ local utils = { get_dir = function() end }
 
 utils.get_dir = function()
 	local handle = io.popen("echo $PWD")
-	local dir = handle:read("*a")
-	handle:close()
+	if handle ~= nil then
+		local dir = handle:read("*a")
+		handle:close()
 
-	return dir:gsub("\n", "") .. "/"
+		return dir:gsub("\n", "") .. "/"
+	end
+
+	return ""
 end
 
 utils.copy_table = function(original)
 	local lookup_table = {}
 
-	local function _copy(original)
-		if type(original) ~= "table" then
-			return original
-		elseif lookup_table[original] then
-			return lookup_table[original]
+	local function _copy(_original)
+		if type(_original) ~= "table" then
+			return _original
+		elseif lookup_table[_original] then
+			return lookup_table[_original]
 		end
 
 		local new_table = {}
-		lookup_table[original] = new_table
+		lookup_table[_original] = new_table
 
-		for key, value in pairs(original) do
+		for key, value in pairs(_original) do
 			new_table[_copy(key)] = _copy(value)
 		end
 
-		return setmetatable(new_table, _copy(getmetatable(original)))
+		return setmetatable(new_table, _copy(getmetatable(_original)))
 	end
 
 	return _copy(original)
@@ -43,6 +47,15 @@ utils.get_json = function(path)
 	return vim.json.decode(content) or {}
 end
 
-utils.work_keyword = "work"
+utils.file_exists = function(path)
+	local file = io.open(path, "r")
+	if file then
+		file:close()
+		return true
+	end
+	return false
+end
+
+utils.WORK_KEYWORD = "work"
 
 return utils
