@@ -16,6 +16,7 @@ local plugins = {
 	-- TODO: add sidebar-nvim
 	-- TODO: setup debuggers
 
+	-- themes
 	{
 		"sainnhe/gruvbox-material",
 		lazy = false,
@@ -24,6 +25,7 @@ local plugins = {
 			vim.cmd([[colorscheme gruvbox-material]])
 		end,
 	},
+	"sainnhe/everforest",
 
 	-- vim plugins
 	"mg979/vim-visual-multi",
@@ -42,8 +44,8 @@ local plugins = {
 	"hrsh7th/cmp-vsnip",
 	"hrsh7th/vim-vsnip",
 	"mfussenegger/nvim-lint",
-	"ray-x/lsp_signature.nvim",
 	"folke/lsp-colors.nvim",
+
 	{
 		"williamboman/mason.nvim",
 		build = ":MasonUpdate", -- :MasonUpdate updates registry contents
@@ -92,20 +94,16 @@ local plugins = {
 			})
 		end,
 	},
-	"nvim-lua/plenary.nvim",
-	{ "nvim-telescope/telescope.nvim", dependencies = { "nvim-lua/plenary.nvim" } },
-	{
-		"numToStr/Comment.nvim",
-		config = function()
-			require("Comment").setup()
-		end,
-	},
+	{ "nvim-telescope/telescope.nvim",   dependencies = { "nvim-lua/plenary.nvim" } },
+
 	"lewis6991/gitsigns.nvim",
+
 	"feline-nvim/feline.nvim",
-	{
-		"romgrk/barbar.nvim",
-	},
+
+	"romgrk/barbar.nvim",
+
 	"lukas-reineke/indent-blankline.nvim",
+
 	{
 		"norcalli/nvim-colorizer.lua",
 		config = function()
@@ -114,7 +112,9 @@ local plugins = {
 			})
 		end,
 	},
+
 	"stevearc/dressing.nvim",
+
 	{
 		"rcarriga/nvim-notify",
 		config = function()
@@ -186,10 +186,17 @@ local plugins = {
 	-- 		require("alpha").setup(require("alpha.themes.dashboard").config)
 	-- 	end,
 	-- })
-	"Shatur/neovim-session-manager",
+	{
+		"Shatur/neovim-session-manager",
+		lazy = false,
+		priority = 1001,
+	},
+
 	"kdheepak/lazygit.nvim",
+
 	-- use("mfussenegger/nvim-dap")
 	-- use("rcarriga/nvim-dap-ui")
+
 	{
 		"folke/neodev.nvim",
 		config = function()
@@ -203,6 +210,7 @@ local plugins = {
 			require("spectre").setup()
 		end,
 	},
+
 	"f-person/git-blame.nvim",
 
 	-- neotree
@@ -216,10 +224,8 @@ local plugins = {
 		},
 		config = require("plugins.neotree"),
 	},
-	"nvim-tree/nvim-web-devicons",
 
 	{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
-	"hkupty/iron.nvim",
 
 	-- autotag
 	"windwp/nvim-ts-autotag",
@@ -321,7 +327,6 @@ local plugins = {
 			"neovim/nvim-lspconfig",
 			"SmiteshP/nvim-navic",
 			"MunifTanjim/nui.nvim",
-			"numToStr/Comment.nvim", -- Optional
 			"nvim-telescope/telescope.nvim", -- Optional
 		},
 		config = function()
@@ -390,44 +395,45 @@ local plugins = {
 		end,
 	},
 
-	{
-		"simrat39/symbols-outline.nvim",
-		config = function()
-			require("symbols-outline").setup({
-				-- use vscode icons
-				symbols = {
-					File = { icon = " ", hl = "@text.uri" },
-					Module = { icon = " ", hl = "@namespace" },
-					Namespace = { icon = " ", hl = "@namespace" },
-					Package = { icon = " ", hl = "@namespace" },
-					Class = { icon = " ", hl = "@type" },
-					Method = { icon = " ", hl = "@method" },
-					Property = { icon = " ", hl = "@method" },
-					Field = { icon = " ", hl = "@field" },
-					Constructor = { icon = " ", hl = "@constructor" },
-					Enum = { icon = " ", hl = "@type" },
-					Interface = { icon = " ", hl = "@type" },
-					Function = { icon = " ", hl = "@function" },
-					Variable = { icon = " ", hl = "@constant" },
-					Constant = { icon = " ", hl = "@constant" },
-					String = { icon = " ", hl = "@string" },
-					Number = { icon = " ", hl = "@number" },
-					Boolean = { icon = " ", hl = "@boolean" },
-					Array = { icon = " ", hl = "@constant" },
-					Object = { icon = " ", hl = "@type" },
-					Key = { icon = " ", hl = "@type" },
-					Null = { icon = " ", hl = "@type" },
-					EnumMember = { icon = " ", hl = "@field" },
-					Struct = { icon = " ", hl = "@type" },
-					Event = { icon = " ", hl = "@type" },
-					Operator = { icon = " ", hl = "@operator" },
-					TypeParameter = { icon = " ", hl = "@parameter" },
-					Component = { icon = " ", hl = "@function" },
-					Fragment = { icon = " ", hl = "@constant" },
-				},
-			})
-		end,
-	},
+	-- {
+	-- 	"simrat39/symbols-outline.nvim",
+	-- 	config = function()
+	-- 		require("symbols-outline").setup({
+	-- 			-- use vscode icons
+	-- 			symbols = {
+	-- 				File = { icon = " ", hl = "@text.uri" },
+	-- 				Module = { icon = " ", hl = "@namespace" },
+	-- 				Namespace = { icon = " ", hl = "@namespace" },
+	-- 				Package = { icon = " ", hl = "@namespace" },
+	-- 				Class = { icon = " ", hl = "@type" },
+	-- 				Method = { icon = " ", hl = "@method" },
+	-- 				Property = { icon = " ", hl = "@method" },
+	-- 				Field = { icon = " ", hl = "@field" },
+	-- 				Constructor = { icon = " ", hl = "@constructor" },
+	-- 				Enum = { icon = " ", hl = "@type" },
+	-- 				Interface = { icon = " ", hl = "@type" },
+	-- 				Function = { icon = " ", hl = "@function" },
+	-- 				Variable = { icon = " ", hl = "@constant" },
+	-- 				Constant = { icon = " ", hl = "@constant" },
+	-- 				String = { icon = " ", hl = "@string" },
+	-- 				Number = { icon = " ", hl = "@number" },
+	-- 				Boolean = { icon = " ", hl = "@boolean" },
+	-- 				Array = { icon = " ", hl = "@constant" },
+	-- 				Object = { icon = " ", hl = "@type" },
+	-- 				Key = { icon = " ", hl = "@type" },
+	-- 				Null = { icon = " ", hl = "@type" },
+	-- 				EnumMember = { icon = " ", hl = "@field" },
+	-- 				Struct = { icon = " ", hl = "@type" },
+	-- 				Event = { icon = " ", hl = "@type" },
+	-- 				Operator = { icon = " ", hl = "@operator" },
+	-- 				TypeParameter = { icon = " ", hl = "@parameter" },
+	-- 				Component = { icon = " ", hl = "@function" },
+	-- 				Fragment = { icon = " ", hl = "@constant" },
+	-- 			},
+	-- 		})
+	-- 	end,
+	-- },
+
 	{
 		"akinsho/toggleterm.nvim",
 		version = "*",
@@ -435,7 +441,7 @@ local plugins = {
 			require("toggleterm").setup()
 		end,
 	},
-	"tpope/vim-dadbod",
+
 	{
 		"kristijanhusak/vim-dadbod-ui",
 		dependencies = {
@@ -447,6 +453,7 @@ local plugins = {
 			vim.g.db_ui_use_nerd_fonts = 1
 		end,
 	},
+
 	{
 		"backdround/improved-search.nvim",
 		config = function()
@@ -469,64 +476,17 @@ local plugins = {
 		end,
 	},
 
-	-- {
-	-- 	"CopilotC-Nvim/CopilotChat.nvim",
-	-- 	branch = "canary",
-	-- 	dependencies = {
-	-- 		"zbirenbaum/copilot.lua", -- or github/copilot.vim
-	-- 		{ "nvim-telescope/telescope.nvim" }, -- Use telescope for help actions
-	-- 		{ "nvim-lua/plenary.nvim" }, -- for curl, log wrapper
-	-- 	},
-	-- 	opts = {
-	-- 		debug = true, -- Enable or disable debug mode, the log file will be in ~/.local/state/nvim/CopilotChat.nvim.log
-	-- 	},
-	-- 	config = function(_, opts)
-	-- 		local chat = require("CopilotChat")
-	-- 		local select = require("CopilotChat.select")
-	--
-	-- 		chat.setup(opts)
-	--
-	-- 		-- Restore CopilotChatVisual
-	-- 		vim.api.nvim_create_user_command("CopilotChatVisual", function(args)
-	-- 			chat.ask(args.args, { selection = select.visual })
-	-- 		end, { nargs = "*", range = true })
-	--
-	-- 		-- Restore CopilotChatInPlace (sort of)
-	-- 		vim.api.nvim_create_user_command("CopilotChatInPlace", function(args)
-	-- 			chat.ask(args.args, { selection = select.visual, window = { layout = "float" } })
-	-- 		end, { nargs = "*", range = true })
-	--
-	-- 		-- Restore CopilotChatBuffer
-	-- 		vim.api.nvim_create_user_command("CopilotChatBuffer", function(args)
-	-- 			chat.ask(args.args, { selection = select.buffer })
-	-- 		end, { nargs = "*", range = true })
-	-- 	end,
-	-- 	event = "VeryLazy",
-	-- 	keys = {
-	-- 		{ "<leader>ccb", "<cmd>CopilotChatBuffer ", desc = "CopilotChat - Chat with current buffer" },
-	-- 		{ "<leader>cce", "<cmd>CopilotChatExplain<cr>", desc = "CopilotChat - Explain code" },
-	-- 		{ "<leader>cct", "<cmd>CopilotChatTests<cr>", desc = "CopilotChat - Generate tests" },
-	-- 		{
-	-- 			"<leader>ccv",
-	-- 			":CopilotChatVisual ",
-	-- 			mode = "x",
-	-- 			desc = "CopilotChat - Open in vertical split",
-	-- 		},
-	-- 		{
-	-- 			"<leader>ccx",
-	-- 			":CopilotChatInPlace<cr>",
-	-- 			mode = "x",
-	-- 			desc = "CopilotChat - Run in-place code",
-	-- 		},
-	-- 		{
-	-- 			"<leader>ccf",
-	-- 			"<cmd>CopilotChatFixDiagnostic<cr>", -- Get a fix for the diagnostic message under the cursor.
-	-- 			desc = "CopilotChat - Fix diagnostic",
-	-- 		},
-	-- 	},
-	-- },
+	{
+		"CopilotC-Nvim/CopilotChat.nvim",
+		branch = "canary",
+		dependencies = {
+			"zbirenbaum/copilot.lua",   -- or github/copilot.vim
+			{ "nvim-telescope/telescope.nvim" }, -- Use telescope for help actions
+			{ "nvim-lua/plenary.nvim" }, -- for curl, log wrapper
+		},
+		event = "VeryLazy",
+	},
 
-	"smithbm2316/centerpad.nvim",
 	{
 		"pwntester/octo.nvim",
 		requires = {
@@ -667,6 +627,36 @@ local plugins = {
 						close_review_tab = { lhs = "<C-c>", desc = "close review tab" },
 						-- toggle_viewed = { lhs = "<leader><space>", desc = "toggle viewer viewed state" },
 					},
+				},
+			})
+		end,
+	},
+
+	-- lazy.nvim
+	{
+		"folke/noice.nvim",
+		event = "VeryLazy",
+		dependencies = {
+			"MunifTanjim/nui.nvim",
+			"rcarriga/nvim-notify",
+		},
+		config = function()
+			require("noice").setup({
+				lsp = {
+					-- override markdown rendering so that **cmp** and other plugins use **Treesitter**
+					override = {
+						["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+						["vim.lsp.util.stylize_markdown"] = true,
+						["cmp.entry.get_documentation"] = true, -- requires hrsh7th/nvim-cmp
+					},
+				},
+				-- you can enable a preset for easier configuration
+				presets = {
+					bottom_search = false, -- use a classic bottom cmdline for search
+					command_palette = false, -- position the cmdline and popupmenu together
+					long_message_to_split = true, -- long messages will be sent to a split
+					lsp_doc_border = true, -- add a border to hover docs and signature help
+					inc_rename = true,
 				},
 			})
 		end,
