@@ -8,10 +8,13 @@ local util = require("lspconfig/util")
 require("autocomplete.cmp")
 
 local bufdir = utils.get_dir()
-local work_keyword = require("utils").work_keyword
+local work_keyword = require("utils").WORK_KEYWORD
 
 local lspconfig = require("lspconfig")
 local installed_servers = require("mason-lspconfig").get_installed_servers()
+if utils.file_exists("/usr/bin/clangd") then
+	table.insert(installed_servers, "clangd")
+end
 
 for _, server in pairs(installed_servers) do
 	local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
@@ -27,93 +30,6 @@ for _, server in pairs(installed_servers) do
 				},
 			}
 		end
-	end
-
-	if server == "jedi_language_server" then
-		local get_poetry_env_path = function()
-			local handle = io.popen("poetry env info")
-			if handle == nil then
-				return ""
-			end
-
-			local output = handle:read("*a")
-			handle:close()
-
-			if output:match("Poetry could not find a pyproject.toml file in") then
-				return ""
-			end
-
-			local env_path = output:match("Path:%s+(%S+)")
-
-			return env_path or ""
-		end
-
-		if get_poetry_env_path() ~= "" then
-			lsp_opts.init_options = { workspace = { environmentPath = get_poetry_env_path() } }
-		end
-	end
-
-	if server == "pylsp" then
-		lsp_opts.settings = {
-			pylsp = {
-				plugins = {
-					jedi_completion = {
-						enabled = false,
-						eager = false,
-					},
-					jedi_hover = {
-						enabled = false,
-						eager = false,
-					},
-					jedi_references = {
-						enabled = false,
-					},
-					jedi_definition = {
-						enabled = false,
-					},
-					jedi_signature_help = {
-						enabled = false,
-					},
-					jedi_symbols = {
-						enabled = false,
-					},
-					mccabe = {
-						enabled = false,
-					},
-					preload = {
-						enabled = false,
-					},
-					pycodestyle = {
-						enabled = false,
-					},
-					pydocstyle = {
-						enabled = false,
-					},
-					pyflakes = {
-						enabled = false,
-					},
-					pylint = {
-						enabled = false,
-					},
-					rope_autoimport = {
-						enabled = false,
-					},
-					yapf = {
-						enabled = false,
-					},
-					autopep8 = {
-						enabled = false,
-					},
-					flake8 = {
-						enabled = false,
-					},
-					rope_completion = {
-						enabled = false,
-						eager = false,
-					},
-				},
-			},
-		}
 	end
 
 	if server == "omnisharp" then
@@ -298,6 +214,8 @@ for _, server in pairs(installed_servers) do
 				"javascript",
 				"typescript",
 				"svelte",
+				"c",
+				"cpp",
 			},
 			init_options = { documentFormatting = true, diagnostics = true },
 			root_dir = function(fname)
@@ -312,5 +230,3 @@ for _, server in pairs(installed_servers) do
 		lspconfig[server].setup(lsp_opts)
 	end
 end
-
-require("lsp_signature").setup()
