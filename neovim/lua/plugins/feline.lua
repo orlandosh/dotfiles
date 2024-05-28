@@ -1,3 +1,24 @@
+function SetupTheme()
+	MyTheme = {
+		bg = string.format("#%06x", vim.api.nvim_get_hl(0, { name = "StatusLine" }).bg),
+		fg = string.format("#%06x", vim.api.nvim_get_hl(0, { name = "StatusLine" }).fg),
+		black = string.format("#%06x", vim.api.nvim_get_hl(0, { name = "BufferTabpageFill" }).bg),
+		blue = G.terminal_color_4,
+		cyan = G.terminal_color_6,
+		darkblue = G.terminal_color_4,
+		green = G.terminal_color_2,
+		oceanblue = G.terminal_color_4,
+		orange = G.terminal_color_3,
+		magenta = G.terminal_color_5,
+		red = G.terminal_color_1,
+		skyblue = G.terminal_color_4,
+		white = G.terminal_color_7,
+		yellow = G.terminal_color_3,
+	}
+end
+
+SetupTheme()
+
 local fe_vi_mode = require("feline.providers.vi_mode")
 local fe_file = require("feline.providers.file")
 local fe_git = require("feline.providers.git")
@@ -202,21 +223,29 @@ local highlight_groups = {
 	"NavicText",
 	"NavicSeparator",
 }
-
--- Iterate over each highlight group and change the background color
+NavicOriginalHighlights = {}
 for _, group in ipairs(highlight_groups) do
 	-- Get the current highlight settings for the group
 	local current_settings = vim.api.nvim_get_hl(0, { name = group })
 	local linked_settings = vim.api.nvim_get_hl(0, { name = current_settings.link })
-	-- Set the new background color while preserving other settings
-	vim.api.nvim_set_hl(
-		0,
-		group,
-		vim.tbl_extend("force", linked_settings, {
-			bg = "#282828",
-		})
-	)
+	NavicOriginalHighlights[group] = linked_settings
 end
+
+function SetupNavic()
+	-- Iterate over each highlight group and change the background color
+	for group, linked_settings in pairs(NavicOriginalHighlights) do
+		-- Set the new background color while preserving other settings
+		vim.api.nvim_set_hl(
+			0,
+			group,
+			vim.tbl_extend("force", linked_settings, {
+				bg = MyTheme.black,
+			})
+		)
+	end
+end
+
+SetupNavic()
 
 local navic = require("nvim-navic")
 local navic_component = {
@@ -275,17 +304,30 @@ local components = {
 	inactive = { left, mid, right },
 }
 
-require("feline").setup({
-	components = components,
-	theme = require("plugins.feline.theme").my_theme,
-	disable = { buftypes = { "terminal" }, filetypes = { "neo--tree", "^Outline$" } },
+function SetupFeline()
+	require("feline").setup({
+		components = components,
+		theme = MyTheme,
+		disable = { buftypes = { "terminal" }, filetypes = { "neo--tree", "^Outline$" } },
+	})
+
+	require("feline").winbar.setup({
+		components = {
+			active = { { empty }, { navic_component, empty }, { empty } },
+			inactive = { { empty }, { navic_component, empty }, { empty } },
+		},
+		theme = MyTheme,
+		disable = { buftypes = { "terminal" }, filetypes = { "neo--tree", "^Outline$" } },
+	})
+end
+
+vim.api.nvim_create_autocmd({ "ColorScheme" }, {
+	callback = function()
+		SetupTheme()
+		SetupNavic()
+		vim.cmd("Lazy reload feline")
+		SetupFeline()
+	end,
 })
 
-require("feline").winbar.setup({
-	components = {
-		active = { { empty }, { navic_component, empty }, { empty } },
-		inactive = { { empty }, { navic_component, empty }, { empty } },
-	},
-	theme = require("plugins.feline.theme").my_theme,
-	disable = { buftypes = { "terminal" }, filetypes = { "neo--tree", "^Outline$" } },
-})
+SetupFeline()
