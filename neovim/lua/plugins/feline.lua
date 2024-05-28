@@ -227,14 +227,14 @@ NavicOriginalHighlights = {}
 for _, group in ipairs(highlight_groups) do
 	-- Get the current highlight settings for the group
 	local current_settings = vim.api.nvim_get_hl(0, { name = group })
-	local linked_settings = vim.api.nvim_get_hl(0, { name = current_settings.link })
-	NavicOriginalHighlights[group] = linked_settings
+	NavicOriginalHighlights[group] = current_settings
 end
 
 function SetupNavic()
 	-- Iterate over each highlight group and change the background color
-	for group, linked_settings in pairs(NavicOriginalHighlights) do
+	for group, current_settings in pairs(NavicOriginalHighlights) do
 		-- Set the new background color while preserving other settings
+		local linked_settings = vim.api.nvim_get_hl(0, { name = current_settings.link })
 		vim.api.nvim_set_hl(
 			0,
 			group,
