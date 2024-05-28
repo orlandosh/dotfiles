@@ -39,6 +39,11 @@ vim.keymap.set("n", "<leader>ft", "<cmd>TodoTelescope<cr>")
 
 vim.keymap.set("n", "<leader>lg", "<cmd>LazyGit<cr>")
 
+-- Neotest
+vim.keymap.set("n", "<leader>tt", "<cmd>Neotest run<cr>")
+vim.keymap.set("n", "<leader>tf", "<cmd>Neotest summary<cr>")
+vim.keymap.set("n", "<leader>to", "<cmd>Neotest output-panel<cr>")
+
 -- Clear highlighting on escape in normal mode
 vim.keymap.set("n", "<esc>", "<cmd>noh<cr><esc>")
 vim.keymap.set("n", "<esc>^[", "<esc>^[")

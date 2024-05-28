@@ -94,7 +94,7 @@ local plugins = {
 			})
 		end,
 	},
-	{ "nvim-telescope/telescope.nvim",   dependencies = { "nvim-lua/plenary.nvim" } },
+	{ "nvim-telescope/telescope.nvim", dependencies = { "nvim-lua/plenary.nvim" } },
 
 	"lewis6991/gitsigns.nvim",
 
@@ -480,7 +480,7 @@ local plugins = {
 		"CopilotC-Nvim/CopilotChat.nvim",
 		branch = "canary",
 		dependencies = {
-			"zbirenbaum/copilot.lua",   -- or github/copilot.vim
+			"zbirenbaum/copilot.lua", -- or github/copilot.vim
 			{ "nvim-telescope/telescope.nvim" }, -- Use telescope for help actions
 			{ "nvim-lua/plenary.nvim" }, -- for curl, log wrapper
 		},
@@ -657,6 +657,33 @@ local plugins = {
 					long_message_to_split = true, -- long messages will be sent to a split
 					lsp_doc_border = true, -- add a border to hover docs and signature help
 					inc_rename = true,
+				},
+				messages = {
+					view = "mini",
+					view_error = "mini",
+					view_warning = "mini",
+				},
+			})
+		end,
+	},
+
+	{
+		"nvim-neotest/neotest-python",
+		dependencies = {
+			"nvim-neotest/neotest",
+			"nvim-neotest/nvim-nio",
+			"nvim-lua/plenary.nvim",
+			"antoinemadec/FixCursorHold.nvim",
+			"nvim-treesitter/nvim-treesitter",
+		},
+		config = function()
+			require("neotest").setup({
+				adapters = {
+					require("neotest-python")({
+						args = { "--keepdb" },
+						dap = { justMyCode = false },
+						runner = "django",
+					}),
 				},
 			})
 		end,
