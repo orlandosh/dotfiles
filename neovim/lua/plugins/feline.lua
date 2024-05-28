@@ -172,52 +172,81 @@ local git_blame = {
 	right_sep = " ",
 }
 
-vim.api.nvim_set_hl(0, "NavicText", {
-	default = false,
-	bg = "#45403d",
-	fg = "#ddc7a1",
-})
+local highlight_groups = {
+	"NavicIconsFile",
+	"NavicIconsModule",
+	"NavicIconsNamespace",
+	"NavicIconsPackage",
+	"NavicIconsClass",
+	"NavicIconsMethod",
+	"NavicIconsProperty",
+	"NavicIconsField",
+	"NavicIconsConstructor",
+	"NavicIconsEnum",
+	"NavicIconsInterface",
+	"NavicIconsFunction",
+	"NavicIconsVariable",
+	"NavicIconsConstant",
+	"NavicIconsString",
+	"NavicIconsNumber",
+	"NavicIconsBoolean",
+	"NavicIconsArray",
+	"NavicIconsObject",
+	"NavicIconsKey",
+	"NavicIconsNull",
+	"NavicIconsEnumMember",
+	"NavicIconsStruct",
+	"NavicIconsEvent",
+	"NavicIconsOperator",
+	"NavicIconsTypeParameter",
+	"NavicText",
+	"NavicSeparator",
+}
 
--- add proper colors
-vim.api.nvim_set_hl(0, "NavicSeparator", { default = false, bg = "#45403d", fg = "#ddc7a1" })
-vim.api.nvim_set_hl(0, "NavicIconsFile", { default = false, bg = "#45403d" })
-vim.api.nvim_set_hl(0, "NavicIconsModule", { default = false, bg = "#45403d" })
-vim.api.nvim_set_hl(0, "NavicIconsNamespace", { default = false, bg = "#45403d" })
-vim.api.nvim_set_hl(0, "NavicIconsPackage", { default = false, bg = "#45403d" })
-vim.api.nvim_set_hl(0, "NavicIconsClass", { default = false, bg = "#45403d" })
-vim.api.nvim_set_hl(0, "NavicIconsMethod", { default = false, bg = "#45403d" })
-vim.api.nvim_set_hl(0, "NavicIconsProperty", { default = false, bg = "#45403d" })
-vim.api.nvim_set_hl(0, "NavicIconsField", { default = false, bg = "#45403d" })
-vim.api.nvim_set_hl(0, "NavicIconsConstructor", { default = false, bg = "#45403d" })
-vim.api.nvim_set_hl(0, "NavicIconsEnum", { default = false, bg = "#45403d" })
-vim.api.nvim_set_hl(0, "NavicIconsInterface", { default = false, bg = "#45403d" })
-vim.api.nvim_set_hl(0, "NavicIconsFunction", { default = false, bg = "#45403d" })
-vim.api.nvim_set_hl(0, "NavicIconsVariable", { default = false, bg = "#45403d" })
-vim.api.nvim_set_hl(0, "NavicIconsConstant", { default = false, bg = "#45403d" })
-vim.api.nvim_set_hl(0, "NavicIconsString", { default = false, bg = "#45403d" })
-vim.api.nvim_set_hl(0, "NavicIconsNumber", { default = false, bg = "#45403d" })
-vim.api.nvim_set_hl(0, "NavicIconsBoolean", { default = false, bg = "#45403d" })
-vim.api.nvim_set_hl(0, "NavicIconsArray", { default = false, bg = "#45403d" })
-vim.api.nvim_set_hl(0, "NavicIconsObject", { default = false, bg = "#45403d" })
-vim.api.nvim_set_hl(0, "NavicIconsKey", { default = false, bg = "#45403d" })
-vim.api.nvim_set_hl(0, "NavicIconsNull", { default = false, bg = "#45403d" })
-vim.api.nvim_set_hl(0, "NavicIconsEnumMember", { default = false, bg = "#45403d" })
-vim.api.nvim_set_hl(0, "NavicIconsStruct", { default = false, bg = "#45403d" })
-vim.api.nvim_set_hl(0, "NavicIconsEvent", { default = false, bg = "#45403d" })
-vim.api.nvim_set_hl(0, "NavicIconsOperator", { default = false, bg = "#45403d" })
-vim.api.nvim_set_hl(0, "NavicIconsTypeParameter", { default = false, bg = "#45403d" })
+-- Iterate over each highlight group and change the background color
+for _, group in ipairs(highlight_groups) do
+	-- Get the current highlight settings for the group
+	local current_settings = vim.api.nvim_get_hl(0, { name = group })
+	local linked_settings = vim.api.nvim_get_hl(0, { name = current_settings.link })
+	-- Set the new background color while preserving other settings
+	vim.api.nvim_set_hl(
+		0,
+		group,
+		vim.tbl_extend("force", linked_settings, {
+			bg = "#282828",
+		})
+	)
+end
 
 local navic = require("nvim-navic")
 local navic_component = {
 	provider = function()
-		return navic.get_location()
+		if not navic.is_available() then
+			return "✨☆＊✧⋆"
+		end
+		local location = navic.get_location()
+		if location ~= "" then
+			return location
+		end
+		return "✨☆＊✧⋆"
 	end,
 	enabled = function()
-		return navic.is_available()
+		return true
 	end,
-	right_sep = " ",
-	left_sep = " ",
-	hl = { bg = "bg" },
+	hl = function()
+		return { bg = "black", fg = "fg" }
+	end,
+}
+local empty = {
+	provider = function()
+		return ""
+	end,
+	enabled = function()
+		return true
+	end,
+	hl = function()
+		return { bg = "black", fg = "fg" }
+	end,
 }
 
 local left = {
@@ -226,7 +255,7 @@ local left = {
 	vi_mode,
 }
 
-local mid = { navic_component }
+local mid = {}
 
 local right = {
 	search_count,
@@ -248,6 +277,15 @@ local components = {
 
 require("feline").setup({
 	components = components,
+	theme = require("plugins.feline.theme").my_theme,
+	disable = { buftypes = { "terminal" }, filetypes = { "neo--tree", "^Outline$" } },
+})
+
+require("feline").winbar.setup({
+	components = {
+		active = { { empty }, { navic_component, empty }, { empty } },
+		inactive = { { empty }, { navic_component, empty }, { empty } },
+	},
 	theme = require("plugins.feline.theme").my_theme,
 	disable = { buftypes = { "terminal" }, filetypes = { "neo--tree", "^Outline$" } },
 })
