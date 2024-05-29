@@ -26,6 +26,32 @@ local plugins = {
 		end,
 	},
 	"sainnhe/everforest",
+	{
+		"catppuccin/nvim",
+		config = function()
+			require("catppuccin").setup({
+				background = {
+					light = "latte",
+					dark = "frappe",
+				},
+
+				term_colors = true,
+				default_integrations = true,
+				integrations = {
+					notify = true,
+					noice = true,
+					barbar = true,
+					navic = true,
+					neotest = true,
+					neotree = true,
+					neogit = true,
+					telescope = true,
+					cmp = true,
+					octo = true,
+				},
+			})
+		end,
+	},
 
 	-- vim plugins
 	"mg979/vim-visual-multi",
