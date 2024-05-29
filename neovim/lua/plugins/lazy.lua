@@ -52,6 +52,7 @@ local plugins = {
 			})
 		end,
 	},
+	"rebelot/kanagawa.nvim",
 
 	-- vim plugins
 	"mg979/vim-visual-multi",
