@@ -1,37 +1,18 @@
-function ensure_hexadecimal(input)
-	local function is_hexadecimal(str)
-		return string.match(str, "^%x+$") ~= nil
-	end
-
-	local function to_hexadecimal_str(str)
-		local hex = ""
-		for i = 1, #str do
-			hex = hex .. string.format("%02X", string.byte(str, i))
-		end
-		return hex
-	end
-
+local function ensure_hexadecimal(input)
 	local function to_hexadecimal_num(num)
 		return "#" .. string.format("%X", num)
 	end
 
-	-- Check if the input is already a hexadecimal string
-	if type(input) == "string" then
-		if is_hexadecimal(input) then
-			return input
-		else
-			return to_hexadecimal_str(input)
-		end
-	elseif type(input) == "number" then
+	if type(input) == "number" then
 		return to_hexadecimal_num(input)
 	elseif input == nil then
 		return nil
 	else
-		error("Unsupported input type. Must be a string or a number. Got: " .. type(input))
+		error("Unsupported input type. Must be a number. Got: " .. type(input))
 	end
 end
 
-function SetupTheme()
+local function setup_theme()
 	local black = ensure_hexadecimal(vim.api.nvim_get_hl(0, { name = "BufferTabpageFill" }).bg)
 	if black == nil then
 		black = ensure_hexadecimal(vim.api.nvim_get_hl(0, { name = "BufferDefaultTabpageFill" }).bg)
@@ -54,7 +35,7 @@ function SetupTheme()
 	}
 end
 
-SetupTheme()
+setup_theme()
 
 local fe_vi_mode = require("feline.providers.vi_mode")
 local fe_file = require("feline.providers.file")
@@ -230,7 +211,7 @@ local git_blame = {
 	right_sep = " ",
 }
 
-function SetupNavic()
+local function setup_navic()
 	local highlight_groups = {
 		"NavicIconsFile",
 		"NavicIconsModule",
@@ -292,7 +273,7 @@ function SetupNavic()
 	end
 end
 
-SetupNavic()
+setup_navic()
 
 local navic = require("nvim-navic")
 local navic_component = {
@@ -351,7 +332,7 @@ local components = {
 	inactive = { left, mid, right },
 }
 
-function SetupFeline()
+local function setup_feline()
 	require("feline").setup({
 		components = components,
 		theme = MyTheme,
@@ -371,12 +352,12 @@ end
 vim.api.nvim_create_autocmd({ "ColorScheme" }, {
 	callback = function()
 		vim.defer_fn(function()
-			SetupTheme()
-			SetupNavic()
+			setup_theme()
+			setup_navic()
 			vim.cmd([[Lazy reload feline.nvim]])
-			SetupFeline()
+			setup_feline()
 		end, 100)
 	end,
 })
 
-SetupFeline()
+setup_feline()
