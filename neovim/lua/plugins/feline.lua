@@ -1,8 +1,45 @@
+function ensure_hexadecimal(input)
+	local function is_hexadecimal(str)
+		return string.match(str, "^%x+$") ~= nil
+	end
+
+	local function to_hexadecimal_str(str)
+		local hex = ""
+		for i = 1, #str do
+			hex = hex .. string.format("%02X", string.byte(str, i))
+		end
+		return hex
+	end
+
+	local function to_hexadecimal_num(num)
+		return "#" .. string.format("%X", num)
+	end
+
+	-- Check if the input is already a hexadecimal string
+	if type(input) == "string" then
+		if is_hexadecimal(input) then
+			return input
+		else
+			return to_hexadecimal_str(input)
+		end
+	elseif type(input) == "number" then
+		return to_hexadecimal_num(input)
+	elseif input == nil then
+		return nil
+	else
+		error("Unsupported input type. Must be a string or a number. Got: " .. type(input))
+	end
+end
+
 function SetupTheme()
+	local black = ensure_hexadecimal(vim.api.nvim_get_hl(0, { name = "BufferTabpageFill" }).bg)
+	if black == nil then
+		black = ensure_hexadecimal(vim.api.nvim_get_hl(0, { name = "BufferDefaultTabpageFill" }).bg)
+	end
 	MyTheme = {
-		bg = string.format("#%06x", vim.api.nvim_get_hl(0, { name = "StatusLine" }).bg),
-		fg = string.format("#%06x", vim.api.nvim_get_hl(0, { name = "StatusLine" }).fg),
-		black = string.format("#%06x", vim.api.nvim_get_hl(0, { name = "BufferTabpageFill" }).bg),
+		bg = ensure_hexadecimal(vim.api.nvim_get_hl(0, { name = "StatusLine" }).bg),
+		fg = ensure_hexadecimal(vim.api.nvim_get_hl(0, { name = "StatusLine" }).fg),
+		black = black,
 		blue = G.terminal_color_4,
 		cyan = G.terminal_color_6,
 		darkblue = G.terminal_color_4,
@@ -193,55 +230,65 @@ local git_blame = {
 	right_sep = " ",
 }
 
-local highlight_groups = {
-	"NavicIconsFile",
-	"NavicIconsModule",
-	"NavicIconsNamespace",
-	"NavicIconsPackage",
-	"NavicIconsClass",
-	"NavicIconsMethod",
-	"NavicIconsProperty",
-	"NavicIconsField",
-	"NavicIconsConstructor",
-	"NavicIconsEnum",
-	"NavicIconsInterface",
-	"NavicIconsFunction",
-	"NavicIconsVariable",
-	"NavicIconsConstant",
-	"NavicIconsString",
-	"NavicIconsNumber",
-	"NavicIconsBoolean",
-	"NavicIconsArray",
-	"NavicIconsObject",
-	"NavicIconsKey",
-	"NavicIconsNull",
-	"NavicIconsEnumMember",
-	"NavicIconsStruct",
-	"NavicIconsEvent",
-	"NavicIconsOperator",
-	"NavicIconsTypeParameter",
-	"NavicText",
-	"NavicSeparator",
-}
-NavicOriginalHighlights = {}
-for _, group in ipairs(highlight_groups) do
-	-- Get the current highlight settings for the group
-	local current_settings = vim.api.nvim_get_hl(0, { name = group })
-	NavicOriginalHighlights[group] = current_settings
-end
-
 function SetupNavic()
+	local highlight_groups = {
+		"NavicIconsFile",
+		"NavicIconsModule",
+		"NavicIconsNamespace",
+		"NavicIconsPackage",
+		"NavicIconsClass",
+		"NavicIconsMethod",
+		"NavicIconsProperty",
+		"NavicIconsField",
+		"NavicIconsConstructor",
+		"NavicIconsEnum",
+		"NavicIconsInterface",
+		"NavicIconsFunction",
+		"NavicIconsVariable",
+		"NavicIconsConstant",
+		"NavicIconsString",
+		"NavicIconsNumber",
+		"NavicIconsBoolean",
+		"NavicIconsArray",
+		"NavicIconsObject",
+		"NavicIconsKey",
+		"NavicIconsNull",
+		"NavicIconsEnumMember",
+		"NavicIconsStruct",
+		"NavicIconsEvent",
+		"NavicIconsOperator",
+		"NavicIconsTypeParameter",
+		"NavicText",
+		"NavicSeparator",
+	}
+	NavicOriginalHighlights = {}
+	for _, group in ipairs(highlight_groups) do
+		-- Get the current highlight settings for the group
+		local current_settings = vim.api.nvim_get_hl(0, { name = group })
+		NavicOriginalHighlights[group] = current_settings
+	end
+
 	-- Iterate over each highlight group and change the background color
 	for group, current_settings in pairs(NavicOriginalHighlights) do
 		-- Set the new background color while preserving other settings
-		local linked_settings = vim.api.nvim_get_hl(0, { name = current_settings.link })
-		vim.api.nvim_set_hl(
-			0,
-			group,
-			vim.tbl_extend("force", linked_settings, {
-				bg = MyTheme.black,
-			})
-		)
+		if current_settings.link == nil then
+			vim.api.nvim_set_hl(
+				0,
+				group,
+				vim.tbl_extend("force", current_settings, {
+					bg = MyTheme.black,
+				})
+			)
+		else
+			local linked_settings = vim.api.nvim_get_hl(0, { name = current_settings.link })
+			vim.api.nvim_set_hl(
+				0,
+				group,
+				vim.tbl_extend("force", linked_settings, {
+					bg = MyTheme.black,
+				})
+			)
+		end
 	end
 end
 
@@ -323,10 +370,12 @@ end
 
 vim.api.nvim_create_autocmd({ "ColorScheme" }, {
 	callback = function()
-		SetupTheme()
-		SetupNavic()
-		vim.cmd("Lazy reload feline")
-		SetupFeline()
+		vim.defer_fn(function()
+			SetupTheme()
+			SetupNavic()
+			vim.cmd([[Lazy reload feline.nvim]])
+			SetupFeline()
+		end, 100)
 	end,
 })
 
