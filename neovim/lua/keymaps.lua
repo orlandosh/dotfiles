@@ -14,7 +14,7 @@ vim.keymap.set("n", "<leader>tl", "<cmd>Telescope reloader<cr>")
 vim.keymap.set(
 	"n",
 	"<leader>tc",
-	'<cmd>Telescope colorscheme<cr>'
+	'<cmd>Telescope colorscheme enable_preview=true<cr>'
 )
 vim.keymap.set("n", "<leader>tk", "<cmd>Telescope keymaps<cr>")
 vim.keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>")
