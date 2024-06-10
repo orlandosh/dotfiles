@@ -1,27 +1,27 @@
-vim.keymap.set("n", "<SPACE>", "<Nop>")
-vim.g.mapleader = " "
-vim.keymap.set("n", "<leader>re", "<C-l>")
-vim.keymap.set("n", "<leader>W", "<cmd>wa<cr>")
+-- important presets, must come before plugins
+vim.keymap.set("n", "<SPACE>", "<Nop>", { desc = "Disable space" })
+vim.g.mapleader = " " -- set leader to space
+
+vim.keymap.set("n", "<leader>re", "<C-l>", { desc = "Redraw screen" })
+vim.keymap.set("n", "<leader>W", "<cmd>wa<cr>", { desc = "Write all" })
 
 -- open neotree
-vim.keymap.set("n", "<leader>b", "<cmd>Neotree toggle position=right<cr>")
+vim.keymap.set("n", "<leader>b", "<cmd>Neotree toggle position=right<cr>", { desc = "Toggle Neotree" })
 
 -- vim.keymap.set("n", "<leader>||||sv", "<cmd>source $MYVIMRC<cr>") -- unused because it doesn't work
 
-vim.keymap.set("n", "<leader>T", "<cmd>Telescope planets<cr>")
-vim.keymap.set("n", "<leader>tb", "<cmd>Telescope builtin<cr>")
-vim.keymap.set("n", "<leader>tl", "<cmd>Telescope reloader<cr>")
-vim.keymap.set(
-	"n",
-	"<leader>tc",
-	'<cmd>Telescope colorscheme enable_preview=true<cr>'
-)
+vim.keymap.set("n", "<leader>T", "<cmd>Telescope planets<cr>", { desc = "Telescope planets" })
+vim.keymap.set("n", "<leader>tb", "<cmd>Telescope builtin<cr>", { desc = "Telescope builtin" })
+vim.keymap.set("n", "<leader>tl", "<cmd>Telescope reloader<cr>", { desc = "Telescope reloader" })
+vim.keymap.set("n", "<leader>tc", "<cmd>Telescope colorscheme enable_preview=true<cr>")
 vim.keymap.set("n", "<leader>tk", "<cmd>Telescope keymaps<cr>")
 vim.keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>")
 vim.keymap.set("n", "<leader>fg", function()
 	require("telescope.builtin").live_grep({})
 end)
-vim.keymap.set("n", "<leader>fb", "<cmd>Telescope buffers<cr>")
+vim.keymap.set("n", "<leader>fb", function()
+	require("telescope.builtin").buffers({ show_all_buffers = true })
+end)
 vim.keymap.set("n", "<leader>fh", "<cmd>Telescope help_tags<cr>")
 vim.keymap.set("n", "<leader>fw", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>")
 vim.keymap.set("n", "<leader>fs", "<cmd>Telescope lsp_workspace_symbols<cr>")
@@ -33,11 +33,21 @@ vim.keymap.set(
 vim.keymap.set("n", "<leader>fd", "<cmd>Telescope lsp_document_symbols<cr>")
 vim.keymap.set("n", "<leader>tr", "<cmd>Telescope diagnostics<cr>") -- from trouble
 vim.keymap.set("n", "<leader>ts", "<cmd>Telescope treesitter<cr>")
+vim.keymap.set("n", "<leader>sc", "<cmd>Telescope spell_suggest<cr>")
 vim.keymap.set("n", "<leader>fr", "<cmd>Telescope resume<cr>")
 vim.keymap.set("n", "<leader>fc", "<cmd>Telescope pickers<cr>")
 vim.keymap.set("n", "<leader>ft", "<cmd>TodoTelescope<cr>")
 
 vim.keymap.set("n", "<leader>lg", "<cmd>LazyGit<cr>")
+
+-- isort current file
+vim.keymap.set("n", "<leader>is", "<cmd>!isort --profile black %<cr>", {
+	desc = "Sort imports with isort",
+})
+
+vim.keymap.set("n", "<leader>bf", "<cmd>!black % && isort --profile black % && black %<cr>", {
+	desc = "Format current file with black",
+})
 
 -- Neotest
 vim.keymap.set("n", "<leader>tt", "<cmd>Neotest run<cr>")
@@ -119,19 +129,13 @@ vim.keymap.set("n", "<C-j>", "<cmd>wincmd j<cr>")
 vim.keymap.set("n", "<C-k>", "<cmd>wincmd k<cr>")
 vim.keymap.set("n", "<C-l>", "<cmd>wincmd l<cr>")
 
--- split vertically and horizontally
-vim.keymap.set("n", "<leader>sv", "<cmd>split<cr>")
-vim.keymap.set("n", "<leader>sh", "<cmd>vsplit<cr>")
--- alternative A and S
 vim.keymap.set("n", "<leader>A", "<cmd>split<cr>")
 vim.keymap.set("n", "<leader>S", "<cmd>vsplit<cr>")
 
--- close split and alternative
-vim.keymap.set("n", "<leader>sc", "<cmd>close<cr>")
 vim.keymap.set("n", "<leader>xc", "<cmd>close<cr>")
 
 -- quit vim
-vim.keymap.set("n", "<leader>Q", "<cmd>wqa<cr>")
+vim.keymap.set("n", "ZZ", "<cmd>wqa<cr>")
 
 -- toggle cmdheight
 vim.keymap.set("n", "<leader>ch", function()
@@ -150,6 +154,39 @@ vim.keymap.set("n", "<leader>rl", function()
 		Set.relativenumber = true
 	end
 end)
+
+-- Function to copy text to Kitty's clipboard
+local function copy_to_kitty_clipboard(lines)
+	local text = table.concat(lines, "\n")
+	local handle = io.popen("kitty +kitten clipboard", "w")
+	handle:write(text)
+	handle:close()
+end
+
+-- Function to paste text from Kitty's clipboard
+local function paste_from_kitty_clipboard()
+	local handle = io.popen('kitty +kitten clipboard --get-clipboard --mime "text/plain"')
+	local result = handle:read("*a")
+	handle:close()
+	return vim.fn.split(result, "\n")
+end
+
+-- Define custom clipboard integration
+local clipboard = {
+	name = "kitty-clipboard",
+	copy = {
+		["+"] = copy_to_kitty_clipboard,
+		["*"] = copy_to_kitty_clipboard,
+	},
+	paste = {
+		["+"] = paste_from_kitty_clipboard,
+		["*"] = paste_from_kitty_clipboard,
+	},
+	cache_enabled = true,
+}
+
+-- Set clipboard option in Neovim
+vim.opt.clipboard = clipboard
 
 local M = {}
 function M.lsp_keymaps(opts)
@@ -183,6 +220,9 @@ function M.lsp_keymaps(opts)
 		vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts)
 		vim.api.nvim_buf_set_keymap(bufnr, "n", "gr", "<cmd>Telescope lsp_references<CR>", opts)
 		vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>fo", "<cmd>lua vim.lsp.buf.format()<CR>", opts)
+		vim.keymap.set("n", "<leader>fo", function()
+			vim.lsp.buf.format({ timeout_ms = 1000 })
+		end, vim.tbl_deep_extend("force", opts, { buffer = bufnr }))
 	end
 end
 
