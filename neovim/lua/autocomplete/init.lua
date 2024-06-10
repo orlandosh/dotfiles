@@ -72,8 +72,7 @@ for _, server in pairs(installed_servers) do
 		}
 
 		-- custom settings
-		local current_dir = require("utils").get_dir()
-		local settings_json = require("utils").get_json(current_dir .. "rust_analyzer_neovim.json")
+		local settings_json = require("utils").get_json(bufdir .. "rust_analyzer_neovim.json")
 
 		-- to merge custom settings, do it recursively
 		local function merge(t1, t2)
@@ -123,12 +122,17 @@ for _, server in pairs(installed_servers) do
 	end
 
 	if server == "efm" then
+		local python_formatter = "black --quiet - | isort --stdout --profile black - | black --quiet -"
+		if string.find(bufdir, work_keyword) then
+			python_formatter = "darker --stdout ${INPUT}"
+		end
+
 		local settings = {
 			lintDebounce = 1000,
 			languages = {
 				python = {
 					{
-						formatCommand = "black --quiet - | isort --stdout --profile black - | black --quiet -",
+						formatCommand = python_formatter,
 						formatStdin = true,
 					},
 				},
