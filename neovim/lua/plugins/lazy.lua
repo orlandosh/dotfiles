@@ -13,19 +13,19 @@ vim.opt.rtp:prepend(lazypath)
 
 local plugins = {
 	-- TODO: properly sort plugins and deps
-	-- TODO: add sidebar-nvim
 	-- TODO: setup debuggers
 
 	-- themes
 	{
 		"sainnhe/gruvbox-material",
-		lazy = false,
 		priority = 1000,
 		config = function()
 			vim.cmd([[colorscheme gruvbox-material]])
 		end,
 	},
+
 	"sainnhe/everforest",
+
 	{
 		"catppuccin/nvim",
 		config = function()
@@ -41,13 +41,22 @@ local plugins = {
 					notify = true,
 					noice = true,
 					barbar = true,
-					navic = true,
+					navic = { enabled = true },
 					neotest = true,
 					neotree = true,
 					neogit = true,
 					telescope = true,
 					cmp = true,
 					octo = true,
+					indent_blankline = { enabled = true },
+					illuminate = { enabled = true, lsp = false },
+					native_lsp = {
+						enabled = true,
+
+						inlay_hints = {
+							background = false,
+						},
+					},
 				},
 			})
 		end,
@@ -121,7 +130,7 @@ local plugins = {
 			})
 		end,
 	},
-	{ "nvim-telescope/telescope.nvim", dependencies = { "nvim-lua/plenary.nvim" } },
+	{ "nvim-telescope/telescope.nvim",   dependencies = { "nvim-lua/plenary.nvim" } },
 
 	"lewis6991/gitsigns.nvim",
 
@@ -507,7 +516,7 @@ local plugins = {
 		"CopilotC-Nvim/CopilotChat.nvim",
 		branch = "canary",
 		dependencies = {
-			"zbirenbaum/copilot.lua", -- or github/copilot.vim
+			"zbirenbaum/copilot.lua",   -- or github/copilot.vim
 			{ "nvim-telescope/telescope.nvim" }, -- Use telescope for help actions
 			{ "nvim-lua/plenary.nvim" }, -- for curl, log wrapper
 		},
