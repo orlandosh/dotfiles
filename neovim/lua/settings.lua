@@ -45,9 +45,7 @@ Set.foldenable = false
 G.gitblame_message_template = "<author> • <date> #<sha>"
 G.gitblame_date_format = "%r"
 G.gitblame_display_virtual_text = 0
-if not dir:find(work_keyword) then
-	G.gitblame_enabled = 0
-end
+G.gitblame_enabled = 0 -- disabled by default
 
 if vim.g.neovide then
 	G.neovide_input_macos_alt_is_meta = true
