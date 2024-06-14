@@ -14,6 +14,7 @@ vim.opt.rtp:prepend(lazypath)
 local plugins = {
 	-- TODO: properly sort plugins and deps
 	-- TODO: setup debuggers
+	-- NOTE: this is currently chaos. i will reorganize this later
 
 	-- themes
 	{
@@ -24,10 +25,11 @@ local plugins = {
 		end,
 	},
 
-	"sainnhe/everforest",
+	{ "sainnhe/everforest", event = "VeryLazy" },
 
 	{
 		"catppuccin/nvim",
+		event = "VeryLazy",
 		config = function()
 			require("catppuccin").setup({
 				background = {
@@ -61,26 +63,76 @@ local plugins = {
 			})
 		end,
 	},
-	"rebelot/kanagawa.nvim",
+	{ "rebelot/kanagawa.nvim", event = "VeryLazy" },
 
 	-- vim plugins
-	"mg979/vim-visual-multi",
-	"sheerun/vim-polyglot",
-	"unblevable/quick-scope",
-	"tpope/vim-fugitive",
+	{ "mg979/vim-visual-multi", event = "VeryLazy" },
+
+	{ "unblevable/quick-scope", event = "VeryLazy" },
 
 	-- TODO: reorganize
 	-- nvim lsp, autocomplete, lint & snip related
-	"neovim/nvim-lspconfig",
-	"hrsh7th/cmp-nvim-lsp",
-	"hrsh7th/cmp-buffer",
-	"hrsh7th/cmp-path",
-	"hrsh7th/cmp-cmdline",
-	"hrsh7th/nvim-cmp",
-	"hrsh7th/cmp-vsnip",
-	"hrsh7th/vim-vsnip",
-	"mfussenegger/nvim-lint",
-	"folke/lsp-colors.nvim",
+	{
+		"neovim/nvim-lspconfig",
+		event = "VeryLazy",
+		dependencies = {
+
+			"onsails/lspkind-nvim",
+			{
+				"kosayoda/nvim-lightbulb",
+				config = function()
+					require("nvim-lightbulb").setup({
+						autocmd = { enabled = true },
+					})
+				end,
+			},
+		},
+	},
+	{
+		"hrsh7th/nvim-cmp",
+		event = "InsertEnter",
+		dependencies = {
+			"hrsh7th/cmp-nvim-lsp",
+			"hrsh7th/cmp-buffer",
+			"hrsh7th/cmp-path",
+			"hrsh7th/cmp-cmdline",
+			{
+				"hrsh7th/cmp-vsnip",
+				dependencies = {
+					"hrsh7th/vim-vsnip",
+				},
+			},
+		},
+	},
+
+	{
+		"mfussenegger/nvim-lint",
+		ft = { "python" },
+		config = function()
+			local lint = { lint = require("lint") }
+
+			local pylint = require("lint.linters.pylint")
+
+			local bufdir = require("utils").get_dir()
+			local work_keyword = require("utils").WORK_KEYWORD
+
+			if bufdir:find(work_keyword) or bufdir:find("dango") then
+				pylint.cmd = "poetry"
+				pylint.args = {
+					"run",
+					"pylint",
+					unpack(pylint.args),
+				}
+			end
+
+			local python_linters = { "pylint" }
+			if string.find(bufdir, work_keyword) then
+				table.insert(python_linters, "flake8")
+			end
+
+			return lint
+		end,
+	},
 
 	{
 		"williamboman/mason.nvim",
@@ -88,30 +140,60 @@ local plugins = {
 		config = function()
 			require("mason").setup()
 		end,
+		event = "VeryLazy",
+		dependencies = {
+			{
+				"williamboman/mason-lspconfig.nvim",
+				config = function()
+					require("mason-lspconfig").setup()
+				end,
+			},
+		},
 	},
 
 	{
-		"williamboman/mason-lspconfig.nvim",
+		"nvim-treesitter/nvim-treesitter",
+		build = ":TSUpdate",
+		event = "VeryLazy",
 		config = function()
-			require("mason-lspconfig").setup()
-		end,
-	},
-	{ "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
+			require("nvim-treesitter.configs").setup({
+				ensure_installed = { "python", "vue", "javascript", "rust", "lua", "sql", "html", "regex", "bash" },
+				sync_install = false,
+				indent = { enable = true },
+				auto_install = true,
 
-	{
-		"kosayoda/nvim-lightbulb",
-		config = function()
-			require("nvim-lightbulb").setup({
-				autocmd = { enabled = true },
+				highlight = {
+					enable = true,
+					disable = function(lang, _)
+						-- disable if lang not in {"json", "sql"}
+						return not ({ json = true, sql = true, svelte = true })[lang]
+					end,
+					-- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+					-- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+					-- Using this option may slow down your editor, and you may see some duplicate highlights.
+					-- Instead of true it can also be a list of languages
+					additional_vim_regex_highlighting = true,
+				},
+
+				incremental_selection = {
+					enable = true,
+					keymaps = {
+						init_selection = "gnn", -- set to `false` to disable one of the mappings
+						node_incremental = "grn",
+						scope_incremental = "grc",
+						node_decremental = "grm",
+					},
+				},
 			})
 		end,
 	},
+
 	-- add lspkind
-	"onsails/lspkind-nvim",
 
 	-- nvim-only plugins
 	{
 		"Pocco81/auto-save.nvim",
+		event = "VeryLazy",
 		config = function()
 			require("auto-save").setup({
 				enabled = true,
@@ -130,15 +212,445 @@ local plugins = {
 			})
 		end,
 	},
-	{ "nvim-telescope/telescope.nvim",   dependencies = { "nvim-lua/plenary.nvim" } },
+	{
+		"nvim-telescope/telescope.nvim",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"nvim-telescope/telescope-live-grep-args.nvim",
+			{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+		},
+		event = "VeryLazy",
+		config = function()
+			local actions = require("telescope.actions")
 
-	"lewis6991/gitsigns.nvim",
+			require("telescope").setup({
+				defaults = {
+					file_ignore_patterns = { "%.po", "assets" },
+					mappings = {
+						n = { ["dd"] = actions.delete_buffer },
+					},
+					cache_picker = {
+						num_pickers = 100,
+					},
+				},
+				extensions = {
+					fzf = {
+						fuzzy = true, -- false will only do exact matching
+						override_generic_sorter = true, -- override the generic sorter
+						override_file_sorter = true, -- override the file sorter
+						case_mode = "smart_case", -- or "ignore_case" or "respect_case"
+						-- the default case_mode is "smart_case"
+					},
+				},
+			})
 
-	"feline-nvim/feline.nvim",
+			require("telescope").load_extension("fzf")
+			require("telescope").load_extension("live_grep_args")
+		end,
+	},
 
-	"romgrk/barbar.nvim",
+	-- TODO: customize appearance
+	{
+		"lewis6991/gitsigns.nvim",
+		config = function()
+			require("gitsigns").setup()
+		end,
+		event = "VeryLazy",
+	},
+	{
+		"feline-nvim/feline.nvim",
+		event = "VeryLazy",
+		config = function()
+			local function ensure_hexadecimal(input)
+				local function to_hexadecimal_num(num)
+					return "#" .. string.format("%X", num)
+				end
 
-	"lukas-reineke/indent-blankline.nvim",
+				if type(input) == "number" then
+					return to_hexadecimal_num(input)
+				elseif input == nil then
+					return nil
+				else
+					error("Unsupported input type. Must be a number. Got: " .. type(input))
+				end
+			end
+
+			local function setup_theme()
+				local black = ensure_hexadecimal(vim.api.nvim_get_hl(0, { name = "BufferTabpageFill" }).bg)
+				if black == nil then
+					black = ensure_hexadecimal(vim.api.nvim_get_hl(0, { name = "BufferDefaultTabpageFill" }).bg)
+				end
+				MyTheme = {
+					bg = ensure_hexadecimal(vim.api.nvim_get_hl(0, { name = "StatusLine" }).bg),
+					fg = ensure_hexadecimal(vim.api.nvim_get_hl(0, { name = "StatusLine" }).fg),
+					black = black,
+					blue = G.terminal_color_4,
+					cyan = G.terminal_color_6,
+					darkblue = G.terminal_color_4,
+					green = G.terminal_color_2,
+					oceanblue = G.terminal_color_4,
+					orange = G.terminal_color_3,
+					magenta = G.terminal_color_5,
+					red = G.terminal_color_1,
+					skyblue = G.terminal_color_4,
+					white = G.terminal_color_7,
+					yellow = G.terminal_color_3,
+				}
+			end
+
+			setup_theme()
+
+			local fe_vi_mode = require("feline.providers.vi_mode")
+			local fe_file = require("feline.providers.file")
+			local fe_git = require("feline.providers.git")
+			local fe_cursor = require("feline.providers.cursor")
+
+			local git_blame_pl = require("gitblame")
+
+			local file_name = {
+				provider = function(component)
+					local file_name, _ = fe_file.file_info(component, { type = "unique" })
+					local pos = fe_cursor.position(component, {}):gsub("%s+", "")
+					local percent = fe_cursor.line_percentage():lower():gsub("%s+", "")
+
+					if percent:find("bot") then
+						percent = "100%%"
+					elseif percent:find("top") then
+						percent = "0%%"
+					end
+
+					percent = percent:format("%-4s", percent) .. "%"
+					local pos_percent = string.format("%-16s", pos .. ":" .. percent)
+
+					local icon_str, icon_color =
+						require("nvim-web-devicons").get_icon_colors_by_filetype(vim.bo.filetype, { default = true })
+
+					local icon = { str = icon_str }
+					icon.hl = { fg = icon_color }
+
+					return file_name .. ":" .. pos_percent, icon
+				end,
+				left_sep = " ",
+			}
+
+			local vi_mode = {
+				provider = function()
+					return fe_vi_mode.get_vim_mode():lower()
+				end,
+
+				hl = function()
+					return { name = fe_vi_mode.get_mode_highlight_name():lower(), fg = fe_vi_mode.get_mode_color() }
+				end,
+
+				left_sep = " ",
+			}
+
+			local file_line_str = fe_file.file_format():lower()
+
+			local file_line = {
+				provider = function()
+					return file_line_str
+				end,
+
+				enabled = function()
+					return file_line_str ~= "unix" -- it's only important to know when it's not unix anyway lol
+				end,
+
+				left_sep = " ",
+			}
+
+			local git_branch = {
+				provider = { name = "git_branch" },
+				right_sep = " ",
+				left_sep = "  ",
+				hl = function()
+					-- if branch contains feature, highlight green
+					-- if branch contains hotfix, highlight red
+					-- if branch contains bugfix, highlight yellow
+
+					if fe_git.git_branch():find("feature") then
+						return { fg = "green" }
+					elseif fe_git.git_branch():find("hotfix") then
+						return { fg = "red" }
+					elseif fe_git.git_branch():find("bugfix") then
+						return { fg = "yellow" }
+					end
+				end,
+			}
+			local git_diff = {}
+
+			git_diff.add = {
+				provider = function()
+					return " " .. fe_git.git_diff_added()
+				end,
+
+				hl = function()
+					return { fg = "blue" }
+				end,
+
+				enabled = function()
+					return fe_git.git_diff_added() ~= ""
+				end,
+
+				right_sep = " ",
+			}
+
+			git_diff.modify = {
+				provider = function()
+					return " " .. fe_git.git_diff_changed()
+				end,
+
+				hl = function()
+					return { fg = "orange" }
+				end,
+
+				enabled = function()
+					return fe_git.git_diff_changed() ~= ""
+				end,
+
+				right_sep = " ",
+			}
+
+			git_diff.del = {
+				provider = function()
+					return " " .. fe_git.git_diff_removed()
+				end,
+
+				hl = function()
+					return { fg = "red" }
+				end,
+
+				enabled = function()
+					return fe_git.git_diff_removed() ~= ""
+				end,
+
+				right_sep = " ",
+			}
+
+			local diagnostic_errors = { provider = "diagnostic_errors", hl = { fg = "magenta" }, right_sep = "" }
+			local diagnostic_warnings = { provider = "diagnostic_warnings", hl = { fg = "yellow" }, right_sep = "" }
+			local diagnostic_hints = { provider = "diagnostic_hints", hl = { fg = "cyan" }, right_sep = "" }
+			local diagnostic_info = { provider = "diagnostic_info", hl = { fg = "white" }, right_sep = "" }
+			local search_count = { provider = "search_count", right_sep = " " }
+
+			local function abbreviate_name(blame_text)
+				if blame_text == nil then
+					return ""
+				end
+
+				local name = blame_text:match("(.*) •")
+				local date = blame_text:match("• (.*) #")
+				local sha = blame_text:match("#(.*)")
+
+				if name == nil or date == nil or sha == nil then
+					return blame_text
+				end
+
+				local name_short = ""
+				local name_words = vim.split(name, " ")
+				local name_words_count = #name_words
+
+				if name_words_count == 1 then
+					name_short = name_words[1]:lower()
+				else
+					name_short = name_words[1]:lower() .. " " .. name_words[2]:sub(1, 1):lower()
+				end
+
+				return name_short .. " • " .. date .. " #" .. sha
+			end
+
+			local git_blame = {
+				provider = function()
+					if
+						(G.gitblame_enabled ~= nil and not G.gitblame_enabled)
+						or not git_blame_pl.is_blame_text_available()
+					then
+						return ""
+					end
+					return abbreviate_name(git_blame_pl.get_current_blame_text()):lower()
+				end,
+
+				enabled = function()
+					return G.gitblame_enabled ~= nil and G.gitblame_enabled
+				end,
+
+				right_sep = " ",
+			}
+
+			local function setup_navic()
+				local highlight_groups = {
+					"NavicIconsFile",
+					"NavicIconsModule",
+					"NavicIconsNamespace",
+					"NavicIconsPackage",
+					"NavicIconsClass",
+					"NavicIconsMethod",
+					"NavicIconsProperty",
+					"NavicIconsField",
+					"NavicIconsConstructor",
+					"NavicIconsEnum",
+					"NavicIconsInterface",
+					"NavicIconsFunction",
+					"NavicIconsVariable",
+					"NavicIconsConstant",
+					"NavicIconsString",
+					"NavicIconsNumber",
+					"NavicIconsBoolean",
+					"NavicIconsArray",
+					"NavicIconsObject",
+					"NavicIconsKey",
+					"NavicIconsNull",
+					"NavicIconsEnumMember",
+					"NavicIconsStruct",
+					"NavicIconsEvent",
+					"NavicIconsOperator",
+					"NavicIconsTypeParameter",
+					"NavicText",
+					"NavicSeparator",
+				}
+				NavicOriginalHighlights = {}
+				for _, group in ipairs(highlight_groups) do
+					-- Get the current highlight settings for the group
+					local current_settings = vim.api.nvim_get_hl(0, { name = group })
+					NavicOriginalHighlights[group] = current_settings
+				end
+
+				-- Iterate over each highlight group and change the background color
+				for group, current_settings in pairs(NavicOriginalHighlights) do
+					-- Set the new background color while preserving other settings
+					if current_settings.link == nil then
+						vim.api.nvim_set_hl(
+							0,
+							group,
+							vim.tbl_extend("force", current_settings, {
+								bg = MyTheme.black,
+							})
+						)
+					else
+						local linked_settings = vim.api.nvim_get_hl(0, { name = current_settings.link })
+						vim.api.nvim_set_hl(
+							0,
+							group,
+							vim.tbl_extend("force", linked_settings, {
+								bg = MyTheme.black,
+							})
+						)
+					end
+				end
+			end
+
+			setup_navic()
+
+			local navic = require("nvim-navic")
+			local navic_component = {
+				provider = function()
+					if not navic.is_available() then
+						return "✨☆＊✧⋆"
+					end
+					local location = navic.get_location()
+					if location ~= "" then
+						return location
+					end
+					return "✨☆＊✧⋆"
+				end,
+				enabled = function()
+					return true
+				end,
+				hl = function()
+					return { bg = "black", fg = "fg" }
+				end,
+			}
+			local empty = {
+				provider = function()
+					return ""
+				end,
+				enabled = function()
+					return true
+				end,
+				hl = function()
+					return { bg = "black", fg = "fg" }
+				end,
+			}
+
+			local macro = {
+				provider = "macro",
+				hl = { fg = "red" },
+				left_sep = "        ",
+				right_sep = "        ",
+			}
+
+			local left = {
+				file_name,
+				file_line,
+				vi_mode,
+				macro,
+			}
+
+			local mid = {}
+
+			local right = {
+				search_count,
+				diagnostic_errors,
+				diagnostic_warnings,
+				diagnostic_hints,
+				diagnostic_info,
+				git_branch,
+				git_diff.add,
+				git_diff.modify,
+				git_diff.del,
+				git_blame,
+			}
+
+			local components = {
+				active = { left, mid, right },
+				inactive = { left, mid, right },
+			}
+
+			local function setup_feline()
+				require("feline").setup({
+					components = components,
+					theme = MyTheme,
+					disable = { buftypes = { "terminal" }, filetypes = { "neo--tree", "^Outline$" } },
+				})
+
+				require("feline").winbar.setup({
+					components = {
+						active = { { empty }, { navic_component, empty }, { empty } },
+						inactive = { { empty }, { navic_component, empty }, { empty } },
+					},
+					theme = MyTheme,
+					disable = { buftypes = { "terminal" }, filetypes = { "neo--tree", "^Outline$" } },
+				})
+			end
+
+			vim.api.nvim_create_autocmd({ "ColorScheme" }, {
+				callback = function()
+					vim.defer_fn(function()
+						setup_theme()
+						setup_navic()
+						vim.cmd([[Lazy reload feline.nvim]])
+						setup_feline()
+					end, 100)
+				end,
+			})
+
+			setup_feline()
+		end,
+	},
+	{
+		"romgrk/barbar.nvim",
+		event = "VeryLazy",
+		config = function()
+			require("bufferline").setup()
+		end,
+	},
+
+	{
+		"lukas-reineke/indent-blankline.nvim",
+		config = function()
+			require("ibl").setup({})
+		end,
+	},
 
 	{
 		"norcalli/nvim-colorizer.lua",
@@ -149,7 +661,31 @@ local plugins = {
 		end,
 	},
 
-	"stevearc/dressing.nvim",
+	{
+		"romgrk/barbar.nvim",
+		event = "VeryLazy",
+		config = function()
+			require("bufferline").setup()
+		end,
+	},
+
+	{
+		"lukas-reineke/indent-blankline.nvim",
+		config = function()
+			require("ibl").setup({})
+		end,
+	},
+
+	{
+		"norcalli/nvim-colorizer.lua",
+		config = function()
+			require("colorizer").setup({
+				css = { css = true },
+			})
+		end,
+	},
+
+	{ "stevearc/dressing.nvim", event = "VeryLazy" },
 
 	{
 		"rcarriga/nvim-notify",
@@ -224,11 +760,24 @@ local plugins = {
 	-- })
 	{
 		"Shatur/neovim-session-manager",
-		lazy = false,
-		priority = 1001,
+		event = "VeryLazy",
+		config = function()
+			local Path = require("plenary.path")
+			require("session_manager").setup({
+				sessions_dir = Path:new(vim.fn.stdpath("data"), "sessions"), -- The directory where the session files will be saved.
+				path_replacer = "__", -- The character to which the path separator will be replaced for session files.
+				colon_replacer = "++", -- The character to which the colon symbol will be replaced for session files.
+				autoload_mode = require("session_manager.config").AutoloadMode.CurrentDir, -- Define what to do when Neovim is started without arguments. Possible values: Disabled, CurrentDir, LastSession
+				autosave_last_session = true, -- Automatically save last session on exit and on session switch.
+				autosave_ignore_not_normal = true, -- Plugin will not save a session when no buffers are opened, or all of them aren't writable or listed.
+				autosave_ignore_filetypes = { -- All buffers of these file types will be closed before the session is saved.
+					"gitcommit",
+				},
+				autosave_only_in_session = false, -- Always autosaves session. If true, only autosaves after a session is active.
+				max_path_length = 80, -- Shorten the display path if length exceeds this threshold. Use 0 if don't want to shorten the path at all.
+			})
+		end,
 	},
-
-	"kdheepak/lazygit.nvim",
 
 	-- use("mfussenegger/nvim-dap")
 	-- use("rcarriga/nvim-dap-ui")
@@ -245,9 +794,10 @@ local plugins = {
 		config = function()
 			require("spectre").setup()
 		end,
+		event = "VeryLazy",
 	},
 
-	"f-person/git-blame.nvim",
+	{ "f-person/git-blame.nvim", event = "VeryLazy" },
 
 	-- neotree
 	{
@@ -258,13 +808,186 @@ local plugins = {
 			"nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
 			"MunifTanjim/nui.nvim",
 		},
-		config = require("plugins.neotree"),
+		config = function()
+			return function()
+				-- If you want icons for diagnostic errors, you'll need to define them somewhere:
+				vim.diagnostic.config({
+					signs = {
+						text = {
+							[vim.diagnostic.severity.ERROR] = " ",
+							[vim.diagnostic.severity.WARN] = " ",
+							[vim.diagnostic.severity.INFO] = " ",
+							[vim.diagnostic.severity.HINT] = "󰌵",
+						},
+					},
+				})
+
+				require("neo-tree").setup({
+					close_if_last_window = false, -- Close Neo-tree if it is the last window left in the tab
+					popup_border_style = "rounded",
+					enable_git_status = true,
+					enable_diagnostics = true,
+					default_component_configs = {
+						container = {
+							enable_character_fade = true,
+						},
+						indent = {
+							indent_size = 2,
+							padding = 1, -- extra padding on left hand side
+							-- indent guides
+							with_markers = true,
+							indent_marker = "│",
+							last_indent_marker = "└",
+							highlight = "NeoTreeIndentMarker",
+							-- expander config, needed for nesting files
+							with_expanders = nil, -- if nil and file nesting is enabled, will enable expanders
+							expander_collapsed = "",
+							expander_expanded = "",
+							expander_highlight = "NeoTreeExpander",
+						},
+						icon = {
+							folder_closed = "",
+							folder_open = "",
+							folder_empty = "󰜌",
+							-- The next two settings are only a fallback, if you use nvim-web-devicons and configure default icons there
+							-- then these will never be used.
+							default = "*",
+							highlight = "NeoTreeFileIcon",
+						},
+						modified = {
+							symbol = "[+]",
+							highlight = "NeoTreeModified",
+						},
+						name = {
+							trailing_slash = false,
+							use_git_status_colors = true,
+							highlight = "NeoTreeFileName",
+						},
+						git_status = {
+							symbols = {
+								-- Change type
+								added = "", -- or "✚", but this is redundant info if you use git_status_colors on the name
+								modified = "", -- or "", but this is redundant info if you use git_status_colors on the name
+								deleted = "✖", -- this can only be used in the git_status source
+								renamed = "󰁕", -- this can only be used in the git_status source
+								-- Status type
+								untracked = "",
+								ignored = "",
+								unstaged = "󰄱",
+								staged = "",
+								conflict = "",
+							},
+						},
+					},
+					window = {
+						position = "left",
+						width = 40,
+						mapping_options = {
+							noremap = true,
+							nowait = true,
+						},
+						mappings = {
+							["<space>"] = {
+								"toggle_node",
+								nowait = false, -- disable `nowait` if you have existing combos starting with this char that you want to use
+							},
+							["o"] = "open",
+							["t"] = "open_tabnew",
+							["S"] = "open_split",
+							["s"] = "open_vsplit",
+							["w"] = "open_with_window_picker",
+							["C"] = "close_node",
+							["a"] = "add",
+							["A"] = "add_directory",
+							["d"] = "delete",
+							["r"] = "rename",
+							["y"] = "copy_to_clipboard",
+							["x"] = "cut_to_clipboard",
+							["p"] = "paste_from_clipboard",
+							["c"] = "copy", -- takes text input for destination
+							["m"] = "move", -- takes text input for destination
+							["q"] = "close_window",
+							["R"] = "refresh",
+						},
+					},
+					nesting_rules = {},
+					filesystem = {
+						filtered_items = {
+							visible = false, -- when true, they will just be displayed differently than normal items
+							hide_dotfiles = true,
+							hide_gitignored = true,
+							hide_hidden = true, -- only works on Windows for hidden files/directories
+							hide_by_name = {
+								".DS_Store",
+								"thumbs.db",
+								--"node_modules"
+							},
+							hide_by_pattern = { -- uses glob style patterns
+								--"*.meta"
+							},
+							never_show = { -- remains hidden even if visible is toggled to true
+								--".DS_Store",
+								--"thumbs.db"
+							},
+						},
+						follow_current_file = { enabled = true }, -- This will find and focus the file in the active buffer every
+						-- time the current file is changed while the tree is open.
+						hijack_netrw_behavior = "open_default", -- netrw disabled, opening a directory opens neo-tree
+						-- in whatever position is specified in window.position
+						-- "open_current",  -- netrw disabled, opening a directory opens within the
+						-- window like netrw would, regardless of window.position
+						-- "disabled",    -- netrw left alone, neo-tree does not handle opening dirs
+						use_libuv_file_watcher = false, -- This will use the OS level file watchers to detect changes
+						-- instead of relying on nvim autocmd events.
+						window = {
+							mappings = {
+								["<bs>"] = "navigate_up",
+								["."] = "set_root",
+								["H"] = "toggle_hidden",
+								["/"] = "fuzzy_finder",
+								["f"] = "filter_on_submit",
+								["<c-x>"] = "clear_filter",
+							},
+						},
+					},
+					buffers = {
+						show_unloaded = true,
+						window = {
+							mappings = {
+								["bd"] = "buffer_delete",
+								["<bs>"] = "navigate_up",
+								["."] = "set_root",
+							},
+						},
+					},
+					git_status = {
+						window = {
+							position = "float",
+							mappings = {
+								["A"] = "git_add_all",
+								["gu"] = "git_unstage_file",
+								["ga"] = "git_add_file",
+								["gr"] = "git_revert_file",
+								["gc"] = "git_commit",
+								["gp"] = "git_push",
+								["gg"] = "git_commit_and_push",
+							},
+						},
+					},
+				})
+			end
+		end,
+		event = "VeryLazy",
 	},
 
-	{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
-
 	-- autotag
-	"windwp/nvim-ts-autotag",
+	{
+		"windwp/nvim-ts-autotag",
+		ft = { "html", "javascript", "typescript", "javascriptreact", "typescriptreact", "svelte", "vue" },
+		config = function()
+			require("nvim-ts-autotag").setup()
+		end,
+	},
 
 	{
 		"kylechui/nvim-surround",
@@ -291,7 +1014,7 @@ local plugins = {
 	{
 		"zbirenbaum/copilot.lua",
 		cmd = "Copilot",
-		event = "VeryLazy",
+		event = "InsertEnter",
 		config = function()
 			require("copilot").setup({
 				panel = {
@@ -365,6 +1088,7 @@ local plugins = {
 			"MunifTanjim/nui.nvim",
 			"nvim-telescope/telescope.nvim", -- Optional
 		},
+		event = "VeryLazy",
 		config = function()
 			require("nvim-navic").setup({
 				icons = {
@@ -474,7 +1198,7 @@ local plugins = {
 		"akinsho/toggleterm.nvim",
 		version = "*",
 		config = function()
-			require("toggleterm").setup()
+			require("toggleterm").setup({ start_in_insert = false })
 		end,
 	},
 
@@ -483,8 +1207,8 @@ local plugins = {
 		dependencies = {
 			"tpope/vim-dadbod",
 			"kristijanhusak/vim-dadbod-completion",
-			ft = { "sql", "plsql", "clickhouse" },
 		},
+		ft = { "sql", "plsql", "clickhouse" },
 		config = function()
 			vim.g.db_ui_use_nerd_fonts = 1
 		end,
@@ -516,7 +1240,7 @@ local plugins = {
 		"CopilotC-Nvim/CopilotChat.nvim",
 		branch = "canary",
 		dependencies = {
-			"zbirenbaum/copilot.lua",   -- or github/copilot.vim
+			"zbirenbaum/copilot.lua", -- or github/copilot.vim
 			{ "nvim-telescope/telescope.nvim" }, -- Use telescope for help actions
 			{ "nvim-lua/plenary.nvim" }, -- for curl, log wrapper
 		},
@@ -525,11 +1249,12 @@ local plugins = {
 
 	{
 		"pwntester/octo.nvim",
-		requires = {
+		dependencies = {
 			"nvim-lua/plenary.nvim",
 			"nvim-telescope/telescope.nvim",
 			"nvim-tree/nvim-web-devicons",
 		},
+		event = "VeryLazy",
 		config = function()
 			require("octo").setup({
 				suppress_missing_scope = {
@@ -704,10 +1429,11 @@ local plugins = {
 	},
 
 	{
-		"nvim-neotest/neotest-python",
+		"nvim-neotest/neotest",
+		ft = { "python" },
 		dependencies = {
-			"nvim-neotest/neotest",
 			"nvim-neotest/nvim-nio",
+			"nvim-neotest/neotest-python",
 			"nvim-lua/plenary.nvim",
 			"antoinemadec/FixCursorHold.nvim",
 			"nvim-treesitter/nvim-treesitter",
