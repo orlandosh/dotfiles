@@ -1,7 +1,3 @@
--- important presets, must come before plugins
-vim.keymap.set("n", "<SPACE>", "<Nop>", { desc = "Disable space" })
-vim.g.mapleader = " " -- set leader to space
-
 vim.keymap.set("n", "<leader>re", "<C-l>", { desc = "Redraw screen" })
 vim.keymap.set("n", "<leader>W", "<cmd>wa<cr>", { desc = "Write all" })
 

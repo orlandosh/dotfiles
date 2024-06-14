@@ -19,7 +19,7 @@ local plugins = {
 	-- themes
 	{
 		"sainnhe/gruvbox-material",
-		priority = 1000,
+		event = "VimEnter",
 		config = function()
 			vim.cmd([[colorscheme gruvbox-material]])
 		end,
@@ -90,7 +90,7 @@ local plugins = {
 	},
 	{
 		"hrsh7th/nvim-cmp",
-		event = "InsertEnter",
+		event = "VeryLazy",
 		dependencies = {
 			"hrsh7th/cmp-nvim-lsp",
 			"hrsh7th/cmp-buffer",
@@ -154,6 +154,10 @@ local plugins = {
 	{
 		"nvim-treesitter/nvim-treesitter",
 		build = ":TSUpdate",
+		init = function(plugin)
+			require("lazy.core.loader").add_to_rtp(plugin)
+			require("nvim-treesitter.query_predicates")
+		end,
 		event = "VeryLazy",
 		config = function()
 			require("nvim-treesitter.configs").setup({
@@ -650,6 +654,7 @@ local plugins = {
 		config = function()
 			require("ibl").setup({})
 		end,
+		event = "VeryLazy",
 	},
 
 	{
@@ -659,6 +664,7 @@ local plugins = {
 				css = { css = true },
 			})
 		end,
+		event = "VeryLazy",
 	},
 
 	{
@@ -676,15 +682,6 @@ local plugins = {
 		end,
 	},
 
-	{
-		"norcalli/nvim-colorizer.lua",
-		config = function()
-			require("colorizer").setup({
-				css = { css = true },
-			})
-		end,
-	},
-
 	{ "stevearc/dressing.nvim", event = "VeryLazy" },
 
 	{
@@ -692,10 +689,12 @@ local plugins = {
 		config = function()
 			vim.notify = require("notify")
 		end,
+		event = "VeryLazy",
 	},
 
 	{
 		"RRethy/vim-illuminate",
+		event = "VeryLazy",
 		config = function()
 			require("illuminate").configure({
 				-- providers: provider used to get references in the buffer, ordered by priority
@@ -752,38 +751,13 @@ local plugins = {
 			})
 		end,
 	},
-	-- use({
-	-- 	"goolord/alpha-nvim",
-	-- 	config = function()
-	-- 		require("alpha").setup(require("alpha.themes.dashboard").config)
-	-- 	end,
-	-- })
-	{
-		"Shatur/neovim-session-manager",
-		event = "VeryLazy",
-		config = function()
-			local Path = require("plenary.path")
-			require("session_manager").setup({
-				sessions_dir = Path:new(vim.fn.stdpath("data"), "sessions"), -- The directory where the session files will be saved.
-				path_replacer = "__", -- The character to which the path separator will be replaced for session files.
-				colon_replacer = "++", -- The character to which the colon symbol will be replaced for session files.
-				autoload_mode = require("session_manager.config").AutoloadMode.CurrentDir, -- Define what to do when Neovim is started without arguments. Possible values: Disabled, CurrentDir, LastSession
-				autosave_last_session = true, -- Automatically save last session on exit and on session switch.
-				autosave_ignore_not_normal = true, -- Plugin will not save a session when no buffers are opened, or all of them aren't writable or listed.
-				autosave_ignore_filetypes = { -- All buffers of these file types will be closed before the session is saved.
-					"gitcommit",
-				},
-				autosave_only_in_session = false, -- Always autosaves session. If true, only autosaves after a session is active.
-				max_path_length = 80, -- Shorten the display path if length exceeds this threshold. Use 0 if don't want to shorten the path at all.
-			})
-		end,
-	},
 
 	-- use("mfussenegger/nvim-dap")
 	-- use("rcarriga/nvim-dap-ui")
 
 	{
 		"folke/neodev.nvim",
+		event = "VeryLazy",
 		config = function()
 			require("neodev").setup()
 		end,
@@ -994,6 +968,7 @@ local plugins = {
 		config = function()
 			require("nvim-surround").setup()
 		end,
+		event = "VeryLazy",
 	},
 
 	{
@@ -1008,6 +983,7 @@ local plugins = {
 				},
 			})
 		end,
+		event = "VeryLazy",
 	},
 
 	-- copilot
@@ -1197,6 +1173,7 @@ local plugins = {
 	{
 		"akinsho/toggleterm.nvim",
 		version = "*",
+		event = "VeryLazy",
 		config = function()
 			require("toggleterm").setup({ start_in_insert = false })
 		end,
@@ -1216,6 +1193,7 @@ local plugins = {
 
 	{
 		"backdround/improved-search.nvim",
+		event = "VeryLazy",
 		config = function()
 			local search = require("improved-search")
 			-- Search next / previous.
@@ -1393,7 +1371,6 @@ local plugins = {
 		end,
 	},
 
-	-- lazy.nvim
 	{
 		"folke/noice.nvim",
 		event = "VeryLazy",
@@ -1427,7 +1404,17 @@ local plugins = {
 			})
 		end,
 	},
+	{
 
+		"rmagatti/auto-session",
+		event = "VimEnter",
+		config = function()
+			require("auto-session").setup({
+				log_level = "error",
+				auto_session_suppress_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
+			})
+		end,
+	},
 	{
 		"nvim-neotest/neotest",
 		ft = { "python" },
@@ -1453,8 +1440,28 @@ local plugins = {
 }
 
 require("lazy").setup(plugins, {
+	default = {
+		lazy = true,
+	},
 	install = {
 		missing = true,
 		colorscheme = { "gruvbox-material" },
 	},
+	profiling = {
+		-- Enables extra stats on the debug tab related to the loader cache.
+		-- Additionally gathers stats about all package.loaders
+		loader = true,
+		-- Track each new require in the Lazy profiling tab
+		require = true,
+	},
+})
+
+vim.api.nvim_create_autocmd("User", {
+	pattern = "VeryLazy",
+	callback = function()
+		require("autocmds")
+		require("keymaps")
+		require("autocomplete.init")
+		vim.cmd([[LspStart]])
+	end,
 })
