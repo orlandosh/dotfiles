@@ -134,6 +134,7 @@ function _G.set_terminal_keymaps()
 end
 
 vim.api.nvim_create_autocmd("TermOpen", { pattern = "term://*toggleterm#*", callback = set_terminal_keymaps })
+vim.api.nvim_create_autocmd("TermLeave", { callback = function() vim.cmd("checktime") end })
 
 local lazygit = require("toggleterm.terminal").Terminal:new({
 	cmd = "lazygit",
