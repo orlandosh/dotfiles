@@ -1,3 +1,4 @@
+vim.loader.enable()
 require("settings")
 require("autocmds")
 require("plugins.init")
