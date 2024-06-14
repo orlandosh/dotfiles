@@ -12,6 +12,5 @@ return function(opts)
 				navic.attach(client, bufnr)
 			end
 		end
-
 	end
 end
