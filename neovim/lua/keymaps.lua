@@ -5,6 +5,21 @@ vim.g.mapleader = " " -- set leader to space
 vim.keymap.set("n", "<leader>re", "<C-l>", { desc = "Redraw screen" })
 vim.keymap.set("n", "<leader>W", "<cmd>wa<cr>", { desc = "Write all" })
 
+-- Clear highlighting on escape in normal mode
+vim.keymap.set("n", "<esc>", "<cmd>noh<cr><esc>")
+vim.keymap.set("n", "<esc>^[", "<esc>^[")
+
+-- split movements
+vim.keymap.set("n", "<C-h>", "<cmd>wincmd h<cr>")
+vim.keymap.set("n", "<C-j>", "<cmd>wincmd j<cr>")
+vim.keymap.set("n", "<C-k>", "<cmd>wincmd k<cr>")
+vim.keymap.set("n", "<C-l>", "<cmd>wincmd l<cr>")
+
+vim.keymap.set("n", "<leader>A", "<cmd>split<cr>")
+vim.keymap.set("n", "<leader>S", "<cmd>vsplit<cr>")
+
+vim.keymap.set("n", "<leader>xc", "<cmd>close<cr>")
+
 -- open neotree
 vim.keymap.set("n", "<leader>b", "<cmd>Neotree toggle position=right<cr>", { desc = "Toggle Neotree" })
 
@@ -16,9 +31,7 @@ vim.keymap.set("n", "<leader>tl", "<cmd>Telescope reloader<cr>", { desc = "Teles
 vim.keymap.set("n", "<leader>tc", "<cmd>Telescope colorscheme enable_preview=true<cr>")
 vim.keymap.set("n", "<leader>tk", "<cmd>Telescope keymaps<cr>")
 vim.keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>")
-vim.keymap.set("n", "<leader>fg", function()
-	require("telescope.builtin").live_grep({})
-end)
+vim.keymap.set("n", "<leader>fg", "<cmd>Telescope live_grep_args<cr>")
 vim.keymap.set("n", "<leader>fb", function()
 	require("telescope.builtin").buffers({ show_all_buffers = true })
 end)
@@ -38,7 +51,116 @@ vim.keymap.set("n", "<leader>fr", "<cmd>Telescope resume<cr>")
 vim.keymap.set("n", "<leader>fc", "<cmd>Telescope pickers<cr>")
 vim.keymap.set("n", "<leader>ft", "<cmd>TodoTelescope<cr>")
 
-vim.keymap.set("n", "<leader>lg", "<cmd>LazyGit<cr>")
+local last_term_id = nil
+local explicit_count = false
+
+-- Function to toggle term based on count
+local function toggle_term_with_count(count)
+	if explicit_count and count ~= last_term_id then
+		-- Open the first terminal
+		vim.cmd(count .. "ToggleTerm direction=float")
+	elseif count and count > 1 then
+		-- Open new or switch to the term with given count
+		vim.cmd(count .. "ToggleTerm direction=float")
+	elseif last_term_id then
+		-- If no count provided, use the last term
+		vim.cmd(last_term_id .. "ToggleTerm direction=float")
+	elseif last_term_id == nil then
+		-- If no last term, open a new one
+		vim.cmd("ToggleTerm direction=float")
+	end
+	last_term_id = count
+	explicit_count = false -- reset after use
+end
+
+-- Function to handle explicit count input
+local function handle_count_and_toggle()
+	local count = explicit_count and 1 or vim.v.count1
+	toggle_term_with_count(count)
+end
+-- Function to move to the next terminal
+local function move_to_terminal(offset)
+	local term_id = last_term_id or 1
+	local next_term_id = term_id + offset
+	if next_term_id < 1 then
+		return -- Do nothing if the next terminal ID is less than 1
+	end
+	explicit_count = true
+	vim.cmd(next_term_id .. "ToggleTerm direction=float")
+	last_term_id = next_term_id
+end
+
+-- ToggleTerm
+vim.keymap.set(
+	"n",
+	"<leader><leader>",
+	handle_count_and_toggle,
+	{ desc = "Toggle Term", silent = true, noremap = true }
+)
+vim.keymap.set("n", "1<leader><leader>", function()
+	explicit_count = true
+	handle_count_and_toggle()
+end, { desc = "Toggle Term", silent = true, noremap = true })
+
+function _G.set_terminal_keymaps()
+	local opts = { buffer = 0 }
+	-- do not set esc keymap for lazygit
+	if not vim.api.nvim_buf_get_name(0):find("lazygit") then
+		vim.keymap.set("t", "<esc>", [[<C-\><C-n>]], opts)
+		vim.keymap.set("n", "q", "<cmd>ToggleTermToggleAll<cr>", opts)
+	end
+
+	vim.keymap.set("n", "<leader><leader>", "<cmd>ToggleTermToggleAll<cr>", opts)
+	vim.keymap.set("t", "<C-w>", [[<C-\><C-n><C-w>]], opts)
+	vim.keymap.set("t", "<C-l>", [[<Cmd>wincmd l<CR>]], opts)
+	vim.keymap.set("t", "<C-k>", [[<Cmd>wincmd k<CR>]], opts)
+	vim.keymap.set("t", "<C-j>", [[<Cmd>wincmd j<CR>]], opts)
+	vim.keymap.set("t", "<C-h>", [[<Cmd>wincmd h<CR>]], opts)
+	vim.keymap.set("n", "<A-,>", function()
+		move_to_terminal(-1)
+	end, { buffer = 0, noremap = true })
+	vim.keymap.set("n", "<A-.>", function()
+		move_to_terminal(1)
+	end, { buffer = 0, noremap = true })
+	vim.keymap.set("t", "<A-,>", function()
+		move_to_terminal(-1)
+	end, { buffer = 0, noremap = true })
+	vim.keymap.set("t", "<A-.>", function()
+		move_to_terminal(1)
+	end, { buffer = 0, noremap = true })
+
+	for i = 1, 9 do
+		vim.keymap.set("n", "<A-" .. tostring(i) .. ">", function()
+			explicit_count = true
+			toggle_term_with_count(i)
+		end, { noremap = true, silent = true, buffer = 0 })
+	end
+end
+
+vim.api.nvim_create_autocmd("TermOpen", { pattern = "term://*toggleterm#*", callback = set_terminal_keymaps })
+
+local lazygit = require("toggleterm.terminal").Terminal:new({
+	cmd = "lazygit",
+	dir = "git_dir",
+	direction = "float",
+	-- function to run on opening the terminal
+	on_open = function(term)
+		vim.cmd("startinsert!")
+		vim.api.nvim_buf_set_keymap(term.bufnr, "n", "q", "<cmd>close<CR>", { noremap = true, silent = true })
+	end,
+	-- function to run on closing the terminal
+	on_close = function(_term)
+		vim.cmd("startinsert!")
+	end,
+})
+
+local function lazygit_toggle()
+	lazygit:toggle()
+end
+
+vim.keymap.set("n", "<leader>lg", lazygit_toggle, { desc = "LazyGit", noremap = true, silent = true })
+
+vim.api.nvim_set_keymap("n", "<leader>g", "<cmd>lua _lazygit_toggle()<CR>", { noremap = true, silent = true })
 
 -- isort current file
 vim.keymap.set("n", "<leader>is", "<cmd>!isort --profile black %<cr>", {
@@ -54,16 +176,12 @@ vim.keymap.set("n", "<leader>tt", "<cmd>Neotest run<cr>")
 vim.keymap.set("n", "<leader>tf", "<cmd>Neotest summary<cr>")
 vim.keymap.set("n", "<leader>to", "<cmd>Neotest output-panel<cr>")
 
--- Clear highlighting on escape in normal mode
-vim.keymap.set("n", "<esc>", "<cmd>noh<cr><esc>")
-vim.keymap.set("n", "<esc>^[", "<esc>^[")
-
 -- barbar
 vim.keymap.set("n", "<A-,>", "<cmd>BufferPrevious<cr>")
 vim.keymap.set("n", "<A-.>", "<cmd>BufferNext<cr>")
 
-vim.keymap.set("n", "<A-<>", "<cmd>BufferMovePrevious<cr>")
-vim.keymap.set("n", "<A->>", "<cmd>BufferMoveNext<cr>")
+vim.keymap.set("n", "<A-h>", "<cmd>BufferMovePrevious<cr>")
+vim.keymap.set("n", "<A-l>", "<cmd>BufferMoveNext<cr>")
 
 vim.keymap.set("n", "<A-1>", "<cmd>BufferGoto 1<cr>")
 vim.keymap.set("n", "<A-2>", "<cmd>BufferGoto 2<cr>")
@@ -123,19 +241,24 @@ end)
 -- toggle gitblame
 vim.keymap.set("n", "<leader>gb", "<cmd>GitBlameToggle<cr>")
 
--- split movements
-vim.keymap.set("n", "<C-h>", "<cmd>wincmd h<cr>")
-vim.keymap.set("n", "<C-j>", "<cmd>wincmd j<cr>")
-vim.keymap.set("n", "<C-k>", "<cmd>wincmd k<cr>")
-vim.keymap.set("n", "<C-l>", "<cmd>wincmd l<cr>")
+local close_all_terminal_buffers_and_quit = function()
+	for _, buffer in ipairs(vim.api.nvim_list_bufs()) do
+		if vim.bo[buffer].buftype == "terminal" then
+			local ok, job_id = pcall(vim.api.nvim_buf_get_var, buffer, "terminal_job_id")
+			if ok and job_id then
+				vim.fn.jobstop(job_id) -- send SIGTERM
+				vim.fn.jobstop(job_id) -- ensure the job is really killed
+			end
+			vim.api.nvim_buf_delete(buffer, { force = true })
+		end
+	end
 
-vim.keymap.set("n", "<leader>A", "<cmd>split<cr>")
-vim.keymap.set("n", "<leader>S", "<cmd>vsplit<cr>")
-
-vim.keymap.set("n", "<leader>xc", "<cmd>close<cr>")
+	-- Quit Neovim with wqa (write all and quit)
+	vim.cmd("wqa")
+end
 
 -- quit vim
-vim.keymap.set("n", "ZZ", "<cmd>wqa<cr>")
+vim.keymap.set("n", "ZZ", close_all_terminal_buffers_and_quit)
 
 -- toggle cmdheight
 vim.keymap.set("n", "<leader>ch", function()
