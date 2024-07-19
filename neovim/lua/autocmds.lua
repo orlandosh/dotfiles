@@ -1,10 +1,10 @@
 -- lint on save
-vim.api.nvim_create_autocmd({ "BufWritePost" }, {
-	pattern = { "*.py", "*.sql", "*.svelte", "*.ts" },
-	callback = function()
-		require("plugins.lint").lint.try_lint()
-	end,
-})
+-- vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+-- 	pattern = { "*.py", "*.sql", "*.svelte", "*.ts" },
+-- 	callback = function()
+-- 		require("lint").try_lint()
+-- 	end,
+-- })
 
 -- TODO: remove trailing whitespace
 

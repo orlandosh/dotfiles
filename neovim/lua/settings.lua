@@ -1,5 +1,5 @@
-local dir = require("utils").get_dir()
-local work_keyword = require("utils").WORK_KEYWORD
+Dir = require("utils").get_dir()
+WorkKeyword = require("utils").WORK_KEYWORD
 
 Set = vim.opt
 G = vim.g

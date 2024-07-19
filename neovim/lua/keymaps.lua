@@ -71,7 +71,14 @@ end
 
 -- Function to handle explicit count input
 local function handle_count_and_toggle()
-	local count = explicit_count and 1 or vim.v.count1
+	local count = vim.v.count1
+	if explicit_count then
+		if last_term_id == nil then
+			count = 1
+		else
+			count = last_term_id
+		end
+	end
 	toggle_term_with_count(count)
 end
 -- Function to move to the next terminal
@@ -95,6 +102,7 @@ vim.keymap.set(
 )
 vim.keymap.set("n", "1<leader><leader>", function()
 	explicit_count = true
+	last_term_id = nil
 	handle_count_and_toggle()
 end, { desc = "Toggle Term", silent = true, noremap = true })
 
@@ -134,7 +142,11 @@ function _G.set_terminal_keymaps()
 end
 
 vim.api.nvim_create_autocmd("TermOpen", { pattern = "term://*toggleterm#*", callback = set_terminal_keymaps })
-vim.api.nvim_create_autocmd("TermLeave", { callback = function() vim.cmd("checktime") end })
+vim.api.nvim_create_autocmd("TermLeave", {
+	callback = function()
+		vim.cmd("checktime")
+	end,
+})
 
 local lazygit = require("toggleterm.terminal").Terminal:new({
 	cmd = "lazygit",

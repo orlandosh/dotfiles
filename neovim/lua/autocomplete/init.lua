@@ -16,6 +16,17 @@ if utils.file_exists("/usr/bin/clangd") then
 	table.insert(installed_servers, "clangd")
 end
 
+vim.diagnostic.config({
+	signs = {
+		text = {
+			[vim.diagnostic.severity.ERROR] = " ",
+			[vim.diagnostic.severity.WARN] = " ",
+			[vim.diagnostic.severity.INFO] = " ",
+			[vim.diagnostic.severity.HINT] = "󰌵",
+		},
+	},
+})
+
 for _, server in pairs(installed_servers) do
 	local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
 	local lsp_opts = { on_attach = on_attach, capabilities = capabilities }

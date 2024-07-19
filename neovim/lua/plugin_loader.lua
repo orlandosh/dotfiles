@@ -73,22 +73,6 @@ local plugins = {
 	-- TODO: reorganize
 	-- nvim lsp, autocomplete, lint & snip related
 	{
-		"neovim/nvim-lspconfig",
-		event = "VeryLazy",
-		dependencies = {
-
-			"onsails/lspkind-nvim",
-			{
-				"kosayoda/nvim-lightbulb",
-				config = function()
-					require("nvim-lightbulb").setup({
-						autocmd = { enabled = true },
-					})
-				end,
-			},
-		},
-	},
-	{
 		"hrsh7th/nvim-cmp",
 		event = "VeryLazy",
 		dependencies = {
@@ -96,6 +80,22 @@ local plugins = {
 			"hrsh7th/cmp-buffer",
 			"hrsh7th/cmp-path",
 			"hrsh7th/cmp-cmdline",
+			"neovim/nvim-lspconfig",
+			{
+				"neovim/nvim-lspconfig",
+				dependencies = {
+
+					"onsails/lspkind-nvim",
+					{
+						"kosayoda/nvim-lightbulb",
+						config = function()
+							require("nvim-lightbulb").setup({
+								autocmd = { enabled = true },
+							})
+						end,
+					},
+				},
+			},
 			{
 				"hrsh7th/cmp-vsnip",
 				dependencies = {
@@ -139,15 +139,14 @@ local plugins = {
 		build = ":MasonUpdate", -- :MasonUpdate updates registry contents
 		config = function()
 			require("mason").setup()
+			require("mason-lspconfig").setup({
+				ensure_installed = { "basedpyright", "efm", "lua_ls", "rust_analyzer", "tsserver" },
+				automatic_installation = { exclude = { "clangd" } },
+			})
 		end,
 		event = "VeryLazy",
 		dependencies = {
-			{
-				"williamboman/mason-lspconfig.nvim",
-				config = function()
-					require("mason-lspconfig").setup()
-				end,
-			},
+			"williamboman/mason-lspconfig.nvim",
 		},
 	},
 
@@ -191,8 +190,6 @@ local plugins = {
 			})
 		end,
 	},
-
-	-- add lspkind
 
 	-- nvim-only plugins
 	{
@@ -785,17 +782,6 @@ local plugins = {
 		config = function()
 			return function()
 				-- If you want icons for diagnostic errors, you'll need to define them somewhere:
-				vim.diagnostic.config({
-					signs = {
-						text = {
-							[vim.diagnostic.severity.ERROR] = " ",
-							[vim.diagnostic.severity.WARN] = " ",
-							[vim.diagnostic.severity.INFO] = " ",
-							[vim.diagnostic.severity.HINT] = "󰌵",
-						},
-					},
-				})
-
 				require("neo-tree").setup({
 					close_if_last_window = false, -- Close Neo-tree if it is the last window left in the tab
 					popup_border_style = "rounded",
@@ -1427,6 +1413,9 @@ local plugins = {
 		},
 		config = function()
 			require("neotest").setup({
+				summary = {
+					follow = false,
+				},
 				adapters = {
 					require("neotest-python")({
 						args = { "--keepdb" },
@@ -1435,6 +1424,61 @@ local plugins = {
 					}),
 				},
 			})
+		end,
+	},
+	{
+		"rcarriga/nvim-dap-ui",
+		dependencies = { "mfussenegger/nvim-dap", "mfussenegger/nvim-dap-python", "nvim-neotest/nvim-nio" },
+		config = function()
+			local dap = require("dap")
+			local dapui = require("dapui")
+
+			local path = "~/.local/share/nvim/mason/packages/debugpy/venv/bin/python"
+			require("dap-python").setup(path)
+
+			dap.listeners.after.event_initialized["dapui_config"] = function()
+				dapui.open()
+			end
+			dap.listeners.before.event_terminated["dapui_config"] = function()
+				dapui.close()
+			end
+			dap.listeners.before.event_exited["dapui_config"] = function()
+				dapui.close()
+			end
+
+			dapui.setup()
+			dap.set_log_level("TRACE")
+
+			local pythonAttachConfig = {
+				type = "python",
+				request = "launch",
+				name = "Django",
+				cwd = vim.fn.getcwd(),
+				program = vim.fn.getcwd() .. "/manage.py", -- NOTE: Adapt path to manage.py as needed
+				args = { "runserver", "10.111.111.2:8000" },
+			}
+			table.insert(require("dap").configurations.python, pythonAttachConfig)
+
+			-- change Breakpoint icon
+			vim.fn.sign_define("DapBreakpoint", {
+				text = "🅑 ",
+				texthl = "",
+				linehl = "",
+				numhl = "",
+			})
+
+			require("dap-python").resolve_python = function()
+				-- Run the poetry command
+				local handle = io.popen("poetry env info --path")
+				local result = handle:read("*a")
+				handle:close()
+
+				-- Trim any trailing whitespace/newlines
+				result = result:gsub("%s+$", "")
+
+				-- Return the absolute path
+				return result .. "/bin/python"
+			end
 		end,
 	},
 }
