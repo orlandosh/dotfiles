@@ -106,6 +106,18 @@ vim.keymap.set("n", "1<leader><leader>", function()
 	handle_count_and_toggle()
 end, { desc = "Toggle Term", silent = true, noremap = true })
 
+-- autcmd enter terminal mode
+vim.api.nvim_create_autocmd("TermEnter", {
+	pattern = "term://*",
+	callback = function()
+		local opts = { buffer = 0 }
+		if not vim.api.nvim_buf_get_name(0):find("lazygit") then
+			vim.keymap.set("t", "<esc>", [[<C-\><C-n>]], opts)
+			vim.keymap.set("n", "q", "<cmd>bd!<cr>", opts)
+		end
+	end,
+})
+
 function _G.set_terminal_keymaps()
 	local opts = { buffer = 0 }
 	-- do not set esc keymap for lazygit
@@ -170,6 +182,9 @@ end
 vim.keymap.set("n", "<leader>lg", lazygit_toggle, { desc = "LazyGit", noremap = true, silent = true })
 
 vim.api.nvim_set_keymap("n", "<leader>g", "<cmd>lua _lazygit_toggle()<CR>", { noremap = true, silent = true })
+
+vim.keymap.set("n", "<leader>cd", "<cmd>Copilot disable<cr>", { desc = "disable Copilot" })
+vim.keymap.set("n", "<leader>ce", "<cmd>Copilot enable<cr>", { desc = "enable Copilot" })
 
 -- isort current file
 vim.keymap.set("n", "<leader>is", "<cmd>!isort --profile black %<cr>", {
@@ -353,7 +368,7 @@ function M.lsp_keymaps(opts)
 		vim.api.nvim_buf_set_keymap(bufnr, "n", "gr", "<cmd>Telescope lsp_references<CR>", opts)
 		vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>fo", "<cmd>lua vim.lsp.buf.format()<CR>", opts)
 		vim.keymap.set("n", "<leader>fo", function()
-			vim.lsp.buf.format({ timeout_ms = 1000 })
+			vim.lsp.buf.format({ timeout_ms = 5000 })
 		end, vim.tbl_deep_extend("force", opts, { buffer = bufnr }))
 	end
 end
