@@ -35,7 +35,8 @@ Set.cmdheight = 0
 Set.shiftwidth = 4
 Set.smarttab = true
 Set.tabstop = 4
-Set.softtabstop = 0
+Set.softtabstop = 4
+Set.expandtab = true
 Set.pumheight = 10
 
 Set.foldmethod = "expr"
