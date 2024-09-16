@@ -103,7 +103,7 @@ for _, server in pairs(installed_servers) do
 		merge(lsp_opts.settings["rust-analyzer"], settings_json)
 	end
 
-	if server == "tsserver" then
+	if server == "ts_ls" then
 		lsp_opts.settings = {
 			typescript = {
 				inlayHints = {
