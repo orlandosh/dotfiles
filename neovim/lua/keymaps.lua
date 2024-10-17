@@ -47,6 +47,14 @@ vim.keymap.set("n", "<leader>fr", "<cmd>Telescope resume<cr>")
 vim.keymap.set("n", "<leader>fc", "<cmd>Telescope pickers<cr>")
 vim.keymap.set("n", "<leader>ft", "<cmd>TodoTelescope<cr>")
 
+vim.keymap.set("n", "<leader>ao", "<cmd>AvanteChat<cr>")
+vim.keymap.set("n", "<leader>ac", "<cmd>AvanteClear<cr>")
+vim.keymap.set("n", "<leader>aa", "<cmd>AvanteAsk<cr>")
+vim.keymap.set("n", "<leader>at", "<cmd>AvanteToggle<cr>")
+vim.keymap.set("n", "<leader>ae", "<cmd>AvanteAsk<cr>")
+vim.keymap.set("n", "<leader>af", "<cmd>AvanteFocus<cr>")
+vim.keymap.set("n", "<leader>ar", "<cmd>AvanteRefresh<cr>")
+
 local last_term_id = nil
 local explicit_count = false
 
