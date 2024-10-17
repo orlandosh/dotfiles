@@ -132,6 +132,13 @@ for _, server in pairs(installed_servers) do
 		}
 	end
 
+	if server == "lua_ls" then
+		lsp_opts.on_attach = function(client, bufnr)
+			client.server_capabilities.documentFormattingProvider = false
+			on_attach(client, bufnr)
+		end
+	end
+
 	if server == "efm" then
 		local python_formatter = "black --quiet - | isort --stdout --profile black - | black --quiet -"
 		if string.find(bufdir, work_keyword) then
