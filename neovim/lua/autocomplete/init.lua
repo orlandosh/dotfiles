@@ -174,43 +174,49 @@ for _, server in pairs(installed_servers) do
 				},
 				json = {
 					{
-						formatCommand = "bunx prettier --parser json",
+						formatCommand = "bunx prettier --parser json --tab-width 2",
 						formatStdin = true,
 					},
 				},
 				html = {
 					{
-						formatCommand = "bunx prettier --parser html",
+						formatCommand = "bunx prettier --parser html --tab-width 2",
 						formatStdin = true,
 					},
 				},
 				javascript = {
 					{
-						formatCommand = "bunx prettier --parser babel",
+						formatCommand = "bunx prettier --parser babel --tab-width 2",
 						formatStdin = true,
 					},
 				},
 				typescript = {
 					{
-						formatCommand = "bunx prettier --parser typescript",
+						formatCommand = "bunx prettier --parser typescript --tab-width 2",
+						formatStdin = true,
+					},
+				},
+				typescriptreact = {
+					{
+						formatCommand = "bunx prettier --parser typescript --tab-width 2",
 						formatStdin = true,
 					},
 				},
 				svelte = {
 					{
-						formatCommand = "bunx prettier --parser svelte",
+						formatCommand = "bunx prettier --parser svelte --tab-width 2",
 						formatStdin = true,
 					},
 				},
 				css = {
 					{
-						formatCommand = "bunx prettier --parser css",
+						formatCommand = "bunx prettier --parser css --tab-width 2",
 						formatStdin = true,
 					},
 				},
 				scss = {
 					{
-						formatCommand = "bunx prettier --parser scss",
+						formatCommand = "bunx prettier --parser scss --tab-width 2",
 						formatStdin = true,
 					},
 				},
@@ -234,7 +240,9 @@ for _, server in pairs(installed_servers) do
 				"css",
 				"scss",
 				"javascript",
+                "javascriptreact",
 				"typescript",
+                "typescriptreact",
 				"svelte",
 				"c",
 				"cpp",

@@ -22,34 +22,18 @@ vim.api.nvim_create_autocmd({ "CmdLineLeave" }, {
 	end,
 })
 
-vim.api.nvim_create_autocmd("User", {
-	pattern = "LazyDone",
-	callback = function()
-		local ts_utils = require("nvim-treesitter.ts_utils")
-		local suggestions = require("copilot.suggestion")
-		vim.api.nvim_create_autocmd({ "CursorMoved" }, {
-			pattern = { "*" },
-			nested = true,
-			callback = function()
-				local current_node = ts_utils.get_node_at_cursor()
-				local is_comment = false
+-- 1. Create or reuse an augroup so the rules are easy to find/clear later
+local two_space_indent = vim.api.nvim_create_augroup("TwoSpaceIndent", { clear = true })
 
-				while current_node do
-					if current_node:type() == "comment" then
-						is_comment = true
-						break
-					end
-					current_node = current_node:parent()
-				end
-
-				if is_comment then
-					vim.b.copilot_suggestion_auto_trigger = false
-					vim.b.copilot_suggestion_hidden = true
-				else
-					vim.b.copilot_suggestion_auto_trigger = true
-					vim.b.copilot_suggestion_hidden = false
-				end
-			end,
-		})
-	end,
+-- 2. Apply the settings whenever one of the chosen filetypes is detected
+vim.api.nvim_create_autocmd("FileType", {
+  group = two_space_indent,
+  pattern = { "typescript", "typescriptreact", "javascript", "javascriptreact" }, -- ts, tsx, js, jsx
+  callback = function()
+    -- buffer‑local options (only affect the current buffer)
+    vim.opt_local.tabstop     = 2  -- how many columns a literal <Tab> counts for
+    vim.opt_local.shiftwidth  = 2  -- how far >> and << shift, and what “auto‑indent” uses
+    vim.opt_local.softtabstop = 2  -- how many columns <Tab>/<BS> insert/delete in insert mode
+    vim.opt_local.expandtab   = true -- convert real <Tab> presses into spaces
+  end,
 })
