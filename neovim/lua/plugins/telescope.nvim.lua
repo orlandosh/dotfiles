@@ -11,7 +11,7 @@ return {
 
 		require("telescope").setup({
 			defaults = {
-				file_ignore_patterns = { "%.po", "assets" },
+				file_ignore_patterns = { "%.po", "assets", "node_modules" },
 				mappings = {
 					n = { ["dd"] = actions.delete_buffer },
 				},
