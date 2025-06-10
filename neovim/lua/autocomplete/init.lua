@@ -131,13 +131,8 @@ for _, server in pairs(installed_servers) do
 			},
 		}
 
-		lsp_opts.root_dir = lspconfig.util.root_pattern(
-			"nx.json",
-			".git",
-			"workspace.json",
-			"package.json",
-			"tsconfig.base.json",
-		)
+		lsp_opts.root_dir =
+			lspconfig.util.root_pattern("nx.json", ".git", "workspace.json", "package.json", "tsconfig.base.json")
 	end
 
 	if server == "lua_ls" then
