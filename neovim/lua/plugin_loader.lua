@@ -39,7 +39,6 @@ vim.api.nvim_create_autocmd("User", {
 		require("autocmds")
 		require("keymaps")
 		require("autocomplete.init")
-		vim.cmd([[LspStart]])
         require("persistence").load()
 	end,
 })
