@@ -39,6 +39,6 @@ vim.api.nvim_create_autocmd("User", {
 		require("autocmds")
 		require("keymaps")
 		require("autocomplete.init")
-        require("persistence").load()
+		require("persistence").load()
 	end,
 })

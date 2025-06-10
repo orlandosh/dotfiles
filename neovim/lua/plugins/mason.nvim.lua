@@ -6,7 +6,7 @@ return {
 		require("mason-lspconfig").setup({
 			ensure_installed = { "basedpyright", "efm", "lua_ls", "rust_analyzer", "ts_ls" },
 			automatic_installation = { exclude = { "clangd" } },
-            automatic_enable = false,
+			automatic_enable = false,
 		})
 	end,
 	event = "VeryLazy",
