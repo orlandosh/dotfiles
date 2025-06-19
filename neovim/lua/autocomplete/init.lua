@@ -104,33 +104,33 @@ for _, server in pairs(installed_servers) do
 	end
 
 	if server == "ts_ls" then
-		lsp_opts.settings = {
-			typescript = {
-				inlayHints = {
-					includeInlayParameterNameHints = "all",
-					includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-					includeInlayFunctionParameterTypeHints = true,
-					includeInlayVariableTypeHints = true,
-					includeInlayVariableTypeHintsWhenTypeMatchesName = false,
-					includeInlayPropertyDeclarationTypeHints = true,
-					includeInlayFunctionLikeReturnTypeHints = true,
-					includeInlayEnumMemberValueHints = true,
-				},
-			},
-			javascript = {
-				inlayHints = {
-					includeInlayParameterNameHints = "all",
-					includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-					includeInlayFunctionParameterTypeHints = true,
-					includeInlayVariableTypeHints = true,
-					includeInlayVariableTypeHintsWhenTypeMatchesName = false,
-					includeInlayPropertyDeclarationTypeHints = true,
-					includeInlayFunctionLikeReturnTypeHints = true,
-					includeInlayEnumMemberValueHints = true,
-				},
-			},
-		}
-
+		-- lsp_opts.settings = {
+		-- 	typescript = {
+		-- 		inlayHints = {
+		-- 			includeInlayParameterNameHints = "all",
+		-- 			includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+		-- 			includeInlayFunctionParameterTypeHints = true,
+		-- 			includeInlayVariableTypeHints = true,
+		-- 			includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+		-- 			includeInlayPropertyDeclarationTypeHints = true,
+		-- 			includeInlayFunctionLikeReturnTypeHints = true,
+		-- 			includeInlayEnumMemberValueHints = true,
+		-- 		},
+		-- 	},
+		-- 	javascript = {
+		-- 		inlayHints = {
+		-- 			includeInlayParameterNameHints = "all",
+		-- 			includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+		-- 			includeInlayFunctionParameterTypeHints = true,
+		-- 			includeInlayVariableTypeHints = true,
+		-- 			includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+		-- 			includeInlayPropertyDeclarationTypeHints = true,
+		-- 			includeInlayFunctionLikeReturnTypeHints = true,
+		-- 			includeInlayEnumMemberValueHints = true,
+		-- 		},
+		-- 	},
+		-- }
+		--
 		lsp_opts.root_dir =
 			lspconfig.util.root_pattern("nx.json", ".git", "workspace.json", "package.json", "tsconfig.base.json")
 	end
@@ -165,7 +165,7 @@ for _, server in pairs(installed_servers) do
 				},
 				vue = {
 					{
-						formatCommand = "bunx prettier --parser vue",
+						formatCommand = "prettier --parser vue --tab-width 2",
 						formatStdin = true,
 					},
 				},
@@ -177,52 +177,58 @@ for _, server in pairs(installed_servers) do
 				},
 				json = {
 					{
-						formatCommand = "bunx prettier --parser json --tab-width 2",
+						formatCommand = "prettier --parser json --tab-width 2",
 						formatStdin = true,
 					},
 				},
 				html = {
 					{
-						formatCommand = "bunx prettier --parser html --tab-width 2",
+						formatCommand = "prettier --parser html --tab-width 2",
 						formatStdin = true,
 					},
 				},
 				javascript = {
 					{
-						formatCommand = "bunx prettier --parser babel --tab-width 2",
+						formatCommand = "prettier --parser babel --tab-width 2",
 						formatStdin = true,
 					},
 				},
 				typescript = {
 					{
-						formatCommand = "bunx prettier --parser typescript --tab-width 2",
+						formatCommand = "biome format - --stdin-file-path=${INPUT}",
 						formatStdin = true,
 					},
 				},
 				typescriptreact = {
 					{
-						formatCommand = "bunx prettier --parser typescript --tab-width 2",
+						formatCommand = "biome format - --stdin-file-path=${INPUT}",
 						formatStdin = true,
 					},
 				},
 				svelte = {
 					{
-						formatCommand = "bunx prettier --parser svelte --tab-width 2",
+						formatCommand = "prettier --parser svelte --tab-width 2",
 						formatStdin = true,
 					},
 				},
 				css = {
 					{
-						formatCommand = "bunx prettier --parser css --tab-width 2",
+						formatCommand = "prettier --parser css --tab-width 2",
 						formatStdin = true,
 					},
 				},
 				scss = {
 					{
-						formatCommand = "bunx prettier --parser scss --tab-width 2",
+						formatCommand = "prettier --parser scss --tab-width 2",
 						formatStdin = true,
 					},
 				},
+                yaml = {
+                    {
+                        formatCommand = "prettier --parser yaml --tab-width 2",
+                        formatStdin = true,
+                    }
+                }
 			},
 		}
 
@@ -249,6 +255,7 @@ for _, server in pairs(installed_servers) do
 				"svelte",
 				"c",
 				"cpp",
+                "yaml",
 			},
 			init_options = { documentFormatting = true, diagnostics = true },
 			root_dir = function(fname)
