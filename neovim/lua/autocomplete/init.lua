@@ -189,7 +189,7 @@ for _, server in pairs(installed_servers) do
 				},
 				javascript = {
 					{
-						formatCommand = "prettier --parser babel --tab-width 2",
+						formatCommand = "biome format - --stdin-file-path=${INPUT}",
 						formatStdin = true,
 					},
 				},
