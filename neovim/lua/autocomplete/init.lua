@@ -266,7 +266,7 @@ for _, server in pairs(installed_servers) do
 		})
 	end
 
-	if server ~= "efm" then
+	if server ~= "efm" and server ~= "ts_ls" then
 		lspconfig[server].setup(lsp_opts)
 	end
 end
