@@ -7,6 +7,11 @@ return {
 			on_attach = function(client, bufnr)
 				require("autocomplete.on_attach")({ noremap = true, silent = true })(client, bufnr)
 			end,
+            server_capabilities = {
+                -- we use biome!
+                documentFormattingProvider = false,
+                documentRangeFormattingProvider = false,
+            },
 		})
 	end,
 }
