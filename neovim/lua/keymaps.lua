@@ -1,6 +1,12 @@
 vim.keymap.set("n", "<leader>re", "<C-l>", { desc = "Redraw screen" })
 vim.keymap.set("n", "<leader>W", "<cmd>wa<cr>", { desc = "Write all" })
 
+-- disable mouse
+vim.keymap.set("", "<up>", "<nop>", { noremap = true })
+vim.keymap.set("", "<down>", "<nop>", { noremap = true })
+vim.keymap.set("i", "<up>", "<nop>", { noremap = true })
+vim.keymap.set("i", "<down>", "<nop>", { noremap = true })
+
 -- Clear highlighting on escape in normal mode
 vim.keymap.set("n", "<esc>", "<cmd>noh<cr><esc>")
 vim.keymap.set("n", "<esc>^[", "<esc>^[")
@@ -47,13 +53,57 @@ vim.keymap.set("n", "<leader>fr", "<cmd>Telescope resume<cr>")
 vim.keymap.set("n", "<leader>fc", "<cmd>Telescope pickers<cr>")
 vim.keymap.set("n", "<leader>ft", "<cmd>TodoTelescope<cr>")
 
-vim.keymap.set("n", "<leader>ao", "<cmd>AvanteChat<cr>")
-vim.keymap.set("n", "<leader>ac", "<cmd>AvanteClear<cr>")
-vim.keymap.set("n", "<leader>aa", "<cmd>AvanteAsk<cr>")
-vim.keymap.set("n", "<leader>at", "<cmd>AvanteToggle<cr>")
-vim.keymap.set("n", "<leader>ae", "<cmd>AvanteAsk<cr>")
-vim.keymap.set("n", "<leader>af", "<cmd>AvanteFocus<cr>")
-vim.keymap.set("n", "<leader>ar", "<cmd>AvanteRefresh<cr>")
+-- CodeCompanion (replaces Avante)
+-- Open a chat buffer
+vim.keymap.set("n", "<leader>ao", "<cmd>CodeCompanionChat<cr>")
+-- Clear the last chat buffer
+vim.keymap.set("n", "<leader>ac", function()
+	local cc = require("codecompanion")
+	local chat = cc.last_chat()
+	if chat then
+		chat:clear()
+	else
+		vim.notify("No CodeCompanion chat to clear", vim.log.levels.WARN)
+	end
+end)
+-- Inline assistant in normal mode; add selection to chat in visual mode
+vim.keymap.set("n", "<leader>aa", "<cmd>CodeCompanionChat<cr>")
+vim.keymap.set("v", "<leader>aa", "<cmd>CodeCompanionChat Add<cr>")
+-- Toggle chat buffer
+vim.keymap.set("n", "<leader>at", "<cmd>CodeCompanionChat Toggle<cr>")
+-- Action Palette
+vim.keymap.set("n", "<leader>ae", "<cmd>CodeCompanionActions<cr>")
+-- Focus last chat (restore if hidden, or open new)
+vim.keymap.set("n", "<leader>af", function()
+	local cc = require("codecompanion")
+	local chat = cc.last_chat()
+	if chat then
+		cc.restore(chat.bufnr)
+	else
+		vim.cmd("CodeCompanionChat")
+	end
+end)
+-- Refresh chat cache (tools/variables)
+vim.keymap.set("n", "<leader>ar", "<cmd>CodeCompanionChat RefreshCache<cr>")
+
+-- Quickly choose adapter/model (opens chat if needed)
+vim.keymap.set("n", "<leader>am", function()
+	local ok, cc = pcall(require, "codecompanion")
+	if not ok then
+		return
+	end
+	local chat = cc.last_chat() or cc.chat()
+	if not chat then
+		return
+	end
+	if not chat.ui:is_visible() then
+		chat.ui:open()
+	end
+	local km_ok, chat_km = pcall(require, "codecompanion.strategies.chat.keymaps")
+	if km_ok and chat_km.change_adapter and chat_km.change_adapter.callback then
+		chat_km.change_adapter.callback(chat)
+	end
+end, { desc = "CodeCompanion: Change adapter/model" })
 
 local last_term_id = nil
 local explicit_count = false

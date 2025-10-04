@@ -38,6 +38,7 @@ Set.tabstop = 4
 Set.softtabstop = 4
 Set.expandtab = true
 Set.pumheight = 10
+Set.mouse = ""
 
 Set.foldmethod = "expr"
 Set.foldexpr = "nvim_treesitter#foldexpr()"
