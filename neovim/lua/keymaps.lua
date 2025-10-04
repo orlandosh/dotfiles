@@ -53,57 +53,40 @@ vim.keymap.set("n", "<leader>fr", "<cmd>Telescope resume<cr>")
 vim.keymap.set("n", "<leader>fc", "<cmd>Telescope pickers<cr>")
 vim.keymap.set("n", "<leader>ft", "<cmd>TodoTelescope<cr>")
 
--- CodeCompanion (replaces Avante)
--- Open a chat buffer
-vim.keymap.set("n", "<leader>ao", "<cmd>CodeCompanionChat<cr>")
--- Clear the last chat buffer
-vim.keymap.set("n", "<leader>ac", function()
-	local cc = require("codecompanion")
-	local chat = cc.last_chat()
-	if chat then
-		chat:clear()
-	else
-		vim.notify("No CodeCompanion chat to clear", vim.log.levels.WARN)
-	end
-end)
--- Inline assistant in normal mode; add selection to chat in visual mode
-vim.keymap.set("n", "<leader>aa", "<cmd>CodeCompanionChat<cr>")
-vim.keymap.set("v", "<leader>aa", "<cmd>CodeCompanionChat Add<cr>")
--- Toggle chat buffer
-vim.keymap.set("n", "<leader>at", "<cmd>CodeCompanionChat Toggle<cr>")
--- Action Palette
-vim.keymap.set("n", "<leader>ae", "<cmd>CodeCompanionActions<cr>")
--- Focus last chat (restore if hidden, or open new)
-vim.keymap.set("n", "<leader>af", function()
-	local cc = require("codecompanion")
-	local chat = cc.last_chat()
-	if chat then
-		cc.restore(chat.bufnr)
-	else
-		vim.cmd("CodeCompanionChat")
-	end
-end)
--- Refresh chat cache (tools/variables)
-vim.keymap.set("n", "<leader>ar", "<cmd>CodeCompanionChat RefreshCache<cr>")
+-- Sidekick
+-- Next Edit Suggestions jump/apply on <Tab>
+vim.keymap.set({ "i", "n" }, "<tab>", function()
+  if not require("sidekick").nes_jump_or_apply() then
+    return "<Tab>"
+  end
+end, { expr = true, desc = "Goto/Apply Next Edit Suggestion" })
 
--- Quickly choose adapter/model (opens chat if needed)
-vim.keymap.set("n", "<leader>am", function()
-	local ok, cc = pcall(require, "codecompanion")
-	if not ok then
-		return
-	end
-	local chat = cc.last_chat() or cc.chat()
-	if not chat then
-		return
-	end
-	if not chat.ui:is_visible() then
-		chat.ui:open()
-	end
-	local km_ok, chat_km = pcall(require, "codecompanion.strategies.chat.keymaps")
-	if km_ok and chat_km.change_adapter and chat_km.change_adapter.callback then
-		chat_km.change_adapter.callback(chat)
-	end
-end, { desc = "CodeCompanion: Change adapter/model" })
+-- Toggle AI CLI, select prompts/tools, and send context
+vim.keymap.set("n", "<leader>aa", function()
+  require("sidekick.cli").toggle({ name = "codex", focus = true })
+end, { desc = "Sidekick Toggle Codex" })
+vim.keymap.set("n", "<leader>ap", function()
+  require("sidekick.cli").prompt()
+end, { desc = "Sidekick Prompt Picker" })
+vim.keymap.set({ "n", "x" }, "<leader>at", function()
+  require("sidekick.cli").send({ msg = "{this}" })
+end, { desc = "Sidekick Send This" })
+vim.keymap.set("x", "<leader>av", function()
+  require("sidekick.cli").send({ msg = "{selection}" })
+end, { desc = "Sidekick Send Visual Selection" })
+-- Visual selection + aa: send selection to Codex and focus
+vim.keymap.set("x", "<leader>aa", function()
+  require("sidekick.cli").send({ msg = [[
+  {file} 
+  {selection}
+]] })
+end, { desc = "Sidekick Send Selection to Codex" })
+vim.keymap.set("n", "<leader>as", function()
+  require("sidekick.cli").select()
+end, { desc = "Sidekick Select CLI" })
+vim.keymap.set({ "n", "x", "i", "t" }, "<c-.>", function()
+  require("sidekick.cli").focus()
+end, { desc = "Sidekick Switch Focus" })
 
 local last_term_id = nil
 local explicit_count = false
